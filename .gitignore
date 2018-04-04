@@ -1,1 +1,3 @@
 homestead/
+vendor/
+nginx.conf
