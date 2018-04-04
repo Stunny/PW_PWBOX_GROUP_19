@@ -1,3 +1,4 @@
 homestead/
 vendor/
 nginx.conf
+.idea/
