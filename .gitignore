@@ -1,4 +1,4 @@
-homestead/
 vendor/
 nginx.conf
 .idea/
+var/
