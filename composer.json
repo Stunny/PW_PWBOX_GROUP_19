@@ -1,0 +1,28 @@
+{
+  "name": "stunny/pw_pwbox_group_19",
+  "description": "A file managing system based on the Slim Framework",
+  "type": "project",
+  "license": "MIT License",
+  "authors": [
+    {
+      "name": "Angel Farre Echaburua",
+      "email": "contact@contact.net"
+    },
+    {
+      "name": "Rafael Rebollo Cacin",
+      "email": "ls31086@salleurl.edu"
+    },
+    {
+      "name":"avogelm@gmail.com",
+      "email": "ls30394@salleurl.edu"
+    }
+  ],
+  "require": {
+    "slim/slim": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "PWBox\\": "src/"
+    }
+  }
+}
