@@ -10,27 +10,22 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 $appConfig = $app->getContainer();
-$dependencies = require __DIR__.'/dependencies.php';
 
 //--------------------------------------SECURITY----------------------------------------------------------------------//
 // Configuramos la seguridad de las rutas mediante Json Web Tokens
 
-/*
-$app->add(new Tuupola\Middleware\JwtAuthentication(
-    [
-        "path" => ["/"],
-        "secret" => getenv("JWT_SECRET")
-    ]
-));*/
 
 //--------------------------------------ROUTES------------------------------------------------------------------------//
 
 //--------------------------------------GET
-$app->get('/', function(){
+$app->get('/', function(Request $req, Response $res){
     echo "Hello World";
 });
 
-
+$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
+    $name = $args['name'];
+    return $this->view->render($response, 'hello.twig', ['name'=>$name]);
+});
 //--------------------------------------POST
 
 

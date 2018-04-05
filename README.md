@@ -5,8 +5,4 @@ Developed by @Stunny, @RafaRebollo and @Sartox.
 - Slim/Slim
 - Twig/Twig
 - doctrine/dbal
-- swiftmailer/swiftmailer
 - slim/twig-view
-- tuupola/slim-jwt-auth
-- bryanjhv/slim-session
-- vlucas/phpdotenv
