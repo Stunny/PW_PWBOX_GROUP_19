@@ -17,19 +17,40 @@ $appConfig = $app->getContainer();
 
 //--------------------------------------ROUTES------------------------------------------------------------------------//
 
-//--------------------------------------GET
 $app->get('/', function(Request $req, Response $res){
     echo "Hello World";
 });
 
-$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-    $name = $args['name'];
-    return $this->view->render($response, 'hello.twig', ['name'=>$name]);
+// -------------------------NAVIGATION
+
+//Landing Page
+$app->group('/', function(){
+
 });
-//--------------------------------------POST
 
+//Profile Page
+$app->group('/profile', function(){
 
-//--------------------------------------PUT
+});
 
+//Dashboard Page
+$app->group('/dashboard', function(){
 
-//--------------------------------------DELETE
+});
+
+//Settings Page
+$app->group('/settings', function(){
+
+});
+
+// -------------------------API
+
+//User
+$app->group('/user/{id}', function(){
+    require_once __DIR__.'/api_routes/apiUserRoutes.php';
+});
+
+//Folder
+$app->group('/folder/{id}', function (){
+    require_once __DIR__.'/api_routes/apiFolderRoutes.php';
+});
