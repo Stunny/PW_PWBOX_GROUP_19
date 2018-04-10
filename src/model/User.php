@@ -6,6 +6,9 @@
  * Date: 10/04/2018
  * Time: 12:33
  */
+
+namespace PWBox\model;
+
     class User{
 
     private $userName;
