@@ -27,7 +27,7 @@ class DatabaseConector
         if ($this->connect()){
             $this->connexion->query("INSERT INTO Usuari (nom, contrasenya, email, birthdate, profile_image) 
               VALUES (\"".$user->getUserName()."\", \"".$user->setPassword()."\", \"".$user->setEmail()."\",
-               \"".$user->getBirthDate()->format('Y-m-d')."\", \"".$user->getImagePath()."\");");
+               \"".$user->getBirthDate()->format('Y-m-d')."\", \"".$user->getProfileImgPath()."\");");
         }
     }
 

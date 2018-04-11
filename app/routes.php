@@ -46,11 +46,11 @@ $app->group('/settings', function(){
 // -------------------------API
 
 //User
-$app->group('/user/{id}', function(){
-    require_once __DIR__.'/api_routes/apiUserRoutes.php';
+$app->group('/user', function(){
+    require __DIR__.'/api_routes/apiUserRoutes.php';
 });
 
 //Folder
-$app->group('/folder/{id}', function (){
-    require_once __DIR__.'/api_routes/apiFolderRoutes.php';
+$app->group('/folder', function (){
+    require __DIR__.'/api_routes/apiFolderRoutes.php';
 });

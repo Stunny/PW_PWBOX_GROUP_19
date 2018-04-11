@@ -8,6 +8,13 @@
 
 return [
         'settings' => [
-            'displayErrorDetails' => true
+            'displayErrorDetails' => true,
+            'database' => [
+                'dbname' => 'pwbox',
+                'user' => 'homestead',
+                'password' => 'secret',
+                'host' => 'localhost',
+                'driver' => 'pdo_mysql'
+            ]
         ]
 ];

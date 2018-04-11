@@ -14,16 +14,52 @@ namespace PWBox\model;
     private $userName;
     private $password;
     private $email;
-    private $birthDate;
-    private $imagePath;
+    private $created_at;
+    private $updated_at;
+    private $profileImgPath;
 
-        public function __construct($userName, $password, $email, $birthDate, $imagePath) {
+        public function __construct($userName, $password, $email, $imagePath, $created_at, $updated_at) {
             $this->userName = $userName;
             $this->password = $password;
             $this->email = $email;
-            $this->birthDate = $birthDate;
-            $this->imagePath = $imagePath;
+            $this->profileImgPath = $imagePath;
+            $this->created_at = $created_at;
+            $this->updated_at = $updated_at;
         }
+
+        /**
+         * @return mixed
+         */
+        public function getCreatedAt()
+        {
+            return $this->created_at;
+        }
+
+        /**
+         * @param mixed $created_at
+         */
+        public function setCreatedAt($created_at)
+        {
+            $this->created_at = $created_at;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getUpdatedAt()
+        {
+            return $this->updated_at;
+        }
+
+        /**
+         * @param mixed $updated_at
+         */
+        public function setUpdatedAt($updated_at)
+        {
+            $this->updated_at = $updated_at;
+        }
+
+
 
         /**
          * @return mixed
@@ -76,33 +112,17 @@ namespace PWBox\model;
         /**
          * @return mixed
          */
-        public function getBirthDate()
+        public function getProfileImgPath()
         {
-            return $this->birthDate;
+            return $this->profileImgPath;
         }
 
         /**
-         * @param mixed $birthDate
+         * @param mixed $profileImgPath
          */
-        public function setBirthDate($birthDate)
+        public function setProfileImgPath($profileImgPath)
         {
-            $this->birthDate = $birthDate;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getImagePath()
-        {
-            return $this->imagePath;
-        }
-
-        /**
-         * @param mixed $imagePath
-         */
-        public function setImagePath($imagePath)
-        {
-            $this->imagePath = $imagePath;
+            $this->profileImgPath = $profileImgPath;
         }
 
 
