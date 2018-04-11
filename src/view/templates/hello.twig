@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Webpage</title>
-</head>
-<body>
-    <p>Hello {{ name }}!</p>
-</body>
-</html>
+{% extends "base.twig" %}
+{% block title %} Hello Page {% endblock %}
+{% block content %}
+  {{ parent() }}
+  Kappa {{name}}
+{% endblock %}

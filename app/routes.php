@@ -17,12 +17,13 @@ $appConfig = $app->getContainer();
 
 //--------------------------------------ROUTES------------------------------------------------------------------------//
 
-$app->get('/', function(Request $req, Response $res){
-    echo "Hello World";
-});
+$app->get(
+    '/hello/{name}',
+    'PWBox\controller\HelloController'
+)->add('PWBox\controller\middleware\HelloMiddleware');
 
 // -------------------------NAVIGATION
-
+/*
 //Landing Page
 $app->group('/', function(){
 
@@ -46,11 +47,12 @@ $app->group('/settings', function(){
 // -------------------------API
 
 //User
-$app->group('/user', function(){
+$app->group('/user', function($request, $response, $args){
     require __DIR__.'/api_routes/apiUserRoutes.php';
 });
 
 //Folder
-$app->group('/folder', function (){
+$app->group('/folder', function ($request, $response, $args){
     require __DIR__.'/api_routes/apiFolderRoutes.php';
 });
+*/
