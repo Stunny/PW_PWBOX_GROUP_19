@@ -6,12 +6,14 @@
  * Time: 6:04 PM
  */
 
-namespace PWBox\model;
+namespace PWBox\model\repositories;
+
+use PWBox\model\User as User;
 
 
 interface UserRepository
 {
     public function save(User $user);
 
-    public function delete(User $user);
+    //public function delete(User $user);
 }

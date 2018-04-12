@@ -9,7 +9,7 @@
 namespace PWBox\model\use_cases;
 
 use PWBox\model\User;
-use PWBox\model\UserRepository;
+use PWBox\model\repositories\UserRepository;
 
 class UseCasePostUser
 {
@@ -26,9 +26,9 @@ class UseCasePostUser
 
     public function __invoke(array $rawData)
     {
-        // TODO: Implement __invoke() method.
         $now = new \DateTime('now');
         $user = new User(
+            null,
             $rawData['username'],
             $rawData['password'],
             $rawData['email'],

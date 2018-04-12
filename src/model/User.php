@@ -11,6 +11,7 @@ namespace PWBox\model;
 
     class User{
 
+    private $id;
     private $userName;
     private $password;
     private $email;
@@ -18,13 +19,30 @@ namespace PWBox\model;
     private $updated_at;
     private $profileImgPath;
 
-        public function __construct($userName, $password, $email, $imagePath, $created_at, $updated_at) {
+        public function __construct($id, $userName, $password, $email, $imagePath, $created_at, $updated_at) {
+            $this->id = $id;
             $this->userName = $userName;
             $this->password = $password;
             $this->email = $email;
             $this->profileImgPath = $imagePath;
             $this->created_at = $created_at;
             $this->updated_at = $updated_at;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getId()
+        {
+            return $this->id;
+        }
+
+        /**
+         * @param mixed $id
+         */
+        public function setId($id): void
+        {
+            $this->id = $id;
         }
 
         /**

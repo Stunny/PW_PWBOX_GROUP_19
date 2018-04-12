@@ -22,6 +22,8 @@ $app->get(
     'PWBox\controller\HelloController'
 )->add('PWBox\controller\middleware\HelloMiddleware');
 
+$app->post('/user', 'PWBox\controller\PostUserController');
+
 // -------------------------NAVIGATION
 /*
 //Landing Page

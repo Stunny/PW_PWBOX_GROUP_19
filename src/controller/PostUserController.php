@@ -9,15 +9,35 @@
 namespace PWBox\controller;
 
 
-use http\Env\Request;
-use http\Env\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Container\ContainerInterface;
+
 
 class PostUserController
 {
+
+    protected $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     public function __invoke(Request $request, Response $response)
     {
-        // TODO: Implement __invoke() method.
+        //todo: validacion de datos de usuario
+        try{
+            $data = $request->getParsedBody();
+            $service = $this->container->get('post-user-service');
+            $service($data);
 
+        }catch (\Exception $e){
+            $response = $response
+                ->withStatus(500)
+                ->withHeader('Content-type', 'text/html')
+                ->write('Something went wrong');
+        }
         return $response;
     }
 }
