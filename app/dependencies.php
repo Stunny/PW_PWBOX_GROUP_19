@@ -77,7 +77,8 @@ $container['folder-repository'] = function ($container){
 
 $container['post-folder-service'] = function ($container){
     $service = new \PWBox\model\use_cases\FolderUseCases\UseCasePostFolder(
-        $container->get('folder-repository')
+        $container->get('folder-repository'),
+        $container->get('user-repository')
     );
     return $service;
 };
