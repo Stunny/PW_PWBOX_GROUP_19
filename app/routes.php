@@ -22,28 +22,30 @@ $app->get(
     'PWBox\controller\HelloController'
 )->add('PWBox\controller\middleware\HelloMiddleware');
 
-$app->post('/user', 'PWBox\controller\PostUserController');
-
 // -------------------------NAVIGATION
-/*
+
 //Landing Page
 $app->group('/', function(){
-
+  //Todo: ruta /
+  echo "Hello";
 });
 
 //Profile Page
 $app->group('/profile', function(){
-
+  //Todo: ruta /profile
+  echo "Hello";
 });
 
 //Dashboard Page
 $app->group('/dashboard', function(){
-
+  //Todo: ruta /dashboard
+  echo "Hello";
 });
 
 //Settings Page
 $app->group('/settings', function(){
-
+  //Todo: ruta /settings
+  echo "Hello";
 });
 
 // -------------------------API
@@ -57,4 +59,3 @@ $app->group('/user', function($request, $response, $args){
 $app->group('/folder', function ($request, $response, $args){
     require __DIR__.'/api_routes/apiFolderRoutes.php';
 });
-*/

@@ -19,6 +19,9 @@ class DoctrineUserRepository implements UserRepository
 
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
+    private const INSERT_QUERY = 'INSERT INTO user(username, email, password, created_at, updated_at) VALUES(:username, :email, :password, :created_at, :updated_at)';
+    private const SELECT_QUERY = 'SELECT * FROM user WHERE (id = :id)';
+
     private $connection;
 
     public function __construct(Connection $connection)
@@ -29,7 +32,7 @@ class DoctrineUserRepository implements UserRepository
     public function save(User $user)
     {
 
-        $sql = "INSERT INTO user(username, email, password, created_at, updated_at) VALUES(:username, :email, :password, :created_at, :updated_at)";
+        $sql = self::INSERT_QUERY;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("username", $user->getUsername(), 'string');
         $stmt->bindValue("email", $user->getEmail(), 'string');
@@ -38,6 +41,20 @@ class DoctrineUserRepository implements UserRepository
         $stmt->bindValue("updated_at", $user->getUpdatedAt()->format(self::DATE_FORMAT));
         $stmt->execute();
 
+    }
+
+    public function get(int $id){
+        $sql = self::SELECT_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id", $id, 'int');
+        $stmt->execute();
+
+        $user =  $stmt->fetch();
+        if(isset($user['id'])){
+            unset($user['id']);
+        }
+
+        return $user;
     }
 
     /*

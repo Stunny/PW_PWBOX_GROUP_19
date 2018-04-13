@@ -46,4 +46,25 @@ $container['post-user-service'] = function ($container){
     return $service;
 };
 
+$container['get-user-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\UseCaseGetUser(
+        $container->get('user-repository')
+    );
+    return $service;
+};
+
+$container['put-user-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\UseCasePutUser(
+        $container->get('user-repository')
+    );
+    return $service;
+};
+
+$container['delete-user-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\UseCaseDeleteUser(
+        $container->get('user-repository')
+    );
+    return $service;
+};
+
 //Folder
