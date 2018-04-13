@@ -54,7 +54,7 @@ $container['get-user-service'] = function ($container){
 };
 
 $container['put-user-service'] = function ($container){
-    $service = new \PWBox\model\use_cases\UseCasePutUser(
+    $service = new \PWBox\model\use_cases\UseCaseUpdateUser(
         $container->get('user-repository')
     );
     return $service;
