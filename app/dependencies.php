@@ -31,7 +31,7 @@ $container['doctrine'] = function ($container) {
 //====================================================================================================================//
 //------------------------------MODEL DEPENDENCIES--------------------------------------------------------------------//
 
-//User
+//----------------------------------------------------------------------------------User
 $container['user-repository'] = function ($container){
     $repository = new \PWBox\model\repositories\impl\DoctrineUserRepository(
         $container->get('doctrine')
@@ -67,4 +67,38 @@ $container['delete-user-service'] = function ($container){
     return $service;
 };
 
-//Folder
+//----------------------------------------------------------------------------------Folder
+$container['folder-repository'] = function ($container){
+    $repository = new \PWBox\model\repositories\impl\DoctrineFolderRepository(
+        $container->get('doctrine')
+    );
+    return $repository;
+};
+
+$container['post-folder-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FolderUseCases\UseCasePostFolder(
+        $container->get('folder-repository')
+    );
+    return $service;
+};
+
+$container['get-folder-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FolderUseCases\UseCaseGetFolder(
+        $container->get('folder-repository')
+    );
+    return $service;
+};
+
+$container['put-folder-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FolderUseCases\UseCaseUpdateFolder(
+        $container->get('folder-repository')
+    );
+    return $service;
+};
+
+$container['delete-folder-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FolderUseCases\UseCaseDeleteFolder(
+        $container->get('folder-repository')
+    );
+    return $service;
+};

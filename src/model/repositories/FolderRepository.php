@@ -8,8 +8,16 @@
 
 namespace PWBox\model;
 
+use PWBox\model\Folder;
+
 
 interface FolderRepository
 {
-    public function createFolder($folderName, User $creator);
+    public function create($folderName, User $creator);
+
+    public function update(User $creator, Folder $folder);
+
+    public function get(int $id) : Folder;
+
+    public function delete(int $id);
 }
