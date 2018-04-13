@@ -21,6 +21,8 @@ class DoctrineUserRepository implements UserRepository
 
     private const INSERT_QUERY = 'INSERT INTO user(username, email, password, created_at, updated_at) VALUES(:username, :email, :password, :created_at, :updated_at)';
     private const SELECT_QUERY = 'SELECT * FROM user WHERE (id = :id)';
+    private const UPDATE_QUERY = 'UPDATE user(username, email, password) VALUES(:username, :email, :password)';
+    private const DELETE_QUERY = 'DELETE * FROM user WHERE (id = :id)';
 
     private $connection;
 
@@ -43,6 +45,11 @@ class DoctrineUserRepository implements UserRepository
 
     }
 
+    public function delete(User $user)
+    {
+        //Todo: delete user de la base de datos
+    }
+
     public function get(int $id){
         $sql = self::SELECT_QUERY;
         $stmt = $this->connection->prepare($sql);
@@ -57,10 +64,8 @@ class DoctrineUserRepository implements UserRepository
         return $user;
     }
 
-    /*
-    public function delete(User $user)
-    {
-
+    public function update(User $user){
+        //Todo: update user en la base de datos
     }
-    */
+
 }
