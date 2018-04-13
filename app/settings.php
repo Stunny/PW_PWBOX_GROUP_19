@@ -8,9 +8,11 @@
 
 return [
         'settings' => [
+            'determineRouteBeforeAppMiddleware' => true,
             'displayErrorDetails' => true,
+            'addContentLengthHeader' => false,
             'database' => [
-                'dbname' => 'pwbox',
+                'dbname' => 'PWBOX',
                 'user' => 'homestead',
                 'password' => 'secret',
                 'host' => 'localhost',

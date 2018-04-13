@@ -38,9 +38,12 @@ class PostUserController
             $response = $response
                 ->withStatus(500)
                 ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong');
+                ->write('Something went wrong'.'<br>'.$e->getMessage());
         } catch (NotFoundExceptionInterface $e) {
+            echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {
+            echo $e->getMessage();
+
         }
         return $response;
     }

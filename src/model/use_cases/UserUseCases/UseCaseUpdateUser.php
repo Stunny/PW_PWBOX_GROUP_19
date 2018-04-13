@@ -24,8 +24,29 @@ class UseCaseUpdateUser
         $this->repository = $repository;
     }
 
-    public function __invoke(array $rawData, $userId)
+    public function __invoke(array $rawData, $userId): bool
     {
-        //todo: invocacion del caso de uso de actualizar usuario
+        $user = $this->repository->get($userId);
+
+        if(isset($user['username'])){
+            echo '<br>'.isset($rawData['username']);
+            echo '<br>'.isset($rawData['username'])? $user['username']: $rawData['username'];
+            $this->repository->update(
+                new User(
+                    $userId,
+                    isset($rawData['username'])? $rawData['username']: $user['username'],
+                    isset($rawData['password'])? $rawData['password']: $user['password'],
+                    isset($rawData['email'])? $rawData['email']: $user['email'],
+                    isset($rawData['imgpath'])? $rawData['imgpath']: $user['imgpath'],
+                    null,
+                    null
+                )
+            );
+
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }
