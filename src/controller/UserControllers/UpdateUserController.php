@@ -30,19 +30,31 @@ class UpdateUserController
     {
         //todo: validacion de datos de usuario
         try{
-            $service = $this->container->get('update-user-service');
+            $service = $this->container->get('put-user-service');
             $data = $request->getParsedBody();
-            $service($data, $args['id']);
+            $result = $service($data, $args['id']);
 
-            //todo: confirmacion de actualizacion del usuario correcta
+            if($result){
+                $response = $response
+                    ->withStatus(200)
+                    ->withHeader('Content-type', 'text/html')
+                    ->write('Updated successfully');
+            }else{
+                $response = $response
+                    ->withStatus(404)
+                    ->withHeader('Content-type', 'text/html')
+                    ->write('User not found');
+            }
 
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
                 ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong');
+                ->write('Something went wrong<br>'.$e->getMessage());
         } catch (NotFoundExceptionInterface $e) {
+            echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {
+            echo $e->getMessage();
         }
         return $response;
     }

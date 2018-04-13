@@ -51,11 +51,11 @@ $app->group('/settings', function(){
 // -------------------------API
 
 //User
-$app->group('/user', function($request, $response, $args){
+$app->group('/user', function(){
     require __DIR__.'/api_routes/apiUserRoutes.php';
 });
 
 //Folder
-$app->group('/folder', function ($request, $response, $args){
+$app->group('/folder', function (){
     require __DIR__.'/api_routes/apiFolderRoutes.php';
 });

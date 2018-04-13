@@ -39,7 +39,7 @@ class DeleteUserController
             $response = $response
                 ->withStatus(500)
                 ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong');
+                ->write('Something went wrong'.'<br>'.$e->getMessage());
         } catch (NotFoundExceptionInterface $e) {
         } catch (ContainerExceptionInterface $e) {
         }
