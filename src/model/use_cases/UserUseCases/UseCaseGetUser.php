@@ -3,15 +3,15 @@
  * Created by PhpStorm.
  * User: Alex
  * Date: 4/13/2018
- * Time: 11:34 AM
+ * Time: 11:10 AM
  */
 
-namespace PWBox\model\use_cases;
+namespace PWBox\model\use_cases\UserUseCases;
 
 use PWBox\model\User;
 use PWBox\model\repositories\UserRepository;
 
-class UseCaseUpdateUser
+class UseCaseGetUser
 {
     private $repository;
 
@@ -24,8 +24,8 @@ class UseCaseUpdateUser
         $this->repository = $repository;
     }
 
-    public function __invoke(array $rawData, $userId)
+    public function __invoke($userId): array
     {
-        //todo: invocacion del caso de uso de actualizar usuario
+        return  $this->repository->get($userId);
     }
 }

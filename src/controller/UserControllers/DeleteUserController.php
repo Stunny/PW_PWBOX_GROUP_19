@@ -2,19 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: Alex
- * Date: 4/11/2018
- * Time: 11:58 AM
+ * Date: 4/13/2018
+ * Time: 11:46 AM
  */
 
-namespace PWBox\controller;
+namespace PWBox\controller\UserControllers;
 
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
 
 
-class PostUserController
+class DeleteUserController
 {
 
     protected $container;
@@ -24,19 +26,22 @@ class PostUserController
         $this->container = $container;
     }
 
-    public function __invoke(Request $request, Response $response)
+    public function __invoke(Request $request, Response $response, $args)
     {
-        //todo: validacion de datos de usuario
+
         try{
-            $data = $request->getParsedBody();
-            $service = $this->container->get('post-user-service');
-            $service($data);
+            $service = $this->container->get('delete-user-service');
+            $service($args['id']);
+
+            //todo: confirmacion de eliminacion del usuario correcta
 
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
                 ->withHeader('Content-type', 'text/html')
                 ->write('Something went wrong');
+        } catch (NotFoundExceptionInterface $e) {
+        } catch (ContainerExceptionInterface $e) {
         }
         return $response;
     }

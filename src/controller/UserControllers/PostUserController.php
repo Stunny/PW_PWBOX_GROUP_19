@@ -2,19 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: Alex
- * Date: 4/13/2018
- * Time: 11:40 AM
+ * Date: 4/11/2018
+ * Time: 11:58 AM
  */
 
-namespace PWBox\controller;
+namespace PWBox\controller\UserControllers;
 
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
 
 
-class UpdateUserController
+class PostUserController
 {
 
     protected $container;
@@ -24,21 +26,21 @@ class UpdateUserController
         $this->container = $container;
     }
 
-    public function __invoke(Request $request, Response $response, $args)
+    public function __invoke(Request $request, Response $response)
     {
         //todo: validacion de datos de usuario
         try{
-            $service = $this->container->get('update-user-service');
             $data = $request->getParsedBody();
-            $service($data, $args['id'])
-
-            //todo: confirmacion de actualizacion del usuario correcta
+            $service = $this->container->get('post-user-service');
+            $service($data);
 
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
                 ->withHeader('Content-type', 'text/html')
                 ->write('Something went wrong');
+        } catch (NotFoundExceptionInterface $e) {
+        } catch (ContainerExceptionInterface $e) {
         }
         return $response;
     }

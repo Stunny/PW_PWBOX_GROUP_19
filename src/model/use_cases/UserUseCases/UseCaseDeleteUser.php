@@ -2,16 +2,16 @@
 /**
  * Created by PhpStorm.
  * User: Alex
- * Date: 4/13/2018
- * Time: 11:10 AM
+ * Date: 4/10/2018
+ * Time: 11:35 AM
  */
 
-namespace PWBox\model\use_cases;
+namespace PWBox\model\use_cases\UserUseCases;
 
 use PWBox\model\User;
 use PWBox\model\repositories\UserRepository;
 
-class UseCaseGettUser
+class UseCaseDeleteUser
 {
     private $repository;
 
@@ -24,8 +24,9 @@ class UseCaseGettUser
         $this->repository = $repository;
     }
 
-    public function __invoke($userId): array
+    public function __invoke($userId)
     {
-        return  $this->repository->get($userId);
+        $this->repository->delete($userId);
+        //todo: retorno de la invocacion del caso de uso de eliminar usuario
     }
 }

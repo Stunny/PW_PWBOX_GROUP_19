@@ -40,28 +40,28 @@ $container['user-repository'] = function ($container){
 };
 
 $container['post-user-service'] = function ($container){
-    $service = new \PWBox\model\use_cases\UseCasePostUser(
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCasePostUser(
         $container->get('user-repository')
     );
     return $service;
 };
 
 $container['get-user-service'] = function ($container){
-    $service = new \PWBox\model\use_cases\UseCaseGetUser(
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCaseGetUser(
         $container->get('user-repository')
     );
     return $service;
 };
 
 $container['put-user-service'] = function ($container){
-    $service = new \PWBox\model\use_cases\UseCaseUpdateUser(
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCaseUpdateUser(
         $container->get('user-repository')
     );
     return $service;
 };
 
 $container['delete-user-service'] = function ($container){
-    $service = new \PWBox\model\use_cases\UseCaseDeleteUser(
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCaseDeleteUser(
         $container->get('user-repository')
     );
     return $service;
