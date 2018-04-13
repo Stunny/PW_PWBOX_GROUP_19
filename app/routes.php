@@ -19,7 +19,7 @@ $appConfig = $app->getContainer();
 
 $app->get(
     '/hello/{name}',
-    'PWBox\controller\HelloController'
+    'PWBox\controller\NavigationControllers\HelloController'
 )->add('PWBox\controller\middleware\HelloMiddleware');
 
 // -------------------------NAVIGATION
@@ -29,7 +29,7 @@ $app->group('/', function(){
   //Todo: ruta /
   echo "Hello";
 });
-
+/*
 //Profile Page
 $app->group('/profile', function(){
   //Todo: ruta /profile
@@ -47,7 +47,7 @@ $app->group('/settings', function(){
   //Todo: ruta /settings
   echo "Hello";
 });
-
+*/
 // -------------------------API
 
 //User

@@ -6,7 +6,7 @@
  * Time: 19:02
  */
 
-namespace PWBox\controller;
+namespace PWBox\NavigationControllers\controller;
 
 
 use Psr\Http\Message\ServerRequestInterface as Request;
