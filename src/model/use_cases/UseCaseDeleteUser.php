@@ -24,8 +24,9 @@ class UseCaseDeleteUser
         $this->repository = $repository;
     }
 
-    public function __invoke(array $rawData)
+    public function __invoke($userId)
     {
-        //todo: invocacion del caso de uso de eliminar usuario
+        $this->repository->delete($userId);
+        //todo: retorno de la invocacion del caso de uso de eliminar usuario
     }
 }

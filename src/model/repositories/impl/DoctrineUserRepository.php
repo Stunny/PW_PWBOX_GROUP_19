@@ -45,7 +45,7 @@ class DoctrineUserRepository implements UserRepository
 
     }
 
-    public function delete(User $user)
+    public function delete(int $userId)
     {
         //Todo: delete user de la base de datos
     }
