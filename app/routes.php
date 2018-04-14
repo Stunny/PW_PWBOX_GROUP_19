@@ -6,13 +6,7 @@
  * Time: 10:53
  */
 
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
-
-$appConfig = $app->getContainer();
-
 //--------------------------------------SECURITY----------------------------------------------------------------------//
-// Configuramos la seguridad de las rutas mediante Json Web Tokens
 
 
 //--------------------------------------ROUTES------------------------------------------------------------------------//
@@ -22,32 +16,6 @@ $app->get(
     'PWBox\controller\NavigationControllers\HelloController'
 )->add('PWBox\controller\middleware\HelloMiddleware');
 
-// -------------------------NAVIGATION
-
-//Landing Page
-$app->group('/', function(){
-  //Todo: ruta /
-  echo "Hello";
-});
-/*
-//Profile Page
-$app->group('/profile', function(){
-  //Todo: ruta /profile
-  echo "Hello";
-});
-
-//Dashboard Page
-$app->group('/dashboard', function(){
-  //Todo: ruta /dashboard
-  echo "Hello";
-});
-
-//Settings Page
-$app->group('/settings', function(){
-  //Todo: ruta /settings
-  echo "Hello";
-});
-*/
 // -------------------------API
 
 //User
@@ -58,4 +26,9 @@ $app->group('/user', function(){
 //Folder
 $app->group('/folder', function (){
     require __DIR__.'/api_routes/apiFolderRoutes.php';
+});
+
+// -------------------------NAVIGATION
+$app->group('/', function(){
+    require __DIR__.'/nav_routes/navigationRoutes.php';
 });
