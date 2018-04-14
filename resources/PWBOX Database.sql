@@ -37,3 +37,15 @@ CREATE TABLE `role`(
   FOREIGN KEY (`usuari`) REFERENCES `user`(`id`),
   FOREIGN KEY (`folder`) REFERENCES `folder`(`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+CREATE TABLE `file`(
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'new-file',
+  `creator` INT unsigned NOT NULL,
+  `folder` INT unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`creador`) REFERENCES `user`(`id`),
+  FOREIGN KEY (`folder`) REFERENCES `folder`(`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
