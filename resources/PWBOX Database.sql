@@ -12,6 +12,7 @@ CREATE TABLE `user` (
   `password` char(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `profileImgPath` VARCHAR(255),
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQUE_EMAIL` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
@@ -36,4 +37,3 @@ CREATE TABLE `role`(
   FOREIGN KEY (`usuari`) REFERENCES `user`(`id`),
   FOREIGN KEY (`folder`) REFERENCES `folder`(`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-

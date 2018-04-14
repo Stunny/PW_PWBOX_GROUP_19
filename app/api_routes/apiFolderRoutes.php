@@ -6,7 +6,7 @@
  * Time: 11:36 PM
  */
 
-$this->post('/', 'PWBox\controller\FolderControllers\PostFolderController')->setName('post-folder');
+$this->post('', 'PWBox\controller\FolderControllers\PostFolderController')->setName('post-folder');
 
 $this->get('/{id}', 'PWBox\controller\FolderControllers\GetFolderController')->setName('get-folder');
 

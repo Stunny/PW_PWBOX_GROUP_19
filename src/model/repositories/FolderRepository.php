@@ -6,16 +6,16 @@
  * Time: 6:04 PM
  */
 
-namespace PWBox\model;
+namespace PWBox\model\repositories;
 
 use PWBox\model\Folder;
 
 
 interface FolderRepository
 {
-    public function create($folderName, User $creator);
+    public function create( int $userId, Folder $folder);
 
-    public function update(User $creator, Folder $folder);
+    public function update(Folder $folder);
 
     public function get(int $id) : Folder;
 
