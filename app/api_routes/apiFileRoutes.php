@@ -16,4 +16,4 @@ $this->delete('/{id}', PWBox\controller\FileController::class,':delete')->setNam
 
 $this->get('/{id}/download', PWBox\controller\FileController::class,':download')->setName('download-file');
 
-$this->get('/{id}/upload', PWBox\controller\FileController::class,':upload')->setName('upload-file');
+$this->post('/upload', PWBox\controller\FileController::class,':upload')->setName('upload-file');

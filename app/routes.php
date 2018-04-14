@@ -28,6 +28,10 @@ $app->group('/folder', function (){
     require __DIR__.'/api_routes/apiFolderRoutes.php';
 });
 
+$app->group('/file', function (){
+    require __DIR__.'/api_routes/apiFileRoutes.php';
+});
+
 // -------------------------NAVIGATION
 $app->group('/', function(){
     require __DIR__.'/nav_routes/navigationRoutes.php';
