@@ -6,12 +6,22 @@
  * Time: 6:04 PM
  */
 
-namespace PWBox\model;
+namespace PWBox\model\repositories;
 
+use PWBox\model\Folder;
+use PWBox\model\User;
+use PWBox\model\File;
 
 interface FileRepository
 {
-    public function post(User $user, Folder $folder_name, File $file);
+    public function post(User $user, Folder $folder, File $file);
 
-    public function get(User $user, Folder $folder,  $file_name);
+    public function download(File $file);
+
+    public function delete(File $file);
+
+    public function getData(File $file);
+
+    public function updateData(File $file);
+
 }

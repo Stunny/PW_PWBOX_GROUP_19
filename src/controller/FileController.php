@@ -188,7 +188,9 @@ class FileController
                 ->withHeader('Content-type', 'text/html')
                 ->write('Something went wrong'.'<br>'.$e->getMessage());
         }catch (NotFoundExceptionInterface $e) {
+            echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {
+            echo $e->getMessage();
         }
 
         return $response;
