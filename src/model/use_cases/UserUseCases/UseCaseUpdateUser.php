@@ -29,8 +29,7 @@ class UseCaseUpdateUser
         $user = $this->repository->get($userId);
 
         if(isset($user['username'])){
-            echo '<br>'.isset($rawData['username']);
-            echo '<br>'.isset($rawData['username'])? $user['username']: $rawData['username'];
+
             $this->repository->update(
                 new User(
                     $userId,

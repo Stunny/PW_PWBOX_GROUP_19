@@ -12,14 +12,14 @@ use PWBox\model\File;
 
 interface FileRepository
 {
-    public function post(File $file);
+    public function post(File $file): File;
 
-    public function download(File $file);
+    public function download(File $file): File;
 
     public function delete(File $file);
 
-    public function getData(File $file);
+    public function getData(File $file): File;
 
-    public function updateData(File $file);
+    public function updateData(File $file): File;
 
 }

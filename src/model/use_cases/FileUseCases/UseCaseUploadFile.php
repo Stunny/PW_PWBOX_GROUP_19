@@ -38,6 +38,8 @@ class UseCaseUploadFile
             $uploadedFile
         );
 
-        $this->repository->post($fileObject);
+        $fileObject = $this->repository->post($fileObject);
+
+        return $fileObject->getId();
     }
 }

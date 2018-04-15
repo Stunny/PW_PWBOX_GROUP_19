@@ -10,35 +10,35 @@ namespace PWBox\model\repositories\impl;
 
 
 use PWBox\model\File;
-use PWBox\model\Folder;
 use PWBox\model\repositories\FileRepository;
-use PWBox\model\User;
 
 class DoctrineFileRepository implements FileRepository
 {
 
-    public function post(File $file)
+    public function post(File $file): File
     {
-        // TODO: Implement post() method.
+        /* TODO: Implement post() method. Una vez cargado el archivo en la carpeta del usuario y sus datos en la base
+         *   de datos, devolver un objeto de clase File el cual contenga la ID del archivo en la BD
+        */
     }
 
-    public function download(File $file)
+    public function download(File $file): File
     {
-        // TODO: Implement download() method.
+        // TODO: Implement download() method. Devolver un objeto de la clase File cuyo atributo `file` contenga el archivo
     }
 
     public function delete(File $file)
     {
-        // TODO: Implement delete() method.
+        // TODO: Implement delete() method. Eliminar archivo del sistema y de la base de datos
     }
 
-    public function getData(File $file)
+    public function getData(File $file): File
     {
-        // TODO: Implement getData() method.
+        // TODO: Implement getData() method. Devolver un objeto de la clase File con su stributo `file` a null
     }
 
-    public function updateData(File $file)
+    public function updateData(File $file): File
     {
-        // TODO: Implement updateData() method.
+        // TODO: Implement updateData() method. Devolver el objeto de la clase File con los nuevos datos y con su atributo `file` a null
     }
 }

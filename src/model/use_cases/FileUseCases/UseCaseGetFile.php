@@ -8,8 +8,35 @@
 
 namespace PWBox\model\use_cases\FileUseCases;
 
+use PWBox\model\repositories\FileRepository;
 
 class UseCaseGetFile
 {
+    private $repository;
 
+    /**
+     * UseCasePostUser constructor.
+     * @param FileRepository $repository
+     */
+    public function __construct(FileRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    public function __invoke($fileId)
+    {
+        $file = $this->repository->getData($fileId);
+
+        if($file != null){
+            return [
+                'name' => $file->getName(),
+                'creador' => $file->getCreador(),
+                'folder' => $file->getFolder(),
+                'created_at' => $file->getCreatedAt(),
+                'updated_at' => $file->getUpdatedAt()
+            ];
+        }
+
+        return [];
+    }
 }

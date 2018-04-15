@@ -35,31 +35,22 @@ class FileController
             if(!isset($fileData['name'])){
                 $response = $response
                     ->withStatus(404)
-                    ->withHeader('Content-type', 'text/html')
-                    ->write('File not found');
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"File not found", "res"=>[]]));
             }else{
                 $response = $response
                     ->withStatus(200)
                     ->withHeader('Content-type', 'application/json')
-                    ->write(json_encode($fileData));
+                    ->write(json_encode(["msg"=>"Success", "res"=> $fileData]));
             }
 
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong<br>'.$e->getMessage());
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         } catch (NotFoundExceptionInterface $e) {
-            $response = $response
-                ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong<br>'.$e->getMessage());
-        } catch (ContainerExceptionInterface $e) {
-            $response = $response
-                ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong<br>'.$e->getMessage());
-        }
+        } catch (ContainerExceptionInterface $e) {}
         return $response;
     }
 
@@ -79,24 +70,22 @@ class FileController
             if($result){
                 $response = $response
                     ->withStatus(200)
-                    ->withHeader('Content-type', 'text/html')
-                    ->write('Updated successfully');
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>'Updated successfully', "res"=>[]]));
             }else{
                 $response = $response
                     ->withStatus(404)
-                    ->withHeader('Content-type', 'text/html')
-                    ->write('File not found');
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"File not found", "res"=>[]]));
             }
 
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong<br>'.$e->getMessage());
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         } catch (NotFoundExceptionInterface $e) {
-            echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {
-            echo $e->getMessage();
         }
         return $response;
     }
@@ -112,17 +101,28 @@ class FileController
             $service = $this->container->get('delete-file-service');
             $service($args['id']);
 
-            //todo: confirmacion de eliminacion del archivo correcta
+            $result = $service($args['id']);
+
+            if($result){
+                $response = $response
+                    ->withStatus(200)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>'Deleted successfully', "res"=>[]]));
+            }else{
+                $response = $response
+                    ->withStatus(404)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"File not found", "res"=>[]]));
+            }
+
 
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong'.'<br>'.$e->getMessage());
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         } catch (NotFoundExceptionInterface $e) {
-            echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {
-            echo $e->getMessage();
         }
         return $response;
     }
@@ -142,20 +142,19 @@ class FileController
             $uploadedFile = $uploadedFiles[$data['filename']];
             if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
                 $service = $this->container->get('upload-file-service');
-                $service($uploadedFile, $data);
+                $fileId = $service($uploadedFile, $data);
+                $response = $response->withStatus(200)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"Uploaded Successfully", "res"=>["id"=>$fileId]]));
             }
-
-            //todo: confirmacion de subida del archivo correcta
 
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong'.'<br>'.$e->getMessage());
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         } catch (NotFoundExceptionInterface $e) {
-            echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {
-            echo $e->getMessage();
         }
         return $response;
     }
@@ -171,26 +170,30 @@ class FileController
             $service = $this->container->get('download-file-service');
             $file = $service($args['id']);
 
-            $response = $response
-                ->withHeader('Content-Description', 'File Transfer')
-                ->withHeader('Content-Type', 'application/octet-stream')
-                ->withHeader('Content-Disposition', 'attachment;filename="'.basename($file).'"')
-                ->withHeader('Expires', '0')
-                ->withHeader('Cache-Control', 'must-revalidate')
-                ->withHeader('Pragma', 'public')
-                ->withHeader('Content-Length', filesize($file));
-
-            readfile($file);
+            if($file != null){
+                $response = $response
+                    ->withHeader('Content-Description', 'File Transfer')
+                    ->withHeader('Content-Type', 'application/octet-stream')
+                    ->withHeader('Content-Disposition', 'attachment;filename="'.basename($file).'"')
+                    ->withHeader('Expires', '0')
+                    ->withHeader('Cache-Control', 'must-revalidate')
+                    ->withHeader('Pragma', 'public')
+                    ->withHeader('Content-Length', filesize($file));
+                readfile($file);
+            }else{
+                $response = $response
+                    ->withStatus(404)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"File not found", "res"=>[]]));
+            }
 
         } catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong'.'<br>'.$e->getMessage());
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         }catch (NotFoundExceptionInterface $e) {
-            echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {
-            echo $e->getMessage();
         }
 
         return $response;
