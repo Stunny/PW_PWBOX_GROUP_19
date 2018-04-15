@@ -17,7 +17,7 @@ use PWBox\model\User;
 class DoctrineFileRepository implements FileRepository
 {
 
-    public function post(User $user, Folder $folder, File $file)
+    public function post(File $file)
     {
         // TODO: Implement post() method.
     }

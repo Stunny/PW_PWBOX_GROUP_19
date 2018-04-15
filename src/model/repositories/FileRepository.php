@@ -8,13 +8,11 @@
 
 namespace PWBox\model\repositories;
 
-use PWBox\model\Folder;
-use PWBox\model\User;
 use PWBox\model\File;
 
 interface FileRepository
 {
-    public function post(User $user, Folder $folder, File $file);
+    public function post(File $file);
 
     public function download(File $file);
 

@@ -7,7 +7,6 @@
  */
 
 namespace PWBox\model;
-//todo
 
 class File
 {
@@ -18,13 +17,16 @@ class File
   private $created_at;
   private $updated_at;
 
+  private $file;
+
   public function __construct(
     $id,
     $name,
     $creador,
     $folder,
     $created_at,
-    $updated_at){
+    $updated_at,
+    $file){
 
       $this->id = $id;
       $this->name = $name;
@@ -32,9 +34,16 @@ class File
       $this->creador = $creador;
       $this->created_at = $created_at;
       $this->updated_at = $updated_at;
+      $this->file = $file;
   }
 
-
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
 
 
     /**
