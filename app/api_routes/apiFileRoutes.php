@@ -6,14 +6,14 @@
  * Time: 11:36 PM
  */
 
-$this->get('/{id}', PWBox\controller\FileController::class,':get')->setName('get-file');
+$this->get('/{id}', PWBox\controller\FileControllers\GetFileController::class)->setName('get-file');
 
-$this->put('/{id}', PWBox\controller\FileController::class,':put')->setName('update-file');
+$this->put('/{id}', PWBox\controller\FileControllers\PutFileController::class)->setName('update-file');
 
-$this->delete('/{id}', PWBox\controller\FileController::class,':delete')->setName('delete-file');
+$this->delete('/{id}', PWBox\controller\FileControllers\DeleteFileController::class)->setName('delete-file');
 
 //-----------------------------------Upload and Download
 
-$this->get('/{id}/download', PWBox\controller\FileController::class,':download')->setName('download-file');
+$this->get('/{id}/download', PWBox\controller\FileControllers\DownloadFileController::class)->setName('download-file');
 
-$this->post('/upload', PWBox\controller\FileController::class,':upload')->setName('upload-file');
+$this->post('/upload', PWBox\controller\FileControllers\PostFileController::class)->setName('upload-file');

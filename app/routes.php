@@ -19,16 +19,16 @@ $app->get(
 // -------------------------API
 
 //User
-$app->group('/user', function(){
+$app->group('/api/user', function(){
     require __DIR__.'/api_routes/apiUserRoutes.php';
 });
 
 //Folder
-$app->group('/folder', function (){
+$app->group('/api/folder', function (){
     require __DIR__.'/api_routes/apiFolderRoutes.php';
 });
 
-$app->group('/file', function (){
+$app->group('/api/file', function (){
     require __DIR__.'/api_routes/apiFileRoutes.php';
 });
 
