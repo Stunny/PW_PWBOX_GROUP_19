@@ -8,8 +8,19 @@
 
 namespace PWBox\model\use_cases\FolderUseCases;
 
+use PWBox\model\repositories\FolderRepository;
 
 class UseCaseDeleteFolder
 {
-    //todo: caso de uso de borrar carpeta
+    private $repository;
+
+    function __construct(FolderRepository $repository){
+        $this->repository = $repository;
+    }
+
+    function __invoke(array $rawData){
+        $folderId = $rawData['id'];
+
+        $this->repository->delete($folderId);
+    }
 }

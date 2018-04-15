@@ -9,7 +9,22 @@
 namespace PWBox\model\use_cases\FolderUseCases;
 
 
+use PWBox\model\repositories\FolderRepository;
+
 class UseCaseGetFolder
 {
-    //todo: caso de uso de recuperar carpeta
+
+    private $repository;
+
+    function __construct(FolderRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    //TODO: RECIVIR EN EL INKOVE EL USUARIO QUE QUIERE
+    function __invoke(array $rawData)
+    {
+        $folderID = $rawData['id'];
+        $this->repository->get($folderID);
+    }
 }

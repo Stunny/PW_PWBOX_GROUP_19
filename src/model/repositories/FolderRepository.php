@@ -13,7 +13,7 @@ use PWBox\model\Folder;
 
 interface FolderRepository
 {
-    public function create( int $userId, Folder $folder);
+    public function create(int $userId, Folder $folder);
 
     public function update(Folder $folder);
 
