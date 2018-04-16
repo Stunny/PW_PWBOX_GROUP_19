@@ -13,11 +13,11 @@ use PWBox\model\User as User;
 
 interface UserRepository
 {
-    public function save(User $user);
+    public function save(User $user): User;
 
     public function delete(int $userId);
 
-    public function get(int $id);
+    public function get(int $id): User;
 
-    public function update(User $user);
+    public function update(User $user): User;
 }

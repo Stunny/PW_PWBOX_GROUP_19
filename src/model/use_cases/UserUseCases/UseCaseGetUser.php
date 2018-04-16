@@ -24,8 +24,19 @@ class UseCaseGetUser
         $this->repository = $repository;
     }
 
-    public function __invoke($userId): array
+    public function __invoke($userId)
     {
-        return  $this->repository->get($userId);
+        $user = $this->repository->get($userId);
+
+        if($user == null){
+            return [];
+        }
+
+        return [
+            "username" => $user->getUserName(),
+            "email" => $user->getEmail(),
+            "created_at" => $user->getCreatedAt(),
+            "imgpath" => $user->getProfileImgPath()
+        ];
     }
 }

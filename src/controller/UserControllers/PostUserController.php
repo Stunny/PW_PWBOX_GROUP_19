@@ -37,8 +37,8 @@ class PostUserController
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong'.'<br>'.$e->getMessage());
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         } catch (NotFoundExceptionInterface $e) {
             echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {

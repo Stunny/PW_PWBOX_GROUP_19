@@ -33,25 +33,25 @@ class GetUserController
 
       try{
           $service = $this->container->get('get-user-service');
-          $userData = $service($args['id']);
+          $userData = $service($args['userID']);
 
           if(!isset($userData['username'])){
-            $response = $response
-                ->withStatus(404)
-                ->withHeader('Content-type', 'text/html')
-                ->write('User not found');
+              $response = $response
+                  ->withStatus(404)
+                  ->withHeader('Content-type', 'application/json')
+                  ->write(json_encode(["msg"=>"User not found", "res"=>[]]));
           }else{
             $response = $response
                 ->withStatus(200)
                 ->withHeader('Content-type', 'application/json')
-                ->write(json_encode($userData));
+                ->write(json_encode(["msg"=>"Success", "res"=>$userData]));
           }
 
       }catch (\Exception $e){
           $response = $response
               ->withStatus(500)
-              ->withHeader('Content-type', 'text/html')
-              ->write('Something went wrong');
+              ->withHeader('Content-type', 'application/json')
+              ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
       } catch (NotFoundExceptionInterface $e) {
       } catch (ContainerExceptionInterface $e) {
       }

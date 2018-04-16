@@ -29,7 +29,7 @@ class UpdateFolderController
         try{
             $service = $this->container->get('put-folder-service');
             $data = $request->getParsedBody();
-            $result = $service($data, $args['id']);
+            $result = $service($data, $args['folderID']);
 
             if($result){
                 $response = $response

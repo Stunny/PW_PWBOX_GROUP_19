@@ -28,7 +28,7 @@ class GetFolderController
     {
         try{
             $service = $this->container->get('get-folder-service');
-            $folderData = $service($args['id']);
+            $folderData = $service($args['folderID']);
 
             if(!isset($folderData['name'])){
                 $response = $response

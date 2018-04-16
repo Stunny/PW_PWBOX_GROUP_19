@@ -31,15 +31,26 @@ class DeleteUserController
 
         try{
             $service = $this->container->get('delete-user-service');
-            $service($args['id']);
+            $result = $service($args['userID']);
 
-            //todo: confirmacion de eliminacion del usuario correcta
+            if($result){
+                $response = $response
+                    ->withStatus(200)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>'Deleted successfully', "res"=>[]]));
+            }else{
+                $response = $response
+                    ->withStatus(404)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"User not found", "res"=>[]]));
+            }
+
 
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong'.'<br>'.$e->getMessage());
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         } catch (NotFoundExceptionInterface $e) {
         } catch (ContainerExceptionInterface $e) {
         }

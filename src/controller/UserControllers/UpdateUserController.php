@@ -32,29 +32,27 @@ class UpdateUserController
         try{
             $service = $this->container->get('put-user-service');
             $data = $request->getParsedBody();
-            $result = $service($data, $args['id']);
+            $result = $service($data, $args['userID']);
 
             if($result){
                 $response = $response
                     ->withStatus(200)
-                    ->withHeader('Content-type', 'text/html')
-                    ->write('Updated successfully');
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>'Updated successfully', "res"=>[]]));
             }else{
                 $response = $response
                     ->withStatus(404)
-                    ->withHeader('Content-type', 'text/html')
-                    ->write('User not found');
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"User not found", "res"=>[]]));
             }
 
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
-                ->withHeader('Content-type', 'text/html')
-                ->write('Something went wrong<br>'.$e->getMessage());
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         } catch (NotFoundExceptionInterface $e) {
-            echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {
-            echo $e->getMessage();
         }
         return $response;
     }
