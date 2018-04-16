@@ -103,3 +103,48 @@ $container['delete-folder-service'] = function ($container){
     );
     return $service;
 };
+
+
+//----------------------------------------------------------------------------------File
+
+$container['file-repository'] = function ($container){
+    $repository = new \PWBox\model\repositories\impl\DoctrineFileRepository(
+        $container->get('doctrine')
+    );
+    return $repository;
+};
+
+$container['upload-file-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FileUseCases\UseCaseUploadFile(
+        $container->get('file-repository')
+    );
+    return $service;
+};
+
+$container['download-file-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FileUseCases\UseCaseDownloadFile(
+        $container->get('file-repository')
+    );
+    return $service;
+};
+
+$container['get-file-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FileUseCases\UseCaseGetFile(
+        $container->get('file-repository')
+    );
+    return $service;
+};
+
+$container['put-file-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FileUseCases\UseCasePutFile(
+        $container->get('file-repository')
+    );
+    return $service;
+};
+
+$container['delete-file-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FileUseCases\UseCaseDeleteFile(
+        $container->get('file-repository')
+    );
+    return $service;
+};

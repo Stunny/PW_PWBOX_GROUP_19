@@ -11,9 +11,17 @@ namespace PWBox\model\repositories\impl;
 
 use PWBox\model\File;
 use PWBox\model\repositories\FileRepository;
+use Doctrine\DBAL\Connection;
 
 class DoctrineFileRepository implements FileRepository
 {
+
+    private $connection;
+
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
 
     public function post(File $file): File
     {

@@ -23,14 +23,6 @@ $app->group('/api/user', function(){
     require __DIR__.'/api_routes/apiUserRoutes.php';
 });
 
-//Folder
-$app->group('/api/folder', function (){
-    require __DIR__.'/api_routes/apiFolderRoutes.php';
-});
-
-$app->group('/api/file', function (){
-    require __DIR__.'/api_routes/apiFileRoutes.php';
-});
 
 // -------------------------NAVIGATION
 $app->group('/', function(){
