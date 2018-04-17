@@ -32,7 +32,7 @@ class PostUserController
         try{
             $data = $request->getParsedBody();
             $service = $this->container->get('post-user-service');
-            $service($data);
+            $service($data, $this->container->get('generate-verification-service'));
 
         }catch (\Exception $e){
             $response = $response

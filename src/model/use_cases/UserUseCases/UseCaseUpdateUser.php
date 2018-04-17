@@ -28,15 +28,17 @@ class UseCaseUpdateUser
     {
         $user = $this->repository->get($userId);
 
-        if($user != null){
+        if(isset($user['username'])){
 
             $this->repository->update(
                 new User(
                     $userId,
-                    isset($rawData['username'])? $rawData['username']: $user->getUserName(),
-                    isset($rawData['password'])? $rawData['password']: $user->getPassword(),
-                    isset($rawData['email'])? $rawData['email']: $user->getEmail(),
-                    isset($rawData['imgpath'])? $rawData['imgpath']: $user->getEmail(),
+                    isset($rawData['username'])? $rawData['username']: $user['username'],
+                    null,
+                    isset($rawData['email'])? $rawData['email']: $user['email'],
+                    isset($rawData['birthdate'])? $rawData['birthdate']: $user['birthdate'],
+                    isset($rawData['imgpath'])? $rawData['imgpath']: $user['imgpath'],
+                    $user['verified'],
                     null,
                     null
                 )

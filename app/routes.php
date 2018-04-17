@@ -10,21 +10,21 @@
 
 
 //--------------------------------------ROUTES------------------------------------------------------------------------//
-
+/*
 $app->get(
     '/hello/{name}',
     'PWBox\controller\NavigationControllers\HelloController'
-)->add('PWBox\controller\middleware\HelloMiddleware');
+)->add('PWBox\controller\middleware\HelloMiddleware');*/
 
 // -------------------------API
 
 //User
 $app->group('/api/user', function(){
-    require __DIR__.'/api_routes/apiUserRoutes.php';
+    require __DIR__ . '/apiUserRoutes.php';
 });
 
 
 // -------------------------NAVIGATION
 $app->group('/', function(){
-    require __DIR__.'/nav_routes/navigationRoutes.php';
+    require __DIR__ . '/navigationRoutes.php';
 });

@@ -24,7 +24,7 @@ class UseCasePostUser
         $this->repository = $repository;
     }
 
-    public function __invoke(array $rawData)
+    public function __invoke(array $rawData, $generateVerificationService)
     {
         $now = new \DateTime('now');
         $user = new User(
@@ -32,11 +32,16 @@ class UseCasePostUser
             $rawData['username'],
             $rawData['password'],
             $rawData['email'],
+            $rawData['birthdate'],
             $rawData['imgpath'],
+            false,
             $now,
             $now
         );
 
-        $this->repository->save($user);
+        $verificationHash = $this->repository->save($user);
+
+        $generateVerificationService($verificationHash, $user->getEmail());
+
     }
 }

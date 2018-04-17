@@ -67,6 +67,20 @@ $container['delete-user-service'] = function ($container){
     return $service;
 };
 
+$container['verify-user-service'] = function($container){
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCaseVerifyUser(
+        $container->get('user-repository')
+    );
+    return $service;
+};
+
+$container['generate-verification-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCaseGenerateVerificationMail(
+        $container->get('user-repository')
+    );
+    return $service;
+};
+
 //----------------------------------------------------------------------------------Folder
 $container['folder-repository'] = function ($container){
     $repository = new \PWBox\model\repositories\impl\DoctrineFolderRepository(
