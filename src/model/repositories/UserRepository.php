@@ -21,5 +21,5 @@ interface UserRepository
 
     public function update(User $user);
 
-    public function verify(User $user);
+    public function verify($verificationHash);
 }

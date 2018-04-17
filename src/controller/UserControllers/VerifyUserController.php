@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Alex
- * Date: 4/11/2018
- * Time: 11:58 AM
+ * User: alex
+ * Date: 17/4/18
+ * Time: 12:35
  */
 
 namespace PWBox\controller\UserControllers;
@@ -16,7 +16,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
 
 
-class PostUserController
+class VerifyUserController
 {
 
     protected $container;
@@ -26,25 +26,19 @@ class PostUserController
         $this->container = $container;
     }
 
-    public function __invoke(Request $request, Response $response)
+    public function __invoke(Request $request, Response $response, $args)
     {
-        //todo: validacion de datos de usuario
         try{
-            $data = $request->getParsedBody();
-            $service = $this->container->get('post-user-service');
-            $service($data, $this->container->get('generate-verification-service'));
-
+            $service = $this->container->get('verify-user-service');
+            $service($args['hash']);
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
                 ->withHeader('Content-type', 'text/html')
                 ->write('Something went wrong'.'<br>'.$e->getMessage());
-        } catch (NotFoundExceptionInterface $e) {
-            echo $e->getMessage();
-        } catch (ContainerExceptionInterface $e) {
-            echo $e->getMessage();
-
         }
+
         return $response;
     }
+
 }

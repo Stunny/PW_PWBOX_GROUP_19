@@ -14,6 +14,9 @@ $this->put('/{userID}', PWBox\controller\UserControllers\UpdateUserController::c
 
 $this->delete('/{userID}', PWBox\controller\UserControllers\DeleteUserController::class)->setName('delete-user');
 
+$this->get('/verify/{hash}', PWBox\controller\UserControllers\VerifyUserController::class)->setName('verify-user');
+
+
 //---------------------------------------------------------Folder
 $this->post('/{userID}/folder', PWBox\controller\FolderControllers\PostFolderController::class)->setName('post-folder');
 
@@ -22,6 +25,7 @@ $this->get('/{userID}/folder/{folderID}', PWBox\controller\FolderControllers\Get
 $this->put('/{userID}/folder/{folderID}', PWBox\controller\FolderControllers\UpdateFolderController::class)->setName('update-folder');
 
 $this->delete('/{userID}/folder/{folderID}', PWBox\controller\FolderControllers\DeleteFolderController::class)->setName('delete-folder');
+
 
 //----------------------------------------------------------File
 $this->get('/{userID}/folder/{folderID}/file/{fileID}', PWBox\controller\FileControllers\GetFileController::class)->setName('get-file');
