@@ -40,7 +40,7 @@ class DoctrineUserRepository implements UserRepository
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("username", $user->getUsername(), 'string');
         $stmt->bindValue("email", $user->getEmail(), 'string');
-        $stmt->bindValue("birthdate", $user->getBirthDate(), 'date');
+        $stmt->bindValue("birthdate", \DateTime::createFromFormat('Y-m-d', $user->getBirthDate()), 'date');
         $stmt->bindValue("password", $user->getPassword(), 'string');
         $stmt->bindValue("hash", $verificationHash, 'string');
         $stmt->bindValue("created_at", $user->getCreatedAt()->format(self::DATE_FORMAT));

@@ -69,14 +69,14 @@ $container['delete-user-service'] = function ($container){
 
 $container['verify-user-service'] = function($container){
     $service = new \PWBox\model\use_cases\UserUseCases\UseCaseVerifyUser(
-        $container
+        $container->get('user-repository')
     );
     return $service;
 };
 
 $container['generate-verification-service'] = function ($container){
     $service = new \PWBox\model\use_cases\UserUseCases\UseCaseGenerateVerificationMail(
-        $container
+        $container->get('user-repository')
     );
     return $service;
 };

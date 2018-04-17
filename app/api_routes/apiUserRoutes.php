@@ -6,7 +6,7 @@
  * Time: 11:36 PM
  */
 
-$this->post('', PWBox\controller\UserControllers\PostUserController::class)->setName('post-user');
+$this->post('/', PWBox\controller\UserControllers\PostUserController::class)->setName('post-user');
 
 $this->get('/{userID}', PWBox\controller\UserControllers\GetUserController::class)->setName('get-user');
 

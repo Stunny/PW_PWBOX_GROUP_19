@@ -40,7 +40,7 @@ We hope our service is to your liking. If you have any trouble when using it be 
 http://pwbox.test/documentation
 
         ';
-
-        mail($to, $subject, $msg, $headers);
+        echo $msg;
+        echo mail($to, $subject, $msg, $headers);
     }
 }

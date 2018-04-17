@@ -10,11 +10,11 @@
 
 
 //--------------------------------------ROUTES------------------------------------------------------------------------//
-
+/*
 $app->get(
     '/hello/{name}',
     'PWBox\controller\NavigationControllers\HelloController'
-)->add('PWBox\controller\middleware\HelloMiddleware');
+)->add('PWBox\controller\middleware\HelloMiddleware');*/
 
 // -------------------------API
 
