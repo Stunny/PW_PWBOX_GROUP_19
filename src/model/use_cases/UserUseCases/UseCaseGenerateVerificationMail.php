@@ -34,15 +34,14 @@ class UseCaseGenerateVerificationMail
     {
 
         $msg = '
-        
 <h1 style="color:#42a5f5">Thanks for signing up on PWBOX!</h1>
 
 Your account has been created successfully, but in order for you to enjoy the full experience of our service we need you to activate your account by confirming us your email address using the following URL:
 <a href="http://pwbox.test/api/user/verify/'.$verificationHash.'">Verify Account Email</a>
-
+<br>
 If the link doesn\'t work, try pasting the following address on your browser: 
 http://pwbox.test/api/user/verify/'.$verificationHash.'
-
+<br>
 We hope our service is to your liking. If you have any trouble when using it be sure to check out the documentation we provide in the following site:
 http://pwbox.test/documentation
 
@@ -57,7 +56,6 @@ http://pwbox.test/documentation
             $mail->isHTML(true);
 
             $mail->IsSMTP();
-            $mail->SMTPDebug = 2;
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'tls';
             $mail->Host = "smtp.gmail.com";

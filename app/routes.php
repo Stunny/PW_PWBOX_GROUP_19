@@ -20,11 +20,11 @@ $app->get(
 
 //User
 $app->group('/api/user', function(){
-    require __DIR__.'/api_routes/apiUserRoutes.php';
+    require __DIR__ . '/apiUserRoutes.php';
 });
 
 
 // -------------------------NAVIGATION
 $app->group('/', function(){
-    require __DIR__.'/nav_routes/navigationRoutes.php';
+    require __DIR__ . '/navigationRoutes.php';
 });
