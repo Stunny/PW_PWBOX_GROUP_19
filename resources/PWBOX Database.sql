@@ -1,12 +1,13 @@
--- CREATE DATABASE PWBOX;
+ -- CREATE DATABASE PWBOX;
 USE PWBOX;
 
 DROP TABLE IF EXISTS `role` CASCADE;
+DROP TABLE IF EXISTS `file` CASCADE;
 DROP TABLE IF EXISTS `folder` CASCADE;
 DROP TABLE IF EXISTS `user` CASCADE;
 
 CREATE TABLE `user` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `email` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `password` char(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
@@ -19,7 +20,7 @@ CREATE TABLE `user` (
 
 CREATE TABLE `folder`(
 	`id` INT NOT NULL AUTO_INCREMENT,
-  `creador` int(11) unsigned NOT NULL,
+  `creador` int unsigned NOT NULL,
   `nom` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'new-folder',
   `path` VARCHAR(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -29,7 +30,7 @@ CREATE TABLE `folder`(
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 CREATE TABLE `role`(
-	`usuari` INT unsigned NOT NULL,
+	`usuari` INT NOT NULL,
   `folder` INT NOT NULL,
   `role` VARCHAR(255) NOT NULL DEFAULT 'read',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -40,12 +41,12 @@ CREATE TABLE `role`(
 
 CREATE TABLE `file`(
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'new-file',
-  `creator` INT unsigned NOT NULL,
-  `folder` INT unsigned NOT NULL,
+  `name` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT "new-file",
+  `creator` INT NOT NULL,
+  `folder` INT NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`creador`) REFERENCES `user`(`id`),
+  FOREIGN KEY (`creator`) REFERENCES `user`(`id`),
   FOREIGN KEY (`folder`) REFERENCES `folder`(`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;

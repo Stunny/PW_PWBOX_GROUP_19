@@ -20,4 +20,6 @@ interface UserRepository
     public function get(int $id);
 
     public function update(User $user);
+
+    public function verify(User $user);
 }

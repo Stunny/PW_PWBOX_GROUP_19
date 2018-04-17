@@ -36,7 +36,9 @@ class UseCaseUpdateUser
                     isset($rawData['username'])? $rawData['username']: $user['username'],
                     isset($rawData['password'])? $rawData['password']: $user['password'],
                     isset($rawData['email'])? $rawData['email']: $user['email'],
+                    isset($rawData['birthdate'])? $rawData['birthdate']: $user['birthdate'],
                     isset($rawData['imgpath'])? $rawData['imgpath']: $user['imgpath'],
+                    $user['verified'],
                     null,
                     null
                 )

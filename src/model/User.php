@@ -15,18 +15,26 @@ namespace PWBox\model;
     private $userName;
     private $password;
     private $email;
+    private $birthDate;
+    private $verified;
     private $created_at;
     private $updated_at;
     private $profileImgPath;
 
-        public function __construct($id, $userName, $password, $email, $imagePath, $created_at, $updated_at) {
+        public function __construct($id, $userName, $password, $email, $birthDate, $imagePath, $verified, $created_at, $updated_at) {
+
             $this->id = $id;
             $this->userName = $userName;
             $this->password = $password;
             $this->email = $email;
             $this->profileImgPath = $imagePath;
+            $this->birthDate = $birthDate;
+            $this->verified = $verified;
+
             $this->created_at = $created_at;
             $this->updated_at = $updated_at;
+
+
         }
 
         /**
@@ -141,6 +149,22 @@ namespace PWBox\model;
         public function setProfileImgPath($profileImgPath)
         {
             $this->profileImgPath = $profileImgPath;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getBirthDate()
+        {
+            return $this->birthDate;
+        }
+
+        /**
+         * @param mixed $birthDate
+         */
+        public function setBirthDate($birthDate)
+        {
+            $this->birthDate = $birthDate;
         }
 
 

@@ -32,7 +32,9 @@ class UseCasePostUser
             $rawData['username'],
             $rawData['password'],
             $rawData['email'],
+            $rawData['birthdate'],
             $rawData['imgpath'],
+            false,
             $now,
             $now
         );
