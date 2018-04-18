@@ -24,8 +24,16 @@ class UseCasePostUser
         $this->repository = $repository;
     }
 
-    public function __invoke(array $rawData, $generateVerificationService)
+    public function __invoke(array $rawData, $uploadedFiles, $generateVerificationService, $postProfileImgService)
     {
+
+        $profileImg = $uploadedFiles[0];
+        $imgPath = "";
+
+        if ($profileImg->getError() === UPLOAD_ERR_OK) {
+            $imgPath = $postProfileImgService($profileImg, $rawData['username']);
+        }
+
         $now = new \DateTime('now');
         $user = new User(
             null,
@@ -33,7 +41,7 @@ class UseCasePostUser
             $rawData['password'],
             $rawData['email'],
             $rawData['birthdate'],
-            $rawData['imgpath'],
+            $imgPath,
             false,
             $now,
             $now

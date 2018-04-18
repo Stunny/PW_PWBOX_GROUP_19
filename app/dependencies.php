@@ -169,3 +169,10 @@ $container['delete-file-service'] = function ($container){
     );
     return $service;
 };
+
+$container['profile-img-service'] = function($container){
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCasePostProfileImage(
+        $container->get('file-repository')
+    );
+    return $service;
+};
