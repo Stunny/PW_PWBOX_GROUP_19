@@ -25,6 +25,9 @@ class DoctrineUserRepository implements UserRepository
     private const DELETE_QUERY = 'DELETE FROM `user` WHERE (`id` = :id)';
     private const VERIFY_QUERY = 'update user set verified = true where verificationHash = :hash';
 
+    private const CHECK_PASS_QUERY = 'select count(*) as count from user where id = :id and password = md5(:password)';
+    private const CHANGE_PASS_QUERY = 'update user set password = md5(:password) where id = :id';
+
     private $connection;
 
     public function __construct(Connection $connection)
@@ -50,7 +53,7 @@ class DoctrineUserRepository implements UserRepository
         return $verificationHash;
     }
 
-    public function delete(int $userId)
+    public function delete($userId)
     {
         $sql = self::DELETE_QUERY;
         $stmt = $this->connection->prepare($sql);
@@ -58,10 +61,10 @@ class DoctrineUserRepository implements UserRepository
         $stmt->execute();
     }
 
-    public function get(int $id){
+    public function get($userId){
         $sql = self::SELECT_QUERY;
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("id", $id, 'integer');
+        $stmt->bindValue("id", $userId, 'integer');
         $stmt->execute();
 
         $user =  $stmt->fetch();
@@ -83,6 +86,28 @@ class DoctrineUserRepository implements UserRepository
         $stmt->execute();
 
     }
+
+    public function changePassword($userId, $oldPassword, $newPassword){
+        $sql = self::CHECK_PASS_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id", $userId, 'integer');
+        $stmt->bindValue("password", $oldPassword, 'string');
+        $stmt->execute();
+
+        $count = $stmt->fetch()['count'];
+
+        if($count == 0)
+            return false;
+
+        $sql = self::CHANGE_PASS_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id", $userId, 'integer');
+        $stmt->bindValue("password", $newPassword, "string");
+        $stmt->execute();
+
+        return true;
+    }
+
 
     public function verify($verificationHash){
 

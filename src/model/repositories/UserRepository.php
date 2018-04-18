@@ -15,11 +15,13 @@ interface UserRepository
 {
     public function save(User $user);
 
-    public function delete(int $userId);
+    public function delete($userId);
 
-    public function get(int $id);
+    public function get($userId);
 
     public function update(User $user);
+
+    public function changePassword($userId, $oldPassword, $newPassword);
 
     public function verify($verificationHash);
 }

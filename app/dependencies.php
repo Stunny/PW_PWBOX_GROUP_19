@@ -60,6 +60,13 @@ $container['put-user-service'] = function ($container){
     return $service;
 };
 
+$container['change-password-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCaseChangePassword(
+        $container->get('user-repository')
+    );
+    return $service;
+};
+
 $container['delete-user-service'] = function ($container){
     $service = new \PWBox\model\use_cases\UserUseCases\UseCaseDeleteUser(
         $container->get('user-repository')

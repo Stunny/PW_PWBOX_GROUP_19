@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Alex
- * Date: 4/13/2018
- * Time: 11:10 AM
+ * User: alex
+ * Date: 18/4/18
+ * Time: 10:27
  */
 
 namespace PWBox\model\use_cases\UserUseCases;
@@ -11,7 +11,7 @@ namespace PWBox\model\use_cases\UserUseCases;
 use PWBox\model\User;
 use PWBox\model\repositories\UserRepository;
 
-class UseCaseGetUser
+class UseCaseChangePassword
 {
     private $repository;
 
@@ -24,20 +24,15 @@ class UseCaseGetUser
         $this->repository = $repository;
     }
 
-    public function __invoke($userId)
+    public function __invoke(array $rawData, $userId)
     {
         $user = $this->repository->get($userId);
 
-        if($user == null){
-            return [];
+        if(isset($user['username'])) {
+            $result = $this->repository->changePassword($userId, $rawData['oldpassword'], $rawData['newpassword']);
+            return $result? 200: 403;
+        }else{
+            return 404;
         }
-
-        return [
-            "userID" => $user['id'],
-            "username" => $user['username'],
-            "email" => $user['email'],
-            "created_at" => $user['created_at'],
-            "imgpath" => $user['profileImgPath']
-        ];
     }
 }
