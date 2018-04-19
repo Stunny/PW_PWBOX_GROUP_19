@@ -30,8 +30,11 @@ class PostFileController
             $data = $request->getParsedBody();
 
             // handle single input with single file upload
-            $uploadedFile = $uploadedFiles[$data['filename']];
-            if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+            //$uploadedFile = $uploadedFiles[$data['filename']];
+            $uploadedFile = $data['name'];
+
+            //if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+            if (isset($uploadedFile)){
                 $service = $this->container->get('upload-file-service');
                 $fileId = $service($uploadedFile, $data);
                 $response = $response->withStatus(200)

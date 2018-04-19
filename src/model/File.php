@@ -45,6 +45,13 @@ class File
         return $this->file;
     }
 
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file): void
+    {
+        $this->file = $file;
+    }
 
     /**
      * Set the value of Created by PhpStorm.
@@ -189,5 +196,7 @@ class File
     {
         return $this->updated_at;
     }
+
+
 
 }

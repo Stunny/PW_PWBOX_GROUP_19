@@ -30,9 +30,9 @@ class UseCaseUploadFile
         $now = new \DateTime('now');
         $fileObject = new File(
             null,
-            $rawData['filename'],
-            $rawData['userId'],
-            $rawData['folderId'],
+            $rawData['name'],
+            $rawData['creator'],
+            $rawData['folder'],
             $now,
             $now,
             $uploadedFile
