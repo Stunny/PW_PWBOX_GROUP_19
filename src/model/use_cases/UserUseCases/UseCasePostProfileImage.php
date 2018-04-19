@@ -14,7 +14,7 @@ use Slim\Http\UploadedFile;
 class UseCasePostProfileImage
 {
 
-    private const PROFILE_IMGS_DIR = "/home/vagrant/pwbox/appdata/profile_imgs";
+    private const PROFILE_IMGS_DIR = "/home/public/pwbox/appdata/profile_imgs";
 
     private $repository;
 

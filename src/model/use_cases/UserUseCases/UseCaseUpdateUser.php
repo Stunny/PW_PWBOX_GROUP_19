@@ -33,10 +33,10 @@ class UseCaseUpdateUser
             $this->repository->update(
                 new User(
                     $userId,
-                    isset($rawData['username'])? $rawData['username']: $user['username'],
+                    $user['username'],
                     null,
                     isset($rawData['email'])? $rawData['email']: $user['email'],
-                    isset($rawData['birthdate'])? $rawData['birthdate']: $user['birthdate'],
+                    $user['birthdate'],
                     isset($rawData['imgpath'])? $rawData['imgpath']: $user['imgpath'],
                     $user['verified'],
                     null,

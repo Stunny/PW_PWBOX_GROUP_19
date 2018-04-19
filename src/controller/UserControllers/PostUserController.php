@@ -34,11 +34,16 @@ class PostUserController
             $service = $this->container->get('post-user-service');
             $service($data, $request->getUploadedFiles(), $this->container->get('generate-verification-service'), $this->container->get('profile-img-service'));
 
-        }catch (\Exception $e){
+            $this->container->get('flash')->addMessage('user_register', 'User registered successfully');
             $response = $response
-                ->withStatus(500)
-                ->withHeader('Content-type', 'application/json')
-                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
+                ->withStatus(302)
+                ->withHeader('location', '/');
+
+        }catch (\Exception $e){
+            return $this->container->get('view')
+                ->render($response, 'register.twig', [
+                    'errors'=> $e->getMessage()
+                ]);
         } catch (NotFoundExceptionInterface $e) {
             echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {

@@ -27,7 +27,8 @@ class UseCasePostUser
     public function __invoke(array $rawData, $uploadedFiles, $generateVerificationService, $postProfileImgService)
     {
 
-        $profileImg = $uploadedFiles[0];
+        $profileImg = $uploadedFiles['profileimg'];
+        var_dump($uploadedFiles);
         $imgPath = "";
 
         if ($profileImg->getError() === UPLOAD_ERR_OK) {
@@ -41,7 +42,7 @@ class UseCasePostUser
             $rawData['password'],
             $rawData['email'],
             $rawData['birthdate'],
-            $imgPath,
+            "",
             false,
             $now,
             $now

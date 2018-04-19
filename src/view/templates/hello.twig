@@ -3,4 +3,9 @@
 {% block content %}
   {{ parent() }}
   Kappa {{name}}
+  <p>You visited this page {{ times }}</p>
+
+    {% if not advice %}
+      Cookies message <br>
+    {% endif %}
 {% endblock %}

@@ -25,6 +25,13 @@ class LandingPageController
 
     public function __invoke(Request $request, Response $response, array $args)
     {
-        echo "Welcome to the rice fields";
+        $messages = $this->container->get('flash')->getMessages();
+
+        $userRegisteredMessages = isset($messages['user_register'])? $messages['user_register']: [];
+
+        $this->container->get('view')
+            ->render($response, 'register.twig', [
+                'messages' => $userRegisteredMessages
+            ]);
     }
 }
