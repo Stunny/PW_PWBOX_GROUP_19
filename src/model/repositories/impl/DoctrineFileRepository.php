@@ -18,6 +18,11 @@ class DoctrineFileRepository implements FileRepository
 
     private $connection;
 
+    private const POST_QUERY = 'INSERT INTO `file`(`filename`, `creator`, `folder`) VALUES (:filename, :creator, :folder);';
+    private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id);';
+    private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id;';
+
+
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -25,6 +30,18 @@ class DoctrineFileRepository implements FileRepository
 
     public function post(File $file): File
     {
+        $sql = self::POST_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("filename", $file->getName(), 'string');
+        $stmt->bindValue("creator", $file->getCreador(), 'integer');
+        $stmt->bindValue("folder", $file->getFolder(), 'integer');
+        $stmt->execute();
+
+        $sql = "SELECT `id` FROM `file` ORDER BY `id` DESC LIMIT 1;";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+
+        return new File($stmt->fetch()['id'], null, null, null, null, null, null);
         /* TODO: Implement post() method. Una vez cargado el archivo en la carpeta del usuario y sus datos en la base
          *   de datos, devolver un objeto de clase File el cual contenga la ID del archivo en la BD
         */
@@ -37,12 +54,22 @@ class DoctrineFileRepository implements FileRepository
 
     public function delete(File $file)
     {
+        $sql = self::DELETE_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id", $file->getId(), 'integer');
+        $stmt->execute();
         // TODO: Implement delete() method. Eliminar archivo del sistema y de la base de datos
     }
 
     public function getData(File $file): File
     {
-        // TODO: Implement getData() method. Devolver un objeto de la clase File con su stributo `file` a null
+        $sql = self::GET_DATA_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id", $file->getId(), 'integer');
+        $stmt->execute();
+        echo "filename: " . $stmt->fetch()['filename'];
+        echo "creator " . $stmt->fetch()['creator'];
+        // TODO: Implement getData() method. Devolver un objeto de la clase File con su su atributo `file` a null
     }
 
     public function updateData(File $file): File

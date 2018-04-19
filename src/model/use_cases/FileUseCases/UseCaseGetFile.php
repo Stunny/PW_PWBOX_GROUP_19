@@ -26,7 +26,7 @@ class UseCaseGetFile
     public function __invoke($fileId)
     {
         $file = $this->repository->getData($fileId);
-
+        echo "lost";
         if($file != null){
             return [
                 'name' => $file->getName(),

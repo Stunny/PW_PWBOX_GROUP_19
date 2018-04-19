@@ -10,6 +10,7 @@ namespace PWBox\model\repositories\impl;
 
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use PWBox\model\User;
 use PWBox\model\repositories\UserRepository;
 
@@ -19,14 +20,14 @@ class DoctrineUserRepository implements UserRepository
 
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
-    private const INSERT_QUERY = 'INSERT INTO `user`(`username`, `email`, `birthdate`, `password`, `created_at`, `updated_at`, `verificationHash`) VALUES(:username, :email, :birthdate, MD5(:password), :created_at, :updated_at, :hash)';
-    private const SELECT_QUERY = 'SELECT * FROM `user` WHERE (`id` = :id)';
-    private const UPDATE_QUERY = 'UPDATE `user` SET `username` = :username, `email` = :email, `birthdate` = :birthdate, `password` = :password WHERE `id` = :id';
-    private const DELETE_QUERY = 'DELETE FROM `user` WHERE (`id` = :id)';
-    private const VERIFY_QUERY = 'update user set verified = true where verificationHash = :hash';
+    private const INSERT_QUERY = 'INSERT INTO `user`(`username`, `email`, `birthdate`, `password`, `created_at`, `updated_at`, `verificationHash`) VALUES(:username, :email, :birthdate, MD5(:password), :created_at, :updated_at, :hash);';
+    private const SELECT_QUERY = 'SELECT * FROM `user` WHERE (`id` = :id);';
+    private const UPDATE_QUERY = 'UPDATE `user` SET `username` = :username, `email` = :email, `birthdate` = :birthdate, `password` = :password WHERE `id` = :id;';
+    private const DELETE_QUERY = 'DELETE FROM `user` WHERE (`id` = :id);';
+    private const VERIFY_QUERY = 'update user set verified = true where verificationHash = :hash;';
 
-    private const CHECK_PASS_QUERY = 'select count(*) as count from user where id = :id and password = md5(:password)';
-    private const CHANGE_PASS_QUERY = 'update user set password = md5(:password) where id = :id';
+    private const CHECK_PASS_QUERY = 'select count(*) as count from user where id = :id and password = md5(:password);';
+    private const CHANGE_PASS_QUERY = 'update user set password = md5(:password) where id = :id;';
 
     private $connection;
 
@@ -57,7 +58,7 @@ class DoctrineUserRepository implements UserRepository
     {
         $sql = self::DELETE_QUERY;
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("id", $userId, 'integer');
+        $stmt->bindValue("id", $userId['id'], 'integer');
         $stmt->execute();
     }
 
