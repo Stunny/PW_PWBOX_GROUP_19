@@ -26,10 +26,13 @@ class GetFileController
     public function __invoke(Request $request, Response $response, $args)
     {
         try{
-            $service = $this->container->get('get-file-service');
-            $fileData = $service($args['id']);
+            //$service = $this->container->get('get-file-service');
+//            $fileData = $args['fileID'];
 
-            if(!isset($fileData['name'])){
+            $service = $this->container->get('get-file-service');
+            $fileInfo = $service($args['fileID']);
+
+            if(!isset($args['fileID'])){
                 $response = $response
                     ->withStatus(404)
                     ->withHeader('Content-type', 'application/json')
@@ -38,7 +41,7 @@ class GetFileController
                 $response = $response
                     ->withStatus(200)
                     ->withHeader('Content-type', 'application/json')
-                    ->write(json_encode(["msg"=>"Success", "res"=> $fileData]));
+                    ->write(json_encode(["msg"=>"Success", "res"=> $fileInfo]));
             }
 
         }catch (\Exception $e){

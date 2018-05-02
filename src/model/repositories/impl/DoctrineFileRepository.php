@@ -21,6 +21,7 @@ class DoctrineFileRepository implements FileRepository
     private const POST_QUERY = 'INSERT INTO `file`(`filename`, `creator`, `folder`) VALUES (:filename, :creator, :folder);';
     private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id);';
     private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id;';
+    private const DOWNLOAD_DATA_QUERY = 'SELECT * FROM `file`;';
 
 
     public function __construct(Connection $connection)
@@ -49,6 +50,7 @@ class DoctrineFileRepository implements FileRepository
 
     public function download(File $file): File
     {
+
         // TODO: Implement download() method. Devolver un objeto de la clase File cuyo atributo `file` contenga el archivo
     }
 
@@ -67,9 +69,8 @@ class DoctrineFileRepository implements FileRepository
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id", $file->getId(), 'integer');
         $stmt->execute();
-        echo "filename: " . $stmt->fetch()['filename'];
-        echo "creator " . $stmt->fetch()['creator'];
-        // TODO: Implement getData() method. Devolver un objeto de la clase File con su su atributo `file` a null
+        $query_result = $stmt->fetch();
+        return new File($file->getId(), $query_result['filename'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
     }
 
     public function updateData(File $file): File
