@@ -6,17 +6,17 @@
  * Time: 11:36 PM
  */
 
-$this->post('[/]', PWBox\controller\UserControllers\PostUserController::class)->setName('post-user');
+$this->post('[/]', 'PWBox\controller\UserController:post')->setName('post-user');
 
-$this->get('/{userID}[/]', PWBox\controller\UserControllers\GetUserController::class)->setName('get-user');
+$this->get('/{userID}[/]', 'PWBox\controller\UserController:get')->setName('get-user');
 
-$this->put('/{userID}[/]', PWBox\controller\UserControllers\UpdateUserController::class)->setName('update-user');
+$this->put('/{userID}[/]', 'PWBox\controller\UserController:put')->setName('update-user');
 
-$this->put('/{userID}/password[/]', \PWBox\controller\UserControllers\ChangePasswordController::class)->setName('change-user-password');
+$this->put('/{userID}/password[/]', 'PWBox\controller\UserController:changePassword')->setName('change-user-password');
 
-$this->delete('/{userID}[/]', PWBox\controller\UserControllers\DeleteUserController::class)->setName('delete-user');
+$this->delete('/{userID}[/]', 'PWBox\controller\UserController:delete')->setName('delete-user');
 
-$this->get('/verify/{hash}[/]', PWBox\controller\UserControllers\VerifyUserController::class)->setName('verify-user');
+$this->get('/verify/{hash}[/]', 'PWBox\controller\UserController:verifyEmail')->setName('verify-user');
 
 
 //---------------------------------------------------------Folder
