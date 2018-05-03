@@ -8,6 +8,7 @@
 
 namespace PWBox\model\use_cases\FileUseCases;
 
+use PWBox\model\File;
 use PWBox\model\repositories\FileRepository;
 
 class UseCaseGetFile
@@ -15,7 +16,7 @@ class UseCaseGetFile
     private $repository;
 
     /**
-     * UseCasePostUser constructor.
+     * UseCaseGetFile constructor.
      * @param FileRepository $repository
      */
     public function __construct(FileRepository $repository)
@@ -25,8 +26,7 @@ class UseCaseGetFile
 
     public function __invoke($fileId)
     {
-        $file = $this->repository->getData($fileId);
-        echo "lost";
+        $file = $this->repository->getData(new File($fileId, null, null, null, null, null, null));
         if($file != null){
             return [
                 'name' => $file->getName(),
@@ -36,7 +36,6 @@ class UseCaseGetFile
                 'updated_at' => $file->getUpdatedAt()
             ];
         }
-
         return [];
     }
 }
