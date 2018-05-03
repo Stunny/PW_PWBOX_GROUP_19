@@ -1,15 +1,29 @@
-{% extends "base.twig" %}
-{% block content %}
+{% extends "login.twig" %}
 
-    <form method="post" action="/api/user" enctype="multipart/form-data">
-        <input type="email" name="email" placeholder="Email">
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <input type="date" name="birthdate">
-        <input type="file" name="profileimg">
-        <input type="submit" value="send">
-    </form>
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
+{% block username %}
+    <div class="field">
+        <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="text" name="username" placeholder="Username">
+        </div>
+    </div>
+{% endblock %}
+
+{% block birthdate %}
+    <div class="field">
+        <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <label for="birthdate">Birth Date</label>
+            <input type="datetime-local" name="birthdate">
+        </div>
+    </div>
+{% endblock %}
+
+{% block registerFields %}
+    <div class="field">
+        <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="repeat-password" placeholder="Repeat Password">
+        </div>
+    </div>
 {% endblock %}

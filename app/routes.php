@@ -13,11 +13,6 @@
 
 $app->add(\PWBox\controller\middleware\SessionMiddleware::class);
 
-$app->get(
-    '/hello/{name}',
-    \PWBox\controller\NavigationControllers\HelloController::class
-)->add('PWBox\controller\middleware\HelloMiddleware');
-
 // -------------------------API
 
 //User

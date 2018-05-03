@@ -2,20 +2,19 @@
 /**
  * Created by PhpStorm.
  * User: alex
- * Date: 17/4/18
- * Time: 18:38
+ * Date: 3/5/18
+ * Time: 18:25
  */
 
 namespace PWBox\controller\NavigationControllers;
+
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
 
-
-class LandingPageController
+class RegisterPageController
 {
-
     protected $container;
 
     public function __construct(ContainerInterface $container)
@@ -29,6 +28,6 @@ class LandingPageController
 
         //$userRegisteredMessages = isset($messages['user_register'])? $messages['user_register']: [];
 
-        $this->container->get('view')->render($response, 'landing.twig');
+        $this->container->get('view')->render($response, 'register.twig', ["form" => "Register"]);
     }
 }

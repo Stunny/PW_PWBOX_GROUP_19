@@ -9,6 +9,10 @@
 $this->any('[landing[/]]', \PWBox\controller\NavigationControllers\LandingPageController::class)
     ->setName('landing-page');
 
+$this->any('login[/]', \PWBox\controller\NavigationControllers\LoginPageController::class)->setName('login-page');
+
+$this->any('register[/]', \PWBox\controller\NavigationControllers\RegisterPageController::class)->setName('login-page');
+
 
 //Profile Page
 $this->any('profile/[{userEmail}[/]]', \PWBox\controller\NavigationControllers\ProfilePageController::class)

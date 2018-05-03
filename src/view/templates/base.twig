@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    {% block metas %}{% endblock %}
+
     <title>{% block title %} {% endblock %}</title>
+
+    {% block styles %}{% endblock %}
+    {% block preLoadScripts %}{% endblock %}
 </head>
 <body>
     {% block content %} {% endblock %}
+    {% block postLoadScripts %}{% endblock %}
 </body>
 </html>
