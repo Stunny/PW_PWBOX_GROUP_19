@@ -20,13 +20,13 @@ $this->get('/verify/{hash}[/]', 'PWBox\controller\UserController:verifyEmail')->
 
 
 //---------------------------------------------------------Folder
-$this->post('/{userID}/folder', PWBox\controller\FolderControllers\PostFolderController::class)->setName('post-folder');
+$this->post('/{userID}/folder', 'PWBox\controller\FolderController:post')->setName('post-folder');
 
-$this->get('/{userID}/folder/{folderID}[/]', PWBox\controller\FolderControllers\GetFolderController::class)->setName('get-folder');
+$this->get('/{userID}/folder/{folderID}[/]', 'PWBox\controller\FolderController:get')->setName('get-folder');
 
-$this->put('/{userID}/folder/{folderID}[/]', PWBox\controller\FolderControllers\UpdateFolderController::class)->setName('update-folder');
+$this->put('/{userID}/folder/{folderID}[/]', 'PWBox\controller\FolderController:put')->setName('update-folder');
 
-$this->delete('/{userID}/folder/{folderID}[/]', PWBox\controller\FolderControllers\DeleteFolderController::class)->setName('delete-folder');
+$this->delete('/{userID}/folder/{folderID}[/]', 'PWBox\controller\FolderController:delete')->setName('delete-folder');
 
 
 //----------------------------------------------------------File
