@@ -28,7 +28,6 @@ class UseCasePostUser
     {
 
         $profileImg = $uploadedFiles['profileimg'];
-        var_dump($uploadedFiles);
         $imgPath = "";
 
         if ($profileImg->getError() === UPLOAD_ERR_OK) {
@@ -42,7 +41,7 @@ class UseCasePostUser
             $rawData['password'],
             $rawData['email'],
             $rawData['birthdate'],
-            "",
+            $imgPath,
             false,
             $now,
             $now
