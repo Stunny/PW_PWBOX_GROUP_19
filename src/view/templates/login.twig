@@ -69,9 +69,9 @@
                             <input type="password" name="password" placeholder="Password">
                         </div>
                     </div>
+                    {% block registerFields %}{% endblock %}
                     <div class="ui fluid large teal submit button">Login</div>
                 </div>
-                {% block registerFields %}{% endblock %}
 
                 <div class="ui error message"></div>
 
