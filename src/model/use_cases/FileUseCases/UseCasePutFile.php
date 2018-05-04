@@ -25,20 +25,22 @@ class UseCasePutFile
         $this->repository = $repository;
     }
 
-    public function __invoke(array $rawData, $fileId): bool
+    public function __invoke(array $rawData, array $args): bool
     {
-        $file = $this->repository->getData($fileId);
-
+        var_dump($rawData);
+        var_dump($args);
+        $file = $this->repository->getData(new File($args['fileID'], null, null, $args['folderID'], null, null, null));
+        //$file = $this->repository->getData($args['userID'], $args['folderID'], $args['fileID'], $rawData['filename']);
         if($file != null){
             $this->repository->updateData(new File(
-                $fileId,
+                $fileId = $file->getId(),
                 isset($rawData['filename'])? $rawData['filename']: $file->getName(),
                 $file->getCreador(),
-                isset($rawData['folderId'])? $rawData['folderId']: $file->getFolder(),
-                null,
-                null,
+                isset($rawData['folder'])? $rawData['folder']: $file->getFolder(),
+                $file->getCreatedAt(),
+                $file->getUpdatedAt(),
                 null
-            ));
+            ), $args['userID']);
 
             return true;
         }else{

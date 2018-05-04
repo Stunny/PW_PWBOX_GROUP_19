@@ -27,9 +27,9 @@ class DeleteFileController
     {
         try{
             $service = $this->container->get('delete-file-service');
-            $service($args['id']);
+            $service($args['fileID']);
 
-            $result = $service($args['id']);
+            $result = $service($args['fileID']);
 
             if($result){
                 $response = $response

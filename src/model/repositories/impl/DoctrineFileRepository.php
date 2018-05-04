@@ -9,6 +9,8 @@
 namespace PWBox\model\repositories\impl;
 
 
+use Doctrine\DBAL\Logging\EchoSQLLogger;
+use function PHPSTORM_META\type;
 use PWBox\model\File;
 use PWBox\model\repositories\FileRepository;
 use Doctrine\DBAL\Connection;
@@ -22,6 +24,7 @@ class DoctrineFileRepository implements FileRepository
     private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id);';
     private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id;';
     private const DOWNLOAD_DATA_QUERY = 'SELECT * FROM `file`;';
+    private const UPDATE_DATA = 'UPDATE `file` SET `filename` = :filename, `folder` = :folder WHERE (`creator` = :userID AND `id` = :fileID);';
 
 
     public function __construct(Connection $connection)
@@ -43,9 +46,6 @@ class DoctrineFileRepository implements FileRepository
         $stmt->execute();
 
         return new File($stmt->fetch()['id'], null, null, null, null, null, null);
-        /* TODO: Implement post() method. Una vez cargado el archivo en la carpeta del usuario y sus datos en la base
-         *   de datos, devolver un objeto de clase File el cual contenga la ID del archivo en la BD
-        */
     }
 
     public function download(File $file): File
@@ -60,7 +60,6 @@ class DoctrineFileRepository implements FileRepository
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id", $file->getId(), 'integer');
         $stmt->execute();
-        // TODO: Implement delete() method. Eliminar archivo del sistema y de la base de datos
     }
 
     public function getData(File $file): File
@@ -73,8 +72,21 @@ class DoctrineFileRepository implements FileRepository
         return new File($file->getId(), $query_result['filename'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
     }
 
-    public function updateData(File $file): File
+    public function updateData(File $file, $userID): File
     {
+        var_dump($file);
+        $sql = self::UPDATE_DATA;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("filename", $file->getName(), 'string');
+        $stmt->bindValue("folder", $file->getFolder(), 'integer');
+        $stmt->bindValue("userID", $userID, 'integer');
+        $stmt->bindValue("fileID", $file->getId(), 'integer');
+        $stmt->execute();
+
+        $sql = "SELECT `id` FROM `file` ORDER BY `id` DESC LIMIT 1;";
+        $stmt = $this->connection->prepare($sql);
+        $aux = $stmt->execute();
+        return new File($aux['id'], $aux['name'], $aux['creador'], $aux['folder'], $aux['created_at'], $aux['updated_at'], $aux['file']);
         // TODO: Implement updateData() method. Devolver el objeto de la clase File con los nuevos datos y con su atributo `file` a null
     }
 }
