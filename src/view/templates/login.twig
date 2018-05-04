@@ -43,7 +43,7 @@
     <div class="ui middle aligned center aligned grid">
         <div class="column">
             <h2 class="ui teal image header">
-                <img src="assets/images/logo.png" class="image">
+                <img src="media/logo.png" class="image">
                 <div class="content">
                     {% if form == "Login" %}
                     Log-in to your account
@@ -59,7 +59,7 @@
                     {% block birthdate %}{% endblock %}
                     <div class="field">
                         <div class="ui left icon input">
-                            <i class="user icon"></i>
+                            <i class="{%  if form == "Login" %}user{% else %}envelope{%  endif %} icon"></i>
                             <input type="text" name="email" placeholder="E-mail address">
                         </div>
                     </div>
@@ -77,7 +77,7 @@
 
             </form>
 
-            {% if form == "login" %}
+            {% if form == "Login" %}
             <div class="ui message">
                 New to us? <a href="{{ base_url }}/register">Sign Up</a>
             </div>
