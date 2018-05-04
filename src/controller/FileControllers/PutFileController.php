@@ -25,11 +25,11 @@ class PutFileController
 
     public function __invoke(Request $request, Response $response, $args)
     {
+        $parsedBody = $request->getParsedBody();
         //todo: validacion de datos de fichero
         try{
             $service = $this->container->get('put-file-service');
-            $data = $request->getParsedBody();
-            $result = $service($data, $args['id']);
+            $result = $service($parsedBody, $args);
 
             if($result){
                 $response = $response

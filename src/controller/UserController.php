@@ -8,6 +8,7 @@
 
 namespace PWBox\controller;
 
+use function FastRoute\cachedDispatcher;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -32,6 +33,7 @@ class UserController
      */
     public function get(Request $request, Response $response, $args){
         try{
+            var_dump($args);
             $service = $this->container->get('get-user-service');
             $userData = $service($args['userID']);
 
@@ -73,7 +75,7 @@ class UserController
             $this->container->get('flash')->addMessage('user_register', 'User registered successfully');
             $response = $response
                 ->withStatus(302)
-                ->withHeader('location', '/');
+                ->withHeader('location', '/login');
 
         }catch (\Exception $e){
             return $this->container->get('view')

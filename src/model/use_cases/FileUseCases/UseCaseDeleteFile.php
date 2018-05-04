@@ -8,6 +8,7 @@
 
 namespace PWBox\model\use_cases\FileUseCases;
 
+use PWBox\model\File;
 use PWBox\model\repositories\FileRepository;
 
 class UseCaseDeleteFile
@@ -25,7 +26,7 @@ class UseCaseDeleteFile
 
     public function __invoke($fileId)
     {
-        $file = $this->repository->getData($fileId);
+        $file = $this->repository->getData(new File($fileId, null, null, null, null, null, null));
 
         if($file != null){
             $this->repository->delete($file);

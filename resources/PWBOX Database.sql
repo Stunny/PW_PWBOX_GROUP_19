@@ -16,7 +16,6 @@ CREATE TABLE `user` (
   `verificationHash` varchar(32) not null,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `profileImgPath` VARCHAR(255),
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQUE_EMAIL` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;

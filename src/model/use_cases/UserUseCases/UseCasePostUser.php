@@ -30,8 +30,12 @@ class UseCasePostUser
         $profileImg = $uploadedFiles['profileimg'];
         $imgPath = "";
 
-        if ($profileImg->getError() === UPLOAD_ERR_OK) {
-            $imgPath = $postProfileImgService($profileImg, $rawData['username']);
+        if (!is_null($profileImg)){
+            if ($profileImg->getError() === UPLOAD_ERR_OK) {
+                $imgPath = $postProfileImgService($profileImg, $rawData['username']);
+            }
+        }else{
+            //TODO: QUE HACER SI ES NULL?
         }
 
         $now = new \DateTime('now');
@@ -41,7 +45,6 @@ class UseCasePostUser
             $rawData['password'],
             $rawData['email'],
             $rawData['birthdate'],
-            $imgPath,
             false,
             $now,
             $now
