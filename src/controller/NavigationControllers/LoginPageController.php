@@ -24,10 +24,18 @@ class LoginPageController
 
     public function __invoke(Request $request, Response $response, array $args)
     {
+
+        if(isset($_SESSION['user'])){
+            $response = $response->withStatus(302)
+                ->withHeader('location', '/dashboard');
+            return $response;
+        }
+
         $messages = $this->container->get('flash')->getMessages();
 
         //$userRegisteredMessages = isset($messages['user_register'])? $messages['user_register']: [];
 
         $this->container->get('view')->render($response, 'login.twig', ["form" => "Login"]);
+
     }
 }
