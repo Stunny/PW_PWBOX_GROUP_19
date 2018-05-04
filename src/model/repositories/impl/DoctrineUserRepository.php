@@ -20,7 +20,9 @@ class DoctrineUserRepository implements UserRepository
 
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
-    private const INSERT_QUERY = 'INSERT INTO `user`(`username`, `email`, `birthdate`, `password`, `created_at`, `updated_at`, `verificationHash`) VALUES(:username, :email, :birthdate, MD5(:password), :created_at, :updated_at, :hash);';
+    private const LOGIN_QUERY = 'SELECT id from `user` where `email`= :email and `password` = md5(:password)';
+
+    private const INSERT_QUERY = 'INSERT INTO `user`(`username`, `email`, `birthdate`, `password`, `created_at`, `updated_at`, `verificationHash`) VALUES(:username, :email, :birthdate, md5(:password), :created_at, :updated_at, :hash);';
     private const SELECT_QUERY = 'SELECT * FROM `user` WHERE (`id` = :id);';
     private const UPDATE_QUERY = 'UPDATE `user` SET `username` = :username, `email` = :email, `birthdate` = :birthdate, `password` = :password WHERE `id` = :id;';
     private const DELETE_QUERY = 'DELETE FROM `user` WHERE (`id` = :id);';
@@ -117,6 +119,19 @@ class DoctrineUserRepository implements UserRepository
         $stmt->bindValue("hash", $verificationHash, 'string');
         $stmt->execute();
 
+    }
+
+    public function login($userEmail, $userPassword){
+
+        $sql = self::LOGIN_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("email", $userEmail, 'string');
+        $stmt->bindValue("password", $userPassword, "string");
+        $stmt->execute();
+
+        $id = $stmt->fetch()['id'];
+
+        return $id;
     }
 
 }

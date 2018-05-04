@@ -24,4 +24,6 @@ interface UserRepository
     public function changePassword($userId, $oldPassword, $newPassword);
 
     public function verify($verificationHash);
+
+    public function login($userEmail, $userPassword);
 }

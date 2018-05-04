@@ -1,6 +1,6 @@
 $(document)
     .ready(function() {
-        $('.ui.form')
+        $('#form')
             .form({
                 fields: {
                     email: {
@@ -9,10 +9,6 @@ $(document)
                             {
                                 type   : 'empty',
                                 prompt : 'Please enter your e-mail'
-                            },
-                            {
-                                type   : 'email',
-                                prompt : 'Please enter a valid e-mail'
                             }
                         ]
                     },
@@ -22,15 +18,21 @@ $(document)
                             {
                                 type   : 'empty',
                                 prompt : 'Please enter your password'
-                            },
-                            {
-                                type   : 'length[6]',
-                                prompt : 'Your password must be at least 6 characters'
                             }
                         ]
                     }
                 }
-            })
-        ;
+            }
+        );
+
+        $('#form').submit((e)=>{
+
+            if($('#form').form('is valid')){
+                console.log("OKIDOKI");
+            }else{
+                e.preventDefault();
+            }
+
+        });
     })
 ;

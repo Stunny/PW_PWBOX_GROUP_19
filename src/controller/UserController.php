@@ -227,4 +227,35 @@ class UserController
         return $response;
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     */
+    public function login(Request $request, Response $response, $args){
+
+        try{
+            $service = $this->container->get('user-login');
+            $data = $request->getParsedBody();
+            $result = $service($data['email'], $data['password']);
+
+            if($result == 200){
+                $response = $response
+                    ->withStatus(200)
+                    ->withHeader('location', '/dashboard');
+            }else{
+                $this->container->get('view')->render($response, 'login.twig', ["form" => "Login", "error"=>["Wrong email or password"]]);
+            }
+
+        }catch (\Exception $e){
+            $response = $response
+                ->withStatus(500)
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
+        }
+
+        return $response;
+
+    }
+
 }

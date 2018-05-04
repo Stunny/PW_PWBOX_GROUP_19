@@ -34,6 +34,14 @@ class UseCasePostProfileImage
         $filename = sprintf('%s.%0.8s', $basename, $extension);
         $imgPath = self::PROFILE_IMGS_DIR . DIRECTORY_SEPARATOR . $filename;
 
+        if(!file_exists("/home/public/pwbox/appdata")){
+            mkdir("/home/public/pwbox/appdata", 0777, true);
+        }
+
+        if(!file_exists("/home/public/pwbox/appdata/profile_imgs")){
+            mkdir("/home/public/pwbox/appdata/profile_imgs", 0777, true);
+        }
+
         $profileImg->moveTo($imgPath);
 
         return $imgPath;

@@ -27,15 +27,12 @@ class UseCasePostUser
     public function __invoke(array $rawData, $uploadedFiles, $generateVerificationService, $postProfileImgService)
     {
 
-        $profileImg = $uploadedFiles['profileimg'];
-        $imgPath = "";
+        $profileImg = isset($uploadedFiles['profileimg'])?$uploadedFiles['profileimg']: null;
 
         if (!is_null($profileImg)){
             if ($profileImg->getError() === UPLOAD_ERR_OK) {
-                $imgPath = $postProfileImgService($profileImg, $rawData['username']);
+                $postProfileImgService($profileImg, $rawData['username']);
             }
-        }else{
-            //TODO: QUE HACER SI ES NULL?
         }
 
         $now = new \DateTime('now');
@@ -53,6 +50,17 @@ class UseCasePostUser
         $verificationHash = $this->repository->save($user);
 
         $generateVerificationService($verificationHash, $user->getEmail());
+
+        if(!file_exists("/home/public/pwbox/appdata")){
+            mkdir("/home/public/pwbox/appdata", 0777, true);
+        }
+
+        if(!file_exists("/home/public/pwbox/appdata/user_folders")){
+            mkdir("/home/public/pwbox/appdata/user_folders", 0777, true);
+
+        }
+
+        mkdir("/home/public/pwbox/appdata/user_folders/".$rawData['username']);
 
     }
 }

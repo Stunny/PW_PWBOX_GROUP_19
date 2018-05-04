@@ -9,7 +9,8 @@
 $this->any('[landing[/]]', \PWBox\controller\NavigationControllers\LandingPageController::class)
     ->setName('landing-page');
 
-$this->any('login[/]', \PWBox\controller\NavigationControllers\LoginPageController::class)->setName('login-page');
+$this->get('login[/]', \PWBox\controller\NavigationControllers\LoginPageController::class)->setName('login-page');
+$this->post('login[/]', '\PWBox\controller\UserController:login')->setName('user-login');
 
 $this->any('register[/]', \PWBox\controller\NavigationControllers\RegisterPageController::class)->setName('login-page');
 

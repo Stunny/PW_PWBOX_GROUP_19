@@ -36,11 +36,19 @@ $container['flash'] = function (){
 //------------------------------MODEL DEPENDENCIES--------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------User
+
 $container['user-repository'] = function ($container){
     $repository = new \PWBox\model\repositories\impl\DoctrineUserRepository(
         $container->get('doctrine')
     );
     return $repository;
+};
+
+$container['user-login'] = function ($container){
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCaseLogin(
+        $container->get('user-repository')
+    );
+    return $service;
 };
 
 $container['post-user-service'] = function ($container){
