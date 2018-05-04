@@ -51,16 +51,16 @@ class UseCasePostUser
 
         $generateVerificationService($verificationHash, $user->getEmail());
 
-        if(!file_exists("/home/public/pwbox/appdata")){
-            mkdir("/home/public/pwbox/appdata", 0777, true);
+        if(!file_exists("/home/vagrant/pwbox/appdata")){
+            mkdir("/home/vagrant/pwbox/appdata", 0777, true);
         }
 
-        if(!file_exists("/home/public/pwbox/appdata/user_folders")){
-            mkdir("/home/public/pwbox/appdata/user_folders", 0777, true);
+        if(!file_exists("/home/vagrant/pwbox/appdata/user_folders")){
+            mkdir("/home/vagrant/pwbox/appdata/user_folders", 0777, true);
 
         }
 
-        mkdir("/home/public/pwbox/appdata/user_folders/".$rawData['username']);
+        mkdir("/home/vagrant/pwbox/appdata/user_folders/".$rawData['username']);
 
     }
 }

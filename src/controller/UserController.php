@@ -258,4 +258,22 @@ class UserController
 
     }
 
+    public function logout(Request $request, Response $response){
+        try{
+            $service = $this->container->get('user-logout');
+            $service();
+
+            $response = $response->withStatus(302)
+                ->withHeader('location', '/');
+
+        }catch (\Exception $e){
+            $response = $response
+                ->withStatus(500)
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
+        }
+
+        return $response;
+    }
+
 }

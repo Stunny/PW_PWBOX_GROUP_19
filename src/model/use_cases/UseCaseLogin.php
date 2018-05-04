@@ -6,7 +6,7 @@
  * Time: 13:34
  */
 
-namespace PWBox\model\use_cases\UserUseCases;
+namespace PWBox\model\use_cases;
 
 use PWBox\model\User;
 use PWBox\model\repositories\UserRepository;

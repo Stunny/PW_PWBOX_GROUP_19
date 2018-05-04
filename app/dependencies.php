@@ -45,9 +45,14 @@ $container['user-repository'] = function ($container){
 };
 
 $container['user-login'] = function ($container){
-    $service = new \PWBox\model\use_cases\UserUseCases\UseCaseLogin(
+    $service = new \PWBox\model\use_cases\UseCaseLogin(
         $container->get('user-repository')
     );
+    return $service;
+};
+
+$container['user-logout'] = function (){
+    $service = new \PWBox\model\use_cases\UseCaseLogout();
     return $service;
 };
 

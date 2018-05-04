@@ -23,6 +23,8 @@ class DashboardPageController
 
     public function __invoke(Request $request, Response $response, array $args)
     {
+
+
         echo "Welcome to the rice fields: User ".$_SESSION['user'];
     }
 }

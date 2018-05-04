@@ -21,9 +21,10 @@ class LoginMiddleware
 
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        if(!isset($_SESSION['userHash'])){
-            //todo: redirigir a pagina de login
-
+        if(!isset($_SESSION['user'])){
+            $response = $response->withStatus(302)
+                ->withHeader('location', '/login');
+            return $response;
         }
 
         return $next($request, $response);
