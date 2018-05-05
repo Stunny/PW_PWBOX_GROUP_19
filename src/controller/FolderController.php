@@ -60,14 +60,15 @@ class FolderController
      * @param Request $request
      * @param Response $response
      * @param $args
+     * @return Response
      */
     public function post(Request $request, Response $response, $args){
         //todo: validacion datos de folder
         try {
+            $userID = $args['userID'];
             $data = $request->getParsedBody();
             $service = $this->container->get('post-folder-service');
-            $service($data);
-
+            $service($data, $userID);
         } catch (\Exception $e) {
             $response = $response
                 ->withStatus(500)

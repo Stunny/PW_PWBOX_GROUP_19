@@ -33,7 +33,6 @@ class UserController
      */
     public function get(Request $request, Response $response, $args){
         try{
-            var_dump($args);
             $service = $this->container->get('get-user-service');
             $userData = $service($args['userID']);
 
