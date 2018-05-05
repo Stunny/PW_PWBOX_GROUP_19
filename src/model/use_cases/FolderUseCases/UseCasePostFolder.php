@@ -31,28 +31,26 @@ class UseCasePostFolder
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(array $rawData)
+    public function __invoke(array $rawData, $userID)
     {
-        $userId = $rawData['creador'];
-
-        $user = $this->userRepository->get($userId);
+        $user = $this->userRepository->get($userID);
 
         if(!isset($user['username'])){
             return false;
+        }else{
+            $now = new \DateTime('now');
+            $folder = new Folder(
+                null,
+                $userID,
+                $rawData['folderName'],
+                $rawData['path'],
+                $now,
+                $now
+            );
+
+            $this->repository->create($userID, $folder);
+
+            return true;
         }
-
-        $now = new \DateTime('now');
-        $folder = new Folder(
-            null,
-            $rawData['creador'],
-            $rawData['nom'],
-            $rawData['path'],
-            $now,
-            $now
-        );
-
-        $this->repository->create($userId, $folder);
-
-        return true;
     }
 }

@@ -36,8 +36,7 @@ class UseCaseGetUser
             "userID" => $user['id'],
             "username" => $user['username'],
             "email" => $user['email'],
-            "created_at" => $user['created_at'],
-            "imgpath" => $user['profileImgPath']
+            "created_at" => $user['created_at']
         ];
     }
 }
