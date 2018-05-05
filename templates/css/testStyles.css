@@ -1,0 +1,19 @@
+html, body {
+    height: 100%;
+}
+
+.ui.grid {
+    height: 100%;
+}
+
+#rightPanel{
+    background-color: #0288D1;
+}
+
+.angle.up.icon{
+    bottom: 0;
+    right: 0;
+    transform: scale(3.0);
+    position: absolute;
+    width: 100%;
+}
