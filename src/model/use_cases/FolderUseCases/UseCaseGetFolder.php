@@ -22,7 +22,6 @@ class UseCaseGetFolder
         $this->repository = $repository;
     }
 
-    //TODO: RECIVIR EN EL INKOVE EL USUARIO QUE QUIERE
     function __invoke(array $rawData)
     {
         $folder = $this->repository->get($rawData['folderID'], $rawData['userID']);

@@ -26,7 +26,7 @@ class DoctrineFolderRepository implements FolderRepository
     private const INSERT_ROLES_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
     private const NEW_FOLDER_ID = 'SELECT `id` FROM `folder` WHERE `creador` = :id_creador ORDER BY `id` DESC LIMIT 1;';
     private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id) AND `id` = (SELECT `folder` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari);';
-    private const UPDATE_QUERY = 'UPDATE `folder` SET `creador` = :creador, `nom` = :nom, `path` = :path WHERE `id` = :id;';
+    private const UPDATE_QUERY = 'UPDATE `folder` SET `nom` = :nom, `path` = :path WHERE `id` = :id;';
     private const DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id);';
 
     public function __construct(Connection $connection)
@@ -61,16 +61,19 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt->execute();
     }
 
-    public function update(Folder $folder)
+    public function update(Folder $folder, int $userID)
     {
-        $sql = self::UPDATE_QUERY;
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("creador", $folder->getCreador(), 'integer');
-        $stmt->bindValue("nom", $folder->getNom(), 'string');
-        $stmt->bindValue("path", $folder->getPath(), 'string');
-        $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
-        $stmt->bindValue("updated_at", $folder->getUpdatedAt()->format(self::DATE_FORMAT));
-        $stmt->execute();
+        if ($this->get($folder->getId(), $userID)->getCreador() == $userID){
+            $sql = self::UPDATE_QUERY;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("nom", $folder->getNom(), 'string');
+            $stmt->bindValue("path", $folder->getPath(), 'string');
+            $stmt->bindValue("id", $folder->getId(), 'integer');
+            $stmt->execute();
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function get(int $folderID, int $userID): Folder

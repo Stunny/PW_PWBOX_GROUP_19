@@ -88,13 +88,14 @@ class FolderController
      * @param Request $request
      * @param Response $response
      * @param $args
+     * @return Response
      */
     public function put(Request $request, Response $response, $args){
         //todo: validacion de datos de fichero
         try{
             $service = $this->container->get('put-folder-service');
             $data = $request->getParsedBody();
-            $result = $service($data, $args['folderID']);
+            $result = $service($data, $args['folderID'], $args['userID']);
 
             if($result){
                 $response = $response
@@ -123,6 +124,7 @@ class FolderController
      * @param Request $request
      * @param Response $response
      * @param $args
+     * @return Response
      */
     public function delete(Request $request, Response $response, $args){
         try{

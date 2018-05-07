@@ -15,7 +15,7 @@ interface FolderRepository
 {
     public function create(int $userId, Folder $folder);
 
-    public function update(Folder $folder);
+    public function update(Folder $folder, int $userID);
 
     public function get(int $folderID, int $userID) : Folder;
 
