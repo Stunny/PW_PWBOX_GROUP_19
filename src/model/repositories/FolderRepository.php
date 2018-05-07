@@ -17,7 +17,7 @@ interface FolderRepository
 
     public function update(Folder $folder);
 
-    public function get(int $id) : Folder;
+    public function get(int $folderID, int $userID) : Folder;
 
     public function delete(int $id);
 }

@@ -25,7 +25,7 @@ class DoctrineFolderRepository implements FolderRepository
     private const INSERT_FOLDER_QUERY = 'INSERT INTO `folder`(`creador`, `nom`, `path`, `created_at`, `updated_at`) VALUES (:creador, :nom, :path, :created_at, :updated_at);';
     private const INSERT_ROLES_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
     private const NEW_FOLDER_ID = 'SELECT `id` FROM `folder` WHERE `creador` = :id_creador ORDER BY `id` DESC LIMIT 1;';
-    private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id);';
+    private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id) AND `id` = (SELECT `folder` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari);';
     private const UPDATE_QUERY = 'UPDATE `folder` SET `creador` = :creador, `nom` = :nom, `path` = :path WHERE `id` = :id;';
     private const DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id);';
 
@@ -73,12 +73,16 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt->execute();
     }
 
-    public function get(int $id): Folder
+    public function get(int $folderID, int $userID): Folder
     {
         $sql = self::SELECT_QUERY;
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("id", $id, 'integer');
+        $stmt->bindValue("id", $folderID, 'integer');
+        $stmt->bindValue("id", $folderID, 'integer');
+        $stmt->bindValue("id_usuari", $userID, 'integer');
         $stmt->execute();
+        $aux = $stmt->fetch();
+        return new Folder($aux['id'], $aux['creador'], $aux['nom'], $aux['path'], $aux['created_at'], $aux['updated_at']);
     }
 
     public function delete(int $id)

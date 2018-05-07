@@ -41,5 +41,3 @@ $this->delete('/{userID}/folder/{folderID}/file/{fileID}[/]', PWBox\controller\F
 $this->get('/{userID}/folder/{folderID}/file/{fileID}/download[/]', PWBox\controller\FileControllers\DownloadFileController::class)->setName('download-file');
 
 $this->post('/{userID}/folder/{folderID}/file[/]', PWBox\controller\FileControllers\PostFileController::class)->setName('upload-file');
-
-//quede update i download (get)

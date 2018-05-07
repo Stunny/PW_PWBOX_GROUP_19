@@ -13,6 +13,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
+use PWBox\model\Folder;
 
 class FolderController
 {
@@ -32,9 +33,9 @@ class FolderController
     public function get(Request $request, Response $response, $args){
         try{
             $service = $this->container->get('get-folder-service');
-            $folderData = $service($args['folderID']);
+            $folderData = $service($args);
 
-            if(!isset($folderData['name'])){
+            if(!isset($folderData)){
                 $response = $response
                     ->withStatus(404)
                     ->withHeader('Content-type', 'application/json')
