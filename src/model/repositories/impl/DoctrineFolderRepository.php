@@ -64,12 +64,22 @@ class DoctrineFolderRepository implements FolderRepository
     public function update(Folder $folder, int $userID)
     {
         if ($this->get($folder->getId(), $userID)->getCreador() == $userID){
-            $sql = self::UPDATE_QUERY;
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue("nom", $folder->getNom(), 'string');
-            $stmt->bindValue("path", $folder->getPath(), 'string');
-            $stmt->bindValue("id", $folder->getId(), 'integer');
-            $stmt->execute();
+            $name = $folder->getNom();
+            if (isset($name)){
+                $sql = self::UPDATE_QUERY;
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue("nom", $folder->getNom(), 'string');
+                $stmt->bindValue("path", $this->get($folder->getId(), $userID)->getPath(), 'string');
+                $stmt->bindValue("id", $folder->getId(), 'integer');
+                $stmt->execute();
+            }else{
+                $sql = self::UPDATE_QUERY;
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue("nom", $this->get($folder->getId(), $userID)->getNom(), 'string');
+                $stmt->bindValue("path", $folder->getPath(), 'string');
+                $stmt->bindValue("id", $folder->getId(), 'integer');
+                $stmt->execute();
+            }
             return true;
         }else{
             return false;
