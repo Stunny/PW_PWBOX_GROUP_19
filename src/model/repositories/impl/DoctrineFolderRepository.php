@@ -23,11 +23,13 @@ class DoctrineFolderRepository implements FolderRepository
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
     private const INSERT_FOLDER_QUERY = 'INSERT INTO `folder`(`creador`, `nom`, `path`, `created_at`, `updated_at`) VALUES (:creador, :nom, :path, :created_at, :updated_at);';
+    private const UPDATE_QUERY = 'UPDATE `folder` SET `nom` = :nom, `path` = :path WHERE `id` = :id;';
     private const INSERT_ROLES_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
     private const NEW_FOLDER_ID = 'SELECT `id` FROM `folder` WHERE `creador` = :id_creador ORDER BY `id` DESC LIMIT 1;';
     private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id) AND `id` = (SELECT `folder` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari);';
-    private const UPDATE_QUERY = 'UPDATE `folder` SET `nom` = :nom, `path` = :path WHERE `id` = :id;';
-    private const DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id);';
+    private const FOLDER_DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id) AND `creador` = :id_usuari;';
+    private const ROLE_DELETE_QUERY = 'DELETE FROM `role` WHERE `usuari` = :id_usuari AND `folder` = :id_folder;';
+
 
     public function __construct(Connection $connection)
     {
@@ -98,11 +100,34 @@ class DoctrineFolderRepository implements FolderRepository
         return new Folder($aux['id'], $aux['creador'], $aux['nom'], $aux['path'], $aux['created_at'], $aux['updated_at']);
     }
 
-    public function delete(int $id)
+    public function delete(int $folderID, int $userID)
     {
-        $sql = self::DELETE_QUERY;
+        $sql = "SELECT `usuari` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari;";
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("id", $id, 'integer');
+        $stmt->bindValue("id_usuari", $userID, 'integer');
+        $stmt->bindValue("id", $folderID, 'integer');
         $stmt->execute();
+
+        $userID = $stmt->fetch();
+        if (isset($userID)){
+            $sql = self::ROLE_DELETE_QUERY;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
+            $stmt->bindValue("id_folder", $folderID, 'integer');
+            $stmt->execute();
+
+            $sql = self::FOLDER_DELETE_QUERY;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("id", $folderID, 'integer');
+            $stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
+            $stmt->execute();
+            if (isset($userID['usuari'])){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 }

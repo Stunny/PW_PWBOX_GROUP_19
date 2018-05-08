@@ -132,8 +132,7 @@ class FolderController
             //todo: control de carpeta vacia
 
             $service = $this->container->get('delete-folder-service');
-            $result = $service($args['folderID']);
-
+            $result = $service($args['folderID'], $args['userID']);
             if($result){
                 $response = $response
                     ->withStatus(200)
