@@ -20,7 +20,7 @@ class DoctrineFileRepository implements FileRepository
 
     private $connection;
 
-    private const POST_QUERY = 'INSERT INTO `file`(`filename`, `creator`, `folder`) VALUES (:filename, :creator, :folder);';
+    private const POST_QUERY = 'INSERT INTO `file`(`name`, `creator`, `folder`) VALUES (:filename, :creator, :folder);';
     private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id);';
     private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id;';
     private const DOWNLOAD_DATA_QUERY = 'SELECT * FROM `file`;';
@@ -34,18 +34,26 @@ class DoctrineFileRepository implements FileRepository
 
     public function post(File $file): File
     {
-        $sql = self::POST_QUERY;
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("filename", $file->getName(), 'string');
-        $stmt->bindValue("creator", $file->getCreador(), 'integer');
-        $stmt->bindValue("folder", $file->getFolder(), 'integer');
-        $stmt->execute();
 
-        $sql = "SELECT `id` FROM `file` ORDER BY `id` DESC LIMIT 1;";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute();
+        $folderRepo = new DoctrineFolderRepository($this->connection);
 
-        return new File($stmt->fetch()['id'], null, null, null, null, null, null);
+        $folderInfo = $folderRepo->get($file->getFolder(), $file->getCreador())->getId();
+        if (isset($folderInfo)){
+            $sql = self::POST_QUERY;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("filename", $file->getName(), 'string');
+            $stmt->bindValue("creator", $file->getCreador(), 'integer');
+            $stmt->bindValue("folder", $file->getFolder(), 'integer');
+            $stmt->execute();
+
+            $sql = "SELECT `id` FROM `file` ORDER BY `id` DESC LIMIT 1;";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute();
+
+            return new File($stmt->fetch()['id'], null, null, null, null, null, null);
+        }else{
+            return new File(null, null, null, null, null, null, null);
+        }
     }
 
     public function download(File $file): File
