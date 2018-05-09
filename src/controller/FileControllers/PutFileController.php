@@ -30,6 +30,7 @@ class PutFileController
         try{
             $service = $this->container->get('put-file-service');
             $result = $service($parsedBody, $args);
+            var_dump($result);
 
             if($result){
                 $response = $response

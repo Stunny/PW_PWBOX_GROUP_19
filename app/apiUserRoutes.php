@@ -20,7 +20,7 @@ $this->get('/verify/{hash}[/]', 'PWBox\controller\UserController:verifyEmail')->
 
 
 //---------------------------------------------------------Folder
-$this->post('/{userID}/folder', 'PWBox\controller\FolderController:post')->setName('post-folder');
+$this->post('/{userID}/folder[/]', 'PWBox\controller\FolderController:post')->setName('post-folder');
 
 $this->get('/{userID}/folder/{folderID}[/]', 'PWBox\controller\FolderController:get')->setName('get-folder');
 
