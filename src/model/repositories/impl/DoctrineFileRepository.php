@@ -21,7 +21,7 @@ class DoctrineFileRepository implements FileRepository
     private $connection;
 
     private const POST_QUERY = 'INSERT INTO `file`(`name`, `creator`, `folder`) VALUES (:filename, :creator, :folder);';
-    private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id);';
+    private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id) AND `creator` = :id_usuari AND `folder` = :id_folder;';
     private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id;';
     private const DOWNLOAD_DATA_QUERY = 'SELECT * FROM `file`;';
     private const UPDATE_DATA = 'UPDATE `file` SET `filename` = :filename, `folder` = :folder WHERE (`creator` = :userID AND `id` = :fileID);';
@@ -34,10 +34,9 @@ class DoctrineFileRepository implements FileRepository
 
     public function post(File $file): File
     {
-
         $folderRepo = new DoctrineFolderRepository($this->connection);
-
         $folderInfo = $folderRepo->get($file->getFolder(), $file->getCreador())->getId();
+        //var_dump($folderRepo->get($file->getFolder(), $file->getCreador()));
         if (isset($folderInfo)){
             $sql = self::POST_QUERY;
             $stmt = $this->connection->prepare($sql);
@@ -50,24 +49,42 @@ class DoctrineFileRepository implements FileRepository
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
 
+            //TODO: INSERTAR ARCHIVO EN LA CARPETA CORRESPONDIENTE DEL USUARIO
             return new File($stmt->fetch()['id'], null, null, null, null, null, null);
         }else{
+            /*
+            if (carpeta no existeix){
+                retornar 404
+            }else {
+                (carpeta existeix pero no es del usuari)
+                retornar 401 unauthorised
+            }
+            pd: tots els camps de File a null = 404 i id = -1 igual a 401 per exemple?
+            */
             return new File(null, null, null, null, null, null, null);
         }
     }
 
     public function download(File $file): File
     {
-
         // TODO: Implement download() method. Devolver un objeto de la clase File cuyo atributo `file` contenga el archivo
     }
 
-    public function delete(File $file)
+    public function delete(File $file, int $userID, int $folderID)
     {
-        $sql = self::DELETE_QUERY;
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("id", $file->getId(), 'integer');
-        $stmt->execute();
+        $databaseFile = $this->getData($file);
+        $databaseFileId = $databaseFile->getId();
+        if (isset($databaseFileId) && $databaseFile->getFolder() == $folderID && $databaseFile->getCreador() == $userID){
+            $sql = self::DELETE_QUERY;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("id", $file->getId(), 'integer');
+            $stmt->bindValue("id_usuari", $userID, 'integer');
+            $stmt->bindValue("id_folder", $folderID, 'integer');
+            $stmt->execute();
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function getData(File $file): File
@@ -77,7 +94,7 @@ class DoctrineFileRepository implements FileRepository
         $stmt->bindValue("id", $file->getId(), 'integer');
         $stmt->execute();
         $query_result = $stmt->fetch();
-        return new File($file->getId(), $query_result['filename'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
+        return new File($query_result['id'], $query_result['name'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
     }
 
     public function updateData(File $file, $userID): File

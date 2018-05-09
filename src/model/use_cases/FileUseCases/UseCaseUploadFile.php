@@ -40,6 +40,7 @@ class UseCaseUploadFile
 
         $fileObject = $this->repository->post($fileObject);
 
+        //var_dump($fileObject);
         return $fileObject->getId();
     }
 }

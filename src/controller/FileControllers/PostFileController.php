@@ -36,7 +36,13 @@ class PostFileController
                     ->withHeader('Content-type', 'application/json')
                     ->write(json_encode(["msg"=>"Uploaded Successsdfully", "res"=>["id"=>$fileId]]));
             }else{
-                echo "Bruh, shit went wrong (this msg is an echo)";
+                echo "Implementation for debate";
+                //TODO: EN CASO DE QUERER DIFERENCIAR SI LA CARPETA NO EXISTE, O SI EXISTE PERO PERTENECE A OTRO USUARIO, DEVOLVER ERROR CORRESPONDIENTE
+                /*
+                $response = $response->withStatus(401)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"Unauthorised", "res"=>[]]));
+                */
             }
 
         }catch (\Exception $e){
