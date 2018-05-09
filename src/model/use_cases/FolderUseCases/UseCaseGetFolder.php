@@ -9,6 +9,7 @@
 namespace PWBox\model\use_cases\FolderUseCases;
 
 
+use PWBox\model\Folder;
 use PWBox\model\repositories\FolderRepository;
 
 class UseCaseGetFolder
@@ -21,10 +22,21 @@ class UseCaseGetFolder
         $this->repository = $repository;
     }
 
-    //TODO: RECIVIR EN EL INKOVE EL USUARIO QUE QUIERE
     function __invoke(array $rawData)
     {
-        $folderID = $rawData['id'];
-        $this->repository->get($folderID);
+        $folder = $this->repository->get($rawData['folderID'], $rawData['userID']);
+
+        if($folder == null){
+            return [];
+        }
+
+        return [
+            "folderID" => $folder->getId(),
+            "folderCreatorId" => $folder->getCreador(),
+            "folderName" => $folder->getNom(),
+            "path" => $folder->getPath(),
+            "created_at" => $folder->getCreatedAt(),
+            "updated_at" => $folder->getUpdatedAt()
+        ];
     }
 }

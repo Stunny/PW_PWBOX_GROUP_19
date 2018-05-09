@@ -21,10 +21,15 @@ class UseCaseUpdateFolder
         $this->repository = $repository;
     }
 
-    function __invoke(array $rawData)
+    function __invoke(array $rawData, int $folderID, int $userID)
     {
-        $folder = new Folder($rawData['id'], $rawData['creador'], $rawData['nom'], $rawData['path'], null, null);
-
-        $this->repository->update($folder);
+        if (isset($rawData['nom']) && isset($rawData['path'])){
+            $folder = new Folder($folderID, null, $rawData['nom'], $rawData['path'], null, null);
+        }else if (isset($rawData['path'])){
+            $folder = new Folder($folderID, null, null, $rawData['path'], null, null);
+        }else{
+            $folder = new Folder($folderID, null, $rawData['nom'], null, null, null);
+        }
+        return $this->repository->update($folder, $userID);
     }
 }

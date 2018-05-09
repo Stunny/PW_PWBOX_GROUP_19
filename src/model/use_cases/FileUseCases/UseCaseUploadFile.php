@@ -25,21 +25,22 @@ class UseCaseUploadFile
         $this->repository = $repository;
     }
 
-    public function __invoke($uploadedFile, array  $rawData)
+    public function __invoke($uploadedFileName, int $userID, int $folderID)
     {
         $now = new \DateTime('now');
         $fileObject = new File(
             null,
-            $rawData['name'],
-            $rawData['creator'],
-            $rawData['folder'],
+            $uploadedFileName,
+            $userID,
+            $folderID,
             $now,
             $now,
-            $uploadedFile
+            $uploadedFileName
         );
 
         $fileObject = $this->repository->post($fileObject);
 
+        //var_dump($fileObject);
         return $fileObject->getId();
     }
 }

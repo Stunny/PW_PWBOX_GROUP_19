@@ -18,9 +18,8 @@ class UseCaseDeleteFolder
         $this->repository = $repository;
     }
 
-    function __invoke(array $rawData){
-        $folderId = $rawData['id'];
+    function __invoke(int $folderID, int $userID){
 
-        $this->repository->delete($folderId);
+        return $this->repository->delete($folderID, $userID);
     }
 }

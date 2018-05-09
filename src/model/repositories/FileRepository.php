@@ -16,7 +16,7 @@ interface FileRepository
 
     public function download(File $file): File;
 
-    public function delete(File $file);
+    public function delete(File $file, int $userID, int $folderID);
 
     public function getData(File $file): File;
 

@@ -26,20 +26,23 @@ class PostFileController
     public function __invoke(Request $request, Response $response, $args)
     {
         try{
-            $uploadedFiles = $request->getUploadedFiles();
             $data = $request->getParsedBody();
 
             // handle single input with single file upload
-            //$uploadedFile = $uploadedFiles[$data['filename']];
-            $uploadedFile = $data['name'];
-
-            //if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-            if (isset($uploadedFile)){
-                $service = $this->container->get('upload-file-service');
-                $fileId = $service($uploadedFile, $data);
+            $service = $this->container->get('upload-file-service');
+            $fileId = $service($data['name'], $args['userID'], $args['folderID']);
+            if (isset($fileId)){
                 $response = $response->withStatus(200)
                     ->withHeader('Content-type', 'application/json')
-                    ->write(json_encode(["msg"=>"Uploaded Successfully", "res"=>["id"=>$fileId]]));
+                    ->write(json_encode(["msg"=>"Uploaded Successsdfully", "res"=>["id"=>$fileId]]));
+            }else{
+                echo "Implementation for debate";
+                //TODO: EN CASO DE QUERER DIFERENCIAR SI LA CARPETA NO EXISTE, O SI EXISTE PERO PERTENECE A OTRO USUARIO, DEVOLVER ERROR CORRESPONDIENTE
+                /*
+                $response = $response->withStatus(401)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"Unauthorised", "res"=>[]]));
+                */
             }
 
         }catch (\Exception $e){

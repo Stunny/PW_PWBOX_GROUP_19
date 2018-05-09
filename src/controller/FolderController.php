@@ -13,6 +13,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
+use PWBox\model\Folder;
 
 class FolderController
 {
@@ -32,9 +33,9 @@ class FolderController
     public function get(Request $request, Response $response, $args){
         try{
             $service = $this->container->get('get-folder-service');
-            $folderData = $service($args['folderID']);
+            $folderData = $service($args);
 
-            if(!isset($folderData['name'])){
+            if(!isset($folderData)){
                 $response = $response
                     ->withStatus(404)
                     ->withHeader('Content-type', 'application/json')
@@ -87,13 +88,14 @@ class FolderController
      * @param Request $request
      * @param Response $response
      * @param $args
+     * @return Response
      */
     public function put(Request $request, Response $response, $args){
         //todo: validacion de datos de fichero
         try{
             $service = $this->container->get('put-folder-service');
             $data = $request->getParsedBody();
-            $result = $service($data, $args['folderID']);
+            $result = $service($data, $args['folderID'], $args['userID']);
 
             if($result){
                 $response = $response
@@ -122,6 +124,7 @@ class FolderController
      * @param Request $request
      * @param Response $response
      * @param $args
+     * @return Response
      */
     public function delete(Request $request, Response $response, $args){
         try{
@@ -129,8 +132,7 @@ class FolderController
             //todo: control de carpeta vacia
 
             $service = $this->container->get('delete-folder-service');
-            $result = $service($args['folderID']);
-
+            $result = $service($args['folderID'], $args['userID']);
             if($result){
                 $response = $response
                     ->withStatus(200)
