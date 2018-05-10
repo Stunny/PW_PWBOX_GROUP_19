@@ -36,7 +36,7 @@ class UseCasePostFolder
         $user = $this->userRepository->get($userID);
 
         if(!isset($user['username'])){
-            return false;
+            return 403;
         }else{
             $now = new \DateTime('now');
             $folder = new Folder(
@@ -48,9 +48,8 @@ class UseCasePostFolder
                 $now
             );
 
-            $this->repository->create($userID, $folder);
+            return $this->repository->create($userID, $folder);
 
-            return true;
         }
     }
 }

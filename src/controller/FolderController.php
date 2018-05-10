@@ -69,7 +69,12 @@ class FolderController
             $userID = $args['userID'];
             $data = $request->getParsedBody();
             $service = $this->container->get('post-folder-service');
-            $service($data, $userID);
+            $result = $service($data, $userID);
+
+            $response = $response
+                ->withStatus($result)
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>$result, "res"=>[]]));
         } catch (\Exception $e) {
             $response = $response
                 ->withStatus(500)

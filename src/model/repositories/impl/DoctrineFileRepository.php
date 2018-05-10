@@ -24,7 +24,7 @@ class DoctrineFileRepository implements FileRepository
     private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id) AND `creator` = :id_usuari AND `folder` = :id_folder;';
     private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id;';
     private const DOWNLOAD_DATA_QUERY = 'SELECT * FROM `file`;';
-    private const UPDATE_DATA = 'UPDATE `file` SET `filename` = :filename, `folder` = :folder WHERE (`creator` = :userID AND `id` = :fileID);';
+    private const UPDATE_DATA = 'UPDATE `file` SET `name` = :filename, `folder` = :folder WHERE (`creator` = :userID AND `id` = :fileID);';
 
 
     public function __construct(Connection $connection)
@@ -97,21 +97,30 @@ class DoctrineFileRepository implements FileRepository
         return new File($query_result['id'], $query_result['name'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
     }
 
-    public function updateData(File $file, $userID): File
+    public function updateData(File $file, $userID, $newName): File
     {
-        var_dump($file);
+        var_dump($file->getName());
         $sql = self::UPDATE_DATA;
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("filename", $file->getName(), 'string');
+        $stmt->bindValue("filename", $newName, 'string');
         $stmt->bindValue("folder", $file->getFolder(), 'integer');
         $stmt->bindValue("userID", $userID, 'integer');
         $stmt->bindValue("fileID", $file->getId(), 'integer');
         $stmt->execute();
 
-        $sql = "SELECT `id` FROM `file` ORDER BY `id` DESC LIMIT 1;";
-        $stmt = $this->connection->prepare($sql);
-        $aux = $stmt->execute();
-        return new File($aux['id'], $aux['name'], $aux['creador'], $aux['folder'], $aux['created_at'], $aux['updated_at'], $aux['file']);
-        // TODO: Implement updateData() method. Devolver el objeto de la clase File con los nuevos datos y con su atributo `file` a null
+        var_dump($newName);
+        var_dump($file->getName());
+        if ($newName == $file->getName()){
+            echo "file with content";
+            $sql = "SELECT * FROM `file` ORDER BY `id` DESC LIMIT 1;";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute();
+            $aux = $stmt->fetch();
+            return new File($aux['id'], $aux['name'], $aux['creator'], $aux['folder'], $aux['created_at'], $aux['updated_at'], null);
+            // TODO: Implement updateData() method. Devolver el objeto de la clase File con los nuevos datos y con su atributo `file` a null
+        }else{
+            echo "no content";
+            return new File(null, null, null, null, null, null, null);
+        }
     }
 }

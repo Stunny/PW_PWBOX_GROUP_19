@@ -18,6 +18,8 @@ use PWBox\model\User;
 class DoctrineFolderRepository implements FolderRepository
 {
 
+    private const USER_FOLDERS_DIR = "/home/vagrant/pwbox/appdata/user_folders/";
+
     private $connection;
 
     private const DATE_FORMAT = 'Y-m-d H:i:s';
@@ -38,6 +40,10 @@ class DoctrineFolderRepository implements FolderRepository
 
     public function create(int $creatorId, Folder $folder)
     {
+        if(file_exists(self::USER_FOLDERS_DIR . $folder->getPath())){
+            return 409;
+        }
+
         $sql = self::INSERT_FOLDER_QUERY;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("creador", $creatorId, 'integer');
@@ -61,6 +67,9 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
         $stmt->bindValue("updated_at", $folder->getUpdatedAt()->format(self::DATE_FORMAT));
         $stmt->execute();
+
+        mkdir(self::USER_FOLDERS_DIR.$folder->getPath(), 0777, true);
+        return 200;
     }
 
     public function update(Folder $folder, int $userID)

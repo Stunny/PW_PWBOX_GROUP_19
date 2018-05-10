@@ -20,6 +20,6 @@ interface FileRepository
 
     public function getData(File $file): File;
 
-    public function updateData(File $file, $userID): File;
+    public function updateData(File $file, $userID, $newName): File;
 
 }
