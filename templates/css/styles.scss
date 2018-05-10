@@ -12,22 +12,20 @@ body{
     overflow: hidden;
 }
 
-/*#main{
-    background-color: #e8ebf2;
-}*/
-
 h1{
-    font-size: 150%;
+    font-size: 3em;
     color: white;
 }
 
 #logoRow{
     height: 25%;
 }
+
 .header{
     font-size: 40px;
     color: white;
 }
+
 
 .ui.grid {
     height: 100%;
@@ -86,10 +84,6 @@ h1{
     width: 80%;
 }
 
-.dashItem{
-
-}
-
 
 #rightPanelLogin{
     background-color: #4284d6;
@@ -121,6 +115,16 @@ h1{
 #topRow{
     //background-color: #161619;
     height: 15%;
+}
+
+#topProfile{
+    background-color: #4284d6;
+    height: 15%;
+}
+
+#topRowAbout{
+    height: 25%;
+    //background-color: grey;
 }
 
 #topSideList{
@@ -156,6 +160,7 @@ h1{
 #dividerDash{
     height: 4%;
 }
+
 #contentGrid{
     height: 81%;
     //white-space:nowrap;
@@ -165,6 +170,20 @@ h1{
 #main-content{
     height: 100%;
     margin-top: 0;
+}
+
+#aboutImage{
+    height: 350px;
+    width: 350px;
+}
+
+#aboutHeader{
+    font-size: 6em;
+    color: #4284d6;
+}
+
+.bar{
+    transform: rotate(-90deg);
 }
 
 .dashItem{
