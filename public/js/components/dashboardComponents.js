@@ -1,9 +1,7 @@
 Vue.component('content-item', {
   props: ['filename', 'extension', 'itemType'],
   data: function(){
-    return {
-
-    }
+    return {}
   },
   template: `
   <div class="four wide center aligned column">

@@ -1,6 +1,6 @@
 $(document).ready(()=>{
 
-
+  //-------Inicializaciones de modulos Vue
   var dashLeftTree = new Vue({
     el: '#dashLeftTree',
     data: {
@@ -33,6 +33,9 @@ $(document).ready(()=>{
     methods: {
       setTitle: function(title){
         this.title = title;
+      },
+      getTitle: function(){
+        return this.title;
       }
     }
   });
@@ -41,17 +44,75 @@ $(document).ready(()=>{
     el: '#rows',
     template: '',
     data: {
-      
+      rows: []
     },
     methods:{
-
+      setRows: function(rows){
+        this.rows = rows;
+      }
     }
   });
 
-  dashLeftTree.setTree([
-    {name: "Folder1", children:[{name:"SubFolder1", children:[{name:"SubSubFolder1", children:[]}]}, {name:"SubFolder2", children:[]}]},
-    {name: "Folder2", children: []}
-  ]);
-  
+  var leftNav = new Vue({
+    el: '#topSideList',
+    data:{
+      filesSelected: true,
+      profileSelected: false,
+      settingsSelected: false
+    },
+    methods:{
+      tabFiles: function(){
+        if(this.filesSelected) return;
 
+        this.filesSelected = true;
+        this.profileSelected = false;
+        this.settingsSelected = false;
+        pathTitle.setTitle('My Files');
+
+        loadDashboardContent();
+      },
+      tabProfile: function(){
+        if(this.profileSelected) return;
+
+        this.filesSelected = false;
+        this.profileSelected = true;
+        this.settingsSelected = false;
+        pathTitle.setTitle('My profile');
+
+        loadDashboardContent();
+      },
+      tabSettings: function(){
+        if(this.settingsSelected) return;
+
+        this.filesSelected = false;
+        this.profileSelected = false;
+        this.settingsSelected = true;
+        pathTitle.setTitle('Settings');
+
+        loadDashboardContent();
+      }
+    }
+  });
+
+  function loadDashboardContent(){
+    switch(pathTitle.getTitle()){
+        case "My Files":
+  
+        break;
+  
+        case "My Profile":
+  
+        break;
+  
+        case "Settings":
+  
+        break;
+  
+        default:
+    }
+  }
+
+  //------------------------Script principal de la pagina
+  
+  loadDashboardContent();
 });
