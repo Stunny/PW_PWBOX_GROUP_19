@@ -111,25 +111,37 @@ $(document).ready(()=>{
     }
   });
 
+  //------------------------Scripts auxiliares de la pagina----------------------------------//
+
+  function changeToFiles(){
+
+  }
+
+  function changeToProfile(){
+
+  }
+
+  function changeToSettings(){
+    
+  }
+
   function loadDashboardContent(){
     switch(pathTitle.getTitle()){
         case "My Files":
-  
+          changeToFiles();
         break;
   
         case "My Profile":
-  
+          changeToProfile();
         break;
   
         case "Settings":
-  
+          changeToSettings();
         break;
   
         default:
     }
   }
-
-  //------------------------Script principal de la pagina
   
   loadDashboardContent();
 });
