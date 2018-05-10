@@ -1,4 +1,4 @@
-Vue.component('content-item', {
+Vue.component('folder-item', {
   props: ['filename', 'extension', 'itemType'],
   data: function(){
     return {}
@@ -12,6 +12,27 @@ Vue.component('content-item', {
       </h4>
     </div>
   </div>
+  `
+});
+
+Vue.component('folder-item-row', {
+  props: ['items'],
+  data: function(){
+    return {}
+  },
+  template: `
+    <div class="row">
+      <span>
+        <content-item
+          v-for="item in items"
+          :filename="item.filename"
+          :extension="item.extension"
+          :itemType="item.type"
+          :key="item.filename+'.'+item.extension"
+        >
+        </content-item>
+      </span>
+    </div>
   `
 });
 

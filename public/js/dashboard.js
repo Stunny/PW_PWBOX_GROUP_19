@@ -42,13 +42,30 @@ $(document).ready(()=>{
 
   var centerContent = new Vue({
     el: '#rows',
-    template: '',
+    template: `
+      <span>
+        <folder-item-row
+          v-for="row in rows"
+          :items="row.items"
+          :key="rowkey(row.items)"
+        >
+        </folder-item-row>
+      </span>
+    `,
     data: {
       rows: []
     },
     methods:{
       setRows: function(rows){
         this.rows = rows;
+      },
+      rowKey: function(items){
+          var key = "";
+          for(item in items){
+            key += item.filename + "-"
+          }
+
+          return key;
       }
     }
   });
