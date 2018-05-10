@@ -23,8 +23,12 @@ class DashboardPageController
 
     public function __invoke(Request $request, Response $response, array $args)
     {
+        if(!isset($_SESSION['user'])){
+            $response = $response->withStatus(302)
+                ->withHeader('location', '/login');
+            return $response;
+        }
 
-
-        echo "Welcome to the rice fields: User ".$_SESSION['user'];
+        $this->container->get('view')->render($response, 'dashboard.twig', []);
     }
 }

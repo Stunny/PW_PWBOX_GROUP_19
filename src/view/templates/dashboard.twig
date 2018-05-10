@@ -1,2 +1,83 @@
 {% extends "base.twig" %}
-loged in boi
+
+{% block title %}
+    Dashboard | PWBox
+{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+{% endblock %}
+
+{% block preLoadScripts %}
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="semantic/dist/semantic.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <script src="js/components/dashboardComponents.js" type="text/javascript"></script>
+  <script src="js/dashboard.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="ui padded equal height grid" id="main-content">
+
+  <div class="ui left floated three wide column" id="dashLeft">
+    <div class="row" id="logoRow">
+      <img class="ui medium circular image" src="media/logo.png" alt="logo">
+    </div>
+
+    <div class="center aligned row" id="topSideList">
+
+        <div class="ui list">
+          <div class="item">
+            <a class="item">Files</a>
+          </div>
+          <div class="item">
+            <a class="item">My account</a>
+          </div>
+          <div class="item">
+            <a class="item">Settings</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="ui horizontal divider">
+      <i class="folder open outline icon"></i>
+    </div>
+
+    <div class="row">
+      <div class="ui list" id="dashLeftTree">
+        <!-- Content loaded dynamically by VueJS -->
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ui eleven wide column centered grid" id="dashCenter">
+    <div class="row" id="pathRow">
+        <div class="centered aligned column" id="pathTitle">
+          <!-- Content loaded dynamically by VueJS -->
+        </div>
+      </div>
+      <div class="row" id="dividerDash">
+        <div class="ui horizontal divider">
+          <i class="folder outline icon"></i>
+        </div>
+      </div>
+      <div class="row" id="contentGrid">
+        <div class="column" id="folder-list-column">
+          <div class="ui middle aligned centered grid" id="rows">
+            <!-- Content loaded dynamically by VueJS -->
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="ui right aligned one wide column" id="dashRight">
+    <i class="user circle icon" id="userIcon"></i>
+  </div>
+
+</div>
+
+{% endblock %}

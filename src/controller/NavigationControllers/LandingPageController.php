@@ -26,7 +26,7 @@ class LandingPageController
     public function __invoke(Request $request, Response $response, array $args)
     {
 
-        if(isset($_SESSION['user'])){
+        if($request->getUri()->getPath() != "/landing" && isset($_SESSION['user'])){
             $response = $response->withStatus(302)
                 ->withHeader('location', '/dashboard');
             return $response;
