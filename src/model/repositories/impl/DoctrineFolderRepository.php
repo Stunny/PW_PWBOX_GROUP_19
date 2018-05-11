@@ -102,7 +102,6 @@ class DoctrineFolderRepository implements FolderRepository
         $sql = self::SELECT_QUERY;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id", $folderID, 'integer');
-        $stmt->bindValue("id", $folderID, 'integer');
         $stmt->bindValue("id_usuari", $userID, 'integer');
         $stmt->execute();
         $aux = $stmt->fetch();

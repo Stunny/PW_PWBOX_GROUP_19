@@ -128,6 +128,13 @@ $container['get-folder-service'] = function ($container){
     return $service;
 };
 
+$container['folder-tree-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FolderUseCases\UseCaseGetFolderTree(
+        $container->get('folder-repository')
+    );
+    return $service;
+};
+
 $container['put-folder-service'] = function ($container){
     $service = new \PWBox\model\use_cases\FolderUseCases\UseCaseUpdateFolder(
         $container->get('folder-repository')

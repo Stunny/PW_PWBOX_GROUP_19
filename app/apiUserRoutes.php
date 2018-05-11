@@ -28,6 +28,7 @@ $this->put('/{userID}/folder/{folderID}[/]', 'PWBox\controller\FolderController:
 
 $this->delete('/{userID}/folder/{folderID}[/]', 'PWBox\controller\FolderController:delete')->setName('delete-folder');
 
+$this->get('/{userID}/folder/{folderID}/tree[/]', 'PWBox\controller\FolderController:getTree')->setName('get-folder-tree');
 
 //----------------------------------------------------------File
 $this->get('/{userID}/folder/{folderID}/file/{fileID}[/]', PWBox\controller\FileControllers\GetFileController::class)->setName('get-file');

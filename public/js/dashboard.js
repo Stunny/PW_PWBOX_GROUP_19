@@ -1,7 +1,10 @@
+
+var dashLeftTree, pathTitle, centerContent, leftNav;
+
 $(document).ready(()=>{
 
   //-------Inicializaciones de modulos Vue
-  var dashLeftTree = new Vue({
+  dashLeftTree = new Vue({
     el: '#dashLeftTree',
     data: {
       tree: []
@@ -24,7 +27,7 @@ $(document).ready(()=>{
     }
   });
 
-  var pathTitle = new Vue({
+  pathTitle = new Vue({
     el: '#pathTitle',
     template: `<span>{{ title }}</span>`,
     data: {
@@ -40,7 +43,7 @@ $(document).ready(()=>{
     }
   });
 
-  var centerContent = new Vue({
+  centerContent = new Vue({
     el: '#rows',
     template: `
       <span>
@@ -70,7 +73,7 @@ $(document).ready(()=>{
     }
   });
 
-  var leftNav = new Vue({
+  leftNav = new Vue({
     el: '#topSideList',
     data:{
       filesSelected: true,
@@ -122,7 +125,7 @@ $(document).ready(()=>{
   }
 
   function changeToSettings(){
-    
+
   }
 
   function loadDashboardContent(){
