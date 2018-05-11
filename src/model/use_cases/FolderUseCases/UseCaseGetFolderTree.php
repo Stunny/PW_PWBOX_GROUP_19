@@ -34,8 +34,7 @@ class UseCaseGetFolderTree
         $tree = new FolderTree($folder->getNom());
         $this->buildTree($folder->getPath(), $tree);
 
-        echo json_encode($tree->toArray());
-        die();
+        return $tree->toArray();
 
     }
 

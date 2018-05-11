@@ -1,5 +1,6 @@
 
 var dashLeftTree, pathTitle, centerContent, leftNav;
+var userId, rootFolderId;
 
 $(document).ready(()=>{
 
@@ -117,7 +118,16 @@ $(document).ready(()=>{
   //------------------------Scripts auxiliares de la pagina----------------------------------//
 
   function changeToFiles(){
+    var get = $.ajax({
+      async : true,
+      type : 'get',
+      url: '/api/user/'+userId+'/folder/'+rootFolderId+'/tree'
+    });
 
+    get.done((elmts, textStatus)=>{
+      console.log(elmts);
+      dashLeftTree.setTree([elmts.res]);
+    });
   }
 
   function changeToProfile(){
@@ -145,6 +155,8 @@ $(document).ready(()=>{
         default:
     }
   }
-  
+
+  userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1]; 
+  rootFolderId = document.cookie.match(/rootFolderId=[^;]+/)[0].split('=')[1]
   loadDashboardContent();
 });

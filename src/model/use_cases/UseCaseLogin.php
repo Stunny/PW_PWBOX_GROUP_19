@@ -28,8 +28,12 @@ class UseCaseLogin
     {
         $result = $this->repository->login($email, $password);
 
+
         if (!is_null($result)){
-            $_SESSION['user'] = $email;
+            $rootFolderId = $this->repository->getRootFolderId($result);
+            setcookie('rootFolderId', $rootFolderId, time()+86400);
+            setcookie('user', $result, time()+86400);
+            $_SESSION['user'] = $result;
             session_set_cookie_params(86400);//1 dia entero de sesion
             return 200;
         }else{

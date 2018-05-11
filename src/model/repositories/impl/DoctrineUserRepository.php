@@ -24,6 +24,7 @@ class DoctrineUserRepository implements UserRepository
 
     private const INSERT_QUERY = 'INSERT INTO `user`(`username`, `email`, `birthdate`, `password`, `created_at`, `updated_at`, `verificationHash`) VALUES(:username, :email, :birthdate, md5(:password), :created_at, :updated_at, :hash);';
     private const SELECT_QUERY = 'SELECT * FROM `user` WHERE (`id` = :id);';
+    private const SELECT_ROOT_FOLDER = 'select `id` from folder where (`creador`=:userId and `nom`=:userName);';
     private const UPDATE_QUERY = 'UPDATE `user` SET `username` = :username, `email` = :email, `birthdate` = :birthdate, `password` = :password WHERE `id` = :id;';
     private const DELETE_QUERY = 'DELETE FROM `user` WHERE (`id` = :id);';
     private const VERIFY_QUERY = 'update user set verified = true where verificationHash = :hash;';
@@ -127,6 +128,22 @@ class DoctrineUserRepository implements UserRepository
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("email", $userEmail, 'string');
         $stmt->bindValue("password", $userPassword, "string");
+        $stmt->execute();
+
+        $id = $stmt->fetch()['id'];
+
+        return $id;
+    }
+
+    public function getRootFolderId($userId)
+    {
+
+        $userName = $this->get($userId)['username'];
+
+        $sql = self::SELECT_ROOT_FOLDER;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("userId", $userId, 'integer');
+        $stmt->bindValue("userName", $userName, 'string');
         $stmt->execute();
 
         $id = $stmt->fetch()['id'];
