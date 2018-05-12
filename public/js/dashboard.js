@@ -16,7 +16,8 @@ $(document).ready(()=>{
           v-for="item in tree"
           :name="item.name"
           :children="item.children"
-          :key="'treeItem-'+item.name"
+          :key="'treeItem-'+item.name+'-'+item.id"
+          :folderID="'folder-'+item.id"
         >
         </left-list-item>
       </span>  

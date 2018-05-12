@@ -38,21 +38,21 @@ Vue.component('folder-item-row', {
 
 
 Vue.component('left-list-item', {
-  props: ['name', 'children'],
+  props: ['name', 'children', 'folderID'],
   data: function(){
     return{};
   },
   template: `
-  <div class="item"
-    v-bind:id="'treeItem-'+name">
+  <div class="item">
     <div class="content">
-      <a class="item">{{name}}</a>
+      <a class="item" :id="folderID">{{name}}</a>
       <span>
         <left-list-item
           v-for="item in children"
           :name="item.name"
-          :key="'treeItem-'+name"
+          :key="'treeItem-'+item.name+'-'+item.id"
           :children="item.children"
+          :folderID="'folder-'+item.id"
         >
         </left-list-item>
       </span> 

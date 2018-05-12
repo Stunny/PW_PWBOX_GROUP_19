@@ -52,7 +52,7 @@ class UseCaseGetFolderTree
 
             if($subcontent != false){
                 $itemId =  $this->repository->getByName($item, $this->userId);
-                $child = new FolderTree($item);
+                $child = new FolderTree($item, $itemId);
                 $tree->addChild($child);
 
                 $this->buildTree($path . '/' . $item, $child);
