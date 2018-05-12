@@ -45,7 +45,7 @@ Vue.component('left-list-item', {
   template: `
   <div class="item">
     <div class="content">
-      <a class="item" :id="folderID">{{name}}</a>
+      <a  class="item" :id="folderID">{{name}}</a>
       <span>
         <left-list-item
           v-for="item in children"
