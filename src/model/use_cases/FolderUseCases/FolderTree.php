@@ -11,18 +11,19 @@ namespace PWBox\model\use_cases\FolderUseCases;
 
 class FolderTree
 {
-
+    private $id;
     private $name;
     private $children;
 
-    public function __construct($name)
+    public function __construct($name, $id)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->children = array();
     }
 
     /**
-     * @param FolderTree $children
+     * @param FolderTree $child
      */
     public function addChild(FolderTree $child)
     {
@@ -38,6 +39,8 @@ class FolderTree
 
     private function preOrder(FolderTree $root, array & $node){
         $node['name'] = $root->getName();
+        $node['id'] = $root->getId();
+
         $children = $root->getChildren();
         $qChildren = count($children);
         $node['children'] = array_fill(0, $qChildren, []);
@@ -62,6 +65,24 @@ class FolderTree
     {
         $this->name = $name;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
+
 
     /**
      * @return mixed

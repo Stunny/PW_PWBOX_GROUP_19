@@ -18,6 +18,8 @@ class UseCaseGetFolderTree
 
     private $repository;
 
+    private $userId;
+
     function __construct(FolderRepository $repository)
     {
         $this->repository = $repository;
@@ -25,13 +27,14 @@ class UseCaseGetFolderTree
 
     public function __invoke(array $urlArgs)
     {
-        $folder = $this->repository->get($urlArgs['folderID'], $urlArgs['userID']);
+        $this->userId = $urlArgs['userID'];
+        $folder = $this->repository->get($urlArgs['folderID'], $this->userId);
 
         if($folder == null){
             return null;
         }
 
-        $tree = new FolderTree($folder->getNom());
+        $tree = new FolderTree($folder->getNom(), $folder->getId());
         $this->buildTree($folder->getPath(), $tree);
 
         return $tree->toArray();
@@ -48,6 +51,7 @@ class UseCaseGetFolderTree
             $subcontent = scandir(self::FOLDERS_DIR . $path . '/' . $item);
 
             if($subcontent != false){
+                $itemId =  $this->repository->getByName($item, $this->userId);
                 $child = new FolderTree($item);
                 $tree->addChild($child);
 

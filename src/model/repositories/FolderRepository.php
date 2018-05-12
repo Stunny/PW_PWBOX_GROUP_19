@@ -19,5 +19,7 @@ interface FolderRepository
 
     public function get(int $folderID, int $userID) : Folder;
 
+    public function getByName($folderName, int $userID);
+
     public function delete(int $folderID, int $userID);
 }

@@ -29,6 +29,7 @@ class DoctrineFolderRepository implements FolderRepository
     private const INSERT_ROLES_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
     private const NEW_FOLDER_ID = 'SELECT `id` FROM `folder` WHERE `creador` = :id_creador ORDER BY `id` DESC LIMIT 1;';
     private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id) AND `id` = (SELECT `folder` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari);';
+    private const SELECT_BY_NAME_QUERY = 'select * from `folder` where(`creador`=:userID and `nom`=:folderName)';
     private const FOLDER_DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id) AND `creador` = :id_usuari;';
     private const ROLE_DELETE_QUERY = 'DELETE FROM `role` WHERE `usuari` = :id_usuari AND `folder` = :id_folder;';
 
@@ -103,6 +104,18 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id", $folderID, 'integer');
         $stmt->bindValue("id_usuari", $userID, 'integer');
+        $stmt->execute();
+        $aux = $stmt->fetch();
+        return new Folder($aux['id'], $aux['creador'], $aux['nom'], $aux['path'], $aux['created_at'], $aux['updated_at']);
+    }
+
+    public function getByName($folderName, int $userID)
+    {
+        $sql = self::SELECT_BY_NAME_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("folderName", $folderName, 'string');
+        $stmt->bindValue("userID", $userID, 'integer');
+
         $stmt->execute();
         $aux = $stmt->fetch();
         return new Folder($aux['id'], $aux['creador'], $aux['nom'], $aux['path'], $aux['created_at'], $aux['updated_at']);
