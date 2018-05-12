@@ -29,7 +29,7 @@ $this->group('/{userID}', function (){
 
     $this->delete('/folder/{folderID}[/]', 'PWBox\controller\FolderController:delete')->setName('delete-folder');
 
-$this->get('/{userID}/folder/{folderID}/tree[/]', 'PWBox\controller\FolderController:getTree')->setName('get-folder-tree');
+    $this->get('/folder/{folderID}/tree[/]', 'PWBox\controller\FolderController:getTree')->setName('get-folder-tree');
 
 //----------------------------------------------------------File
     $this->get('/folder/{folderID}/file/{fileID}[/]', PWBox\controller\FileControllers\GetFileController::class)->setName('get-file');

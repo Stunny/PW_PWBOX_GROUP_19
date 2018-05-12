@@ -126,7 +126,7 @@ $(document).ready(()=>{
     });
 
     get.done((elmts, textStatus)=>{
-      console.log(elmts);
+      console.log(JSON.stringify(elmts.res));
       dashLeftTree.setTree([elmts.res]);
     });
   }
@@ -145,12 +145,12 @@ $(document).ready(()=>{
           changeToFiles();
         break;
   
-        case "My Profile":
-          changeToProfile();
+        case "My profile":
+        dashLeftTree.setTree([]);
         break;
   
         case "Settings":
-          changeToSettings();
+        dashLeftTree.setTree([]);
         break;
   
         default:

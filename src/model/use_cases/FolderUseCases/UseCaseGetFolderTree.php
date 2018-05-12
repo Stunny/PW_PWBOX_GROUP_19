@@ -51,8 +51,8 @@ class UseCaseGetFolderTree
             $subcontent = scandir(self::FOLDERS_DIR . $path . '/' . $item);
 
             if($subcontent != false){
-                $itemId =  $this->repository->getByName($item, $this->userId);
-                $child = new FolderTree($item, $itemId);
+                $childObj =  $this->repository->getByName($item, $this->userId);
+                $child = new FolderTree($item, $childObj->getId());
                 $tree->addChild($child);
 
                 $this->buildTree($path . '/' . $item, $child);
