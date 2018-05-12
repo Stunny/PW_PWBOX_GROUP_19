@@ -17,6 +17,12 @@ h1{
     color: white;
 }
 
+hr{
+    height: 1px;
+    background-color: #83a9d1;
+    color: #83a9d1;
+}
+
 #logoRow{
     height: 25%;
 }
@@ -38,6 +44,10 @@ h1{
     .itemChild{
         color: #4284d6;
     }
+}
+
+.checkbox{
+    padding: 0em;
 }
 
 .content.header{
@@ -84,7 +94,6 @@ h1{
     width: 80%;
 }
 
-
 #rightPanelLogin{
     background-color: #4284d6;
 }
@@ -104,7 +113,7 @@ h1{
     height: 100%;
 }
 
-#logoRow{
+#logoRowDash{
     margin-bottom: 50px;
     .image{
         height: 15em;
@@ -112,19 +121,99 @@ h1{
     }
 }
 
-#topRow{
-    //background-color: #161619;
-    height: 15%;
-}
 
+
+//Profile Page
 #topProfile{
     background-color: #4284d6;
-    height: 15%;
+    height: 20%;
+    padding: 0em;
+    margin: 0px;
 }
 
+#logoRowProfile{
+    margin-top: 2em;
+    margin-left: 1em;
+    .image{
+        height: 10em;
+        width: 10em;
+        padding: 1em;
+    }
+}
+
+#profileHeader{
+    font-size: 4em;
+    color: #e8ebf2;
+    padding-top: 1.5em;
+    float: left;
+}
+
+#profileLink{
+    font-size: 2em;
+    color: #e8ebf2;
+    padding-top: 4em;
+    padding-right: 1em;
+    float: right;
+}
+
+#middleRowProfile{
+    height:20%;
+    padding: 1em;
+    margin-bottom: 50px;
+    margin-top: 20px;
+    .img{
+        height:11.5em;
+        width:11.5em;
+        margin:0em;
+    }
+}
+
+#contentRowProfile{
+    height:55%;
+    padding:0em;
+}
+
+#profileInfoRow{
+    padding:2em;
+    //float:right;
+    //text-align:left;
+}
+
+.checkbox{
+    float: right;
+}
+
+#leftText{
+    text-align:left;
+}
+
+#rightText{
+    text-align:right;
+}
+
+
+//About Page
 #topRowAbout{
     height: 25%;
     //background-color: grey;
+}
+
+#aboutImage{
+    height: 350px;
+    width: 350px;
+}
+
+#aboutHeader{
+    font-size: 6em;
+    color: #4284d6;
+}
+
+
+
+
+#topRow{
+    //background-color: #161619;
+    height: 15%;
 }
 
 #topSideList{
@@ -172,19 +261,6 @@ h1{
     margin-top: 0;
 }
 
-#aboutImage{
-    height: 350px;
-    width: 350px;
-}
-
-#aboutHeader{
-    font-size: 6em;
-    color: #4284d6;
-}
-
-.bar{
-    transform: rotate(-90deg);
-}
 
 .dashItem{
     height: 175px;
