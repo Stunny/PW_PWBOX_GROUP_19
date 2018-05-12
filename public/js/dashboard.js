@@ -5,6 +5,7 @@ var userId, rootFolderId;
 $(document).ready(()=>{
 
   //-------Inicializaciones de modulos Vue
+
   dashLeftTree = new Vue({
     el: '#dashLeftTree',
     data: {
@@ -25,22 +26,30 @@ $(document).ready(()=>{
     methods: {
       setTree: function(arrayTree){
         this.tree = arrayTree;
+        pathTitle.setPath([arrayTree[0].name]);
       }
     }
   });
 
   pathTitle = new Vue({
     el: '#pathTitle',
-    template: `<span>{{ title }}</span>`,
+    template: `
+    <div class="ui big centered breadcrumb" id="path">
+      <a :class="path.length != 1?'section':'active section'">{{path[0]}}</a>
+      <span v-for="(item, index) in path">
+        <span v-if="index != 0">
+        <i class="right chevron icon divider"></i>
+        <a :class="index == path.length-1?'active section': 'section'">{{path[index]}}</a>
+        </span>
+      </span>
+    </div>
+    `,
     data: {
-      title: "My Files"
+      path: []
     },
     methods: {
-      setTitle: function(title){
-        this.title = title;
-      },
-      getTitle: function(){
-        return this.title;
+      setPath: function(path){
+        this.path = path;
       }
     }
   });
@@ -84,34 +93,23 @@ $(document).ready(()=>{
     },
     methods:{
       tabFiles: function(){
-        if(this.filesSelected) return;
-
         this.filesSelected = true;
         this.profileSelected = false;
         this.settingsSelected = false;
-        pathTitle.setTitle('My Files');
-
-        loadDashboardContent();
       },
       tabProfile: function(){
-        if(this.profileSelected) return;
-
         this.filesSelected = false;
         this.profileSelected = true;
         this.settingsSelected = false;
-        pathTitle.setTitle('My profile');
 
-        loadDashboardContent();
+        changeToProfile();
       },
       tabSettings: function(){
-        if(this.settingsSelected) return;
-
         this.filesSelected = false;
         this.profileSelected = false;
         this.settingsSelected = true;
-        pathTitle.setTitle('Settings');
 
-        loadDashboardContent();
+        changeToSettings();
       }
     }
   });
@@ -127,35 +125,36 @@ $(document).ready(()=>{
 
     get.done((elmts, textStatus)=>{
       console.log(JSON.stringify(elmts.res));
+      rootFolderTree = elmts.res;
       dashLeftTree.setTree([elmts.res]);
     });
   }
 
   function changeToProfile(){
-      dashLeftTree.setTree([]);
+      window.location.href = "";
   }
 
   function changeToSettings(){
-      dashLeftTree.setTree([]);
+    window.location.href = "";
   }
 
   function loadDashboardContent(){
-    switch(pathTitle.getTitle()){
-        case "My Files":
-          changeToFiles();
-        break;
-  
-        case "My profile":
-        dashLeftTree.setTree([]);
-        break;
-  
-        case "Settings":
-        dashLeftTree.setTree([]);
-        break;
-  
-        default:
-    }
+    var get = $.ajax({
+      async : true,
+      type : 'get',
+      url: '/api/user/'+userId+'/folder/'+rootFolderId+'/tree'
+    });
+
+    get.done((elmts, textStatus)=>{
+      console.log(JSON.stringify(elmts.res));
+      rootFolderTree = elmts.res;
+      dashLeftTree.setTree([elmts.res]);
+    });
   }
+
+  $("#userIcon").click((event)=>{
+    leftNav.tabProfile();
+  });
 
   userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1]; 
   rootFolderId = document.cookie.match(/rootFolderId=[^;]+/)[0].split('=')[1]
