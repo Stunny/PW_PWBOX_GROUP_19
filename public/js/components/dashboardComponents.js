@@ -23,14 +23,14 @@ Vue.component('folder-item-row', {
   template: `
     <div class="row">
       <span>
-        <content-item
+        <folder-item
           v-for="item in items"
           :filename="item.filename"
           :extension="item.extension"
           :itemType="item.type"
           :key="item.filename+'.'+item.extension"
         >
-        </content-item>
+        </folder-item>
       </span>
     </div>
   `

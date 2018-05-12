@@ -132,11 +132,11 @@ $(document).ready(()=>{
   }
 
   function changeToProfile(){
-
+      dashLeftTree.setTree([]);
   }
 
   function changeToSettings(){
-
+      dashLeftTree.setTree([]);
   }
 
   function loadDashboardContent(){
