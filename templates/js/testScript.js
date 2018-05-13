@@ -27,4 +27,10 @@ $(document).ready(()=>{
     $('.ui.labeled.icon.sidebar')
   .sidebar('toggle');
   });
+
+  $("#profileLink").on("click", (e)=>{
+    $('.ui.modal')
+  .modal('show');
+  e.preventDefault();
+  })
 });
