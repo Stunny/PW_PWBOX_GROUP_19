@@ -2,6 +2,26 @@
 var dashLeftTree, pathTitle, centerContent, leftNav;
 var userId, rootFolderId;
 
+function getParentId(id){
+  console.log($("#"+id).parent().parent().parent().prev().attr('id'));
+  return $("#"+id).parent().parent().parent().prev().attr('id');
+}
+
+function getFolderBreadcrumb(id){
+
+  let bc = $("#"+id).text()+'-';
+  let folderID = id;
+  let parentId;
+
+  while(getParentId(folderID) != undefined){
+    parentId = getParentId(folderID);
+    bc += $("#"+parentId).text()+'-';
+    folderID = parentId;
+  }
+
+  bc.replace(/-$/, '');
+  return bc.split('-').reverse();
+}
   //-------Inicializaciones de modulos Vue
 
 dashLeftTree = new Vue({
@@ -163,4 +183,5 @@ $(document).on('click','a[id^="folder-"]',(event)=>{
       content = $('#'+id).text();
   //TODO: implementar la funcion que cambia el breadcrumb
   // y el contenido interno del dashCenter
+  pathTitle.setPath(getFolderBreadcrumb(id));
 });
