@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <title>Settings Page test</title>
+  <meta charset="utf-8">
+  <meta name="description" content="PWBox Settings Page" />
+  <meta name="author" content="Angel Farre, Rafael  Rebollo, Alex Vogel" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <link rel="stylesheet" href="css/styles.min.css" type="text/css" media="all" />
+  <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="semantic/dist/semantic.min.js"></script>
+  <script src="js/testScript.js" type="text/javascript"></script>
+
+
+</head>
+
+<body>
+
+  <div class="ui center aligned grid" id="main-content">
+
+    <div class="center aligned row" id="topSettings">
+
+      <div class="three wide column">
+
+        <div class="row" id="logoRowSettings">
+          <img class="ui circular image" src="media/image.png" alt="image">
+        </div>
+      </div>
+
+      <div class="thirteen wide column">
+        <div class="row">
+          <h1 class="ui header" id="settingsHeader">Settings</h1>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row" id="middleRowSettings">
+
+      <div class="ui left floated three wide column" id="settingsLeft">
+
+        <div class="row">
+          <div class="ui vertical padded segment" id="settingsListItem">
+            <a id="leftText" href="">Dashboard</a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="ui vertical padded segment" id="settingsListItem">
+            <a id="leftText" href="">My Account</a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="ui vertical padded segment" id="settingsListItem">
+            <a id="leftText" href="">Help</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="ui thirteen wide column" id="noPadding">
+
+        <div class="row" id="settingsContHeaderRow">
+
+
+          <h1 class="ui header" id="settingsContentHeader">Account Settings</h1>
+
+
+        </div>
+
+
+        <div class="ui grid" id="noPadding">
+
+          <div class="ui three wide column">
+
+          </div>
+
+
+          <div class="ui three wide center aligned column" id="noPadding">
+
+            <div class="row" id="noPadding">
+              <div class="ui vertical padded segment" id="settingList">
+                <p>Email</p>
+              </div>
+            </div>
+            <div class="ui fitted divider" id="divider"></div>
+            <div class="row" id="noPadding">
+              <div class="ui vertical padded segment" id="settingList">
+                <p>Password</p>
+              </div>
+            </div>
+            <div class="ui fitted divider" id="divider"></div>
+            <div class="row" id="noPadding">
+              <div class="ui vertical padded segment" id="settingList">
+                <p>Photo</p>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="ui three wide center aligned column" id="noPadding">
+
+            <div class="row" id="rowPaddingSettings">
+              <div class="ui vertical padded segment">
+                <p>currentEmail@gmail.com</p>
+              </div>
+            </div>
+
+
+            <div class="row" id="rowPaddingSettings">
+              <div class="ui vertical padded segment">
+                <div class="ui animated fade button" tabindex="0" id="changePassButton">
+                  <div class="visible content">Change password</div>
+                  <div class="hidden content">
+                    <i class="edit outline icon"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+
+              <div class="ui animated fade button" tabindex="0" id="changeImageButton">
+                <div class="visible content">
+                  <div class="ui vertical padded segment" id="settingList">
+                    <img class="ui centered rounded tiny image" src="media/image.png">
+                  </div>
+                </div>
+                <div class="hidden content">
+                  <i class="big cloud upload icon"></i>
+                </div>
+              </div>
+
+
+            </div>
+
+          </div>
+
+          <div class="ui two wide column" id="noPadding">
+
+            <div class="row">
+              <div class="ui vertical padded segment" id="settingList">
+                <a href="" id="changeMail">Edit</a>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="ui five wide column" id="noPadding">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui small modal" id="changeMailModal">
+    <i class="close icon"></i>
+    <div class="header">
+      <i class="envelope icon"></i> Change Email
+    </div>
+    <div class="ui center aligned basic segment">
+      <div class="description">
+        <div class="ui header">Enter Email:</div>
+        <div class="ui input focus">
+          <input placeholder="Enter new Email..." type="text">
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        Cancel
+      </div>
+      <div class="ui positive right labeled icon button">
+        Accept
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui small modal" id="changePassModal">
+    <i class="close icon"></i>
+    <div class="header">
+      <i class="lock icon"></i> Change Password
+    </div>
+    <div class="ui center aligned basic segment">
+      <div class="description">
+        <div class="ui header">Enter your password:</div>
+        <div class="ui input focus">
+          <input placeholder="Enter current password..." type="text">
+        </div>
+      </div>
+      <div class="description">
+        <div class="ui header">Enter new password:</div>
+        <div class="ui input focus">
+          <input placeholder="Enter new password..." type="text">
+          <input placeholder="Repeat new password..." type="text">
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        Cancel
+      </div>
+      <div class="ui positive right labeled icon button">
+        Accept
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="ui tiny modal" id="changeImageModal">
+    <i class="close icon"></i>
+    <div class="header">
+      <i class="images outline icon"></i>
+      Change Profile Image
+    </div>
+    <div class="ui center aligned basic segment">
+      <div class="description">
+        <div class="ui header">Upload an image:</div>
+        <input type="file" id="myFile">
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        Cancel
+      </div>
+      <div class="ui positive right labeled icon button">
+        Accept
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
+
+</html>
