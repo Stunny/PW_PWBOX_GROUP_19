@@ -29,10 +29,41 @@ $(document).ready(()=>{
   });
 
   $("#profileLink").on("click", (e)=>{
-    $('.ui.modal')
+    $('#confirmPassModal')
   .modal('show');
   e.preventDefault();
   })
+
+  $("#deleteAccountButton").on("click", (e)=>{
+    $('#deleteAccModal')
+  .modal('show');
+  e.preventDefault();
+  })
+
+  $("#deleteConfirmButton").on("click", (e)=>{
+    $('#deleteAccModal2')
+  .modal('show');
+  e.preventDefault();
+  })
+
+  $("#changeMail").on("click", (e)=>{
+    $('#changeMailModal')
+  .modal('show');
+  e.preventDefault();
+  })
+
+  $("#changePassButton").on("click", (e)=>{
+    $('#changePassModal')
+  .modal('show');
+  e.preventDefault();
+  })
+
+  $("#changeImageButton").on("click", (e)=>{
+    $('#changeImageModal')
+  .modal('show');
+  e.preventDefault();
+  })
+
 
   $('#progBar').progress({
   percent: 77

@@ -90,6 +90,9 @@
             <p id="leftText">Verified Account</p>
           </div>
         </div>
+
+
+
       </div>
 
       <div class="ui three wide column">
@@ -126,6 +129,13 @@
             </div>
           </div>
         </div>
+
+        <div class="row">
+          <div class="ui vertical padded segment" id="profileInfoRow">
+            <a href="" class="ui left aligned red tiny header" id="deleteAccountButton">Delete account</a>
+          </div>
+        </div>
+
       </div>
 
       <div class="ui five wide column">
@@ -135,7 +145,7 @@
   </div>
 
 
-  <div class="ui tiny modal">
+  <div class="ui tiny modal" id="confirmPassModal">
     <i class="close icon"></i>
     <div class="header">
       Confirm Password
@@ -154,6 +164,50 @@
       </div>
       <div class="ui positive right labeled icon button">
         Accept
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui tiny modal" id="deleteAccModal">
+    <i class="close icon"></i>
+    <div class="header">
+      <i class="user times icon"></i>
+      Delete account
+    </div>
+    <div class="ui center aligned basic segment">
+      <div class="description">
+        <div class="ui alert header">Are you sure you want to delete your account?</div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui green deny button">
+        Cancel
+      </div>
+      <div class="ui negative right labeled icon button" id="deleteConfirmButton">
+        Delete account
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui tiny modal" id="deleteAccModal2">
+    <i class="close icon"></i>
+    <div class="header">
+      <i class="user times icon"></i>
+      Delete account
+    </div>
+    <div class="ui center aligned basic segment">
+      <div class="description">
+        <div class="ui alert header">Last chance. This will delete your account!</div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        Cancel
+      </div>
+      <div class="ui negative right labeled icon button">
+        Delete account
         <i class="checkmark icon"></i>
       </div>
     </div>
