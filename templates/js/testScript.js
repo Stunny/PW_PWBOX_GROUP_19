@@ -33,4 +33,8 @@ $(document).ready(()=>{
   .modal('show');
   e.preventDefault();
   })
+
+  $('#progBar').progress({
+  percent: 77
+});
 });
