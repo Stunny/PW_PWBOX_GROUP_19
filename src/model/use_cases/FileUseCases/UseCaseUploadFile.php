@@ -11,6 +11,7 @@ namespace PWBox\model\use_cases\FileUseCases;
 
 use PWBox\model\File;
 use PWBox\model\repositories\FileRepository;
+use Slim\Http\UploadedFile;
 
 class UseCaseUploadFile
 {
@@ -25,22 +26,14 @@ class UseCaseUploadFile
         $this->repository = $repository;
     }
 
-    public function __invoke($uploadedFileName, int $userID, int $folderID)
+    public function __invoke(array $uploadedFiles, int $userID, int $folderID)
     {
+        $qFiles = count($uploadedFiles);
+        for($i = 0; $i < $qFiles; $i++){
+            //todo: subir los archivos a la carpeta correspondiente 
+        }
+
         $now = new \DateTime('now');
-        $fileObject = new File(
-            null,
-            $uploadedFileName,
-            $userID,
-            $folderID,
-            $now,
-            $now,
-            $uploadedFileName
-        );
 
-        $fileObject = $this->repository->post($fileObject);
-
-        //var_dump($fileObject);
-        return $fileObject->getId();
     }
 }

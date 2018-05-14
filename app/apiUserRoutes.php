@@ -31,6 +31,9 @@ $this->group('/{userID}', function (){
 
     $this->get('/folder/{folderID}/tree[/]', 'PWBox\controller\FolderController:getTree')->setName('get-folder-tree');
 
+    $this->get('/folder/{folderID}/content[/]', 'PWBox\controller\FolderController:getContent')->setName('get-folder-content');
+
+
 //----------------------------------------------------------File
     $this->get('/folder/{folderID}/file/{fileID}[/]', PWBox\controller\FileControllers\GetFileController::class)->setName('get-file');
 

@@ -85,6 +85,13 @@
                 </div>
 
             {% endfor %}
+            {% for msg in user_register %}
+
+                <div class="ui success" style="color: lawngreen">
+                    {{ msg }}
+                </div>
+
+            {% endfor %}
 
             {% if form == "Login" %}
             <div class="ui message">

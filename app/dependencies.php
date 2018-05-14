@@ -135,6 +135,13 @@ $container['folder-tree-service'] = function ($container){
     return $service;
 };
 
+$container['folder-content-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FolderUseCases\UseCaseGetContents(
+        $container->get('folder-repository')
+    );
+    return $service;
+};
+
 $container['put-folder-service'] = function ($container){
     $service = new \PWBox\model\use_cases\FolderUseCases\UseCaseUpdateFolder(
         $container->get('folder-repository')

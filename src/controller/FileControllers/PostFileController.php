@@ -26,11 +26,13 @@ class PostFileController
     public function __invoke(Request $request, Response $response, $args)
     {
         try{
-            $data = $request->getParsedBody();
+            $files = $request->getUploadedFiles();
 
             // handle single input with single file upload
             $service = $this->container->get('upload-file-service');
-            $fileId = $service($data['name'], $args['userID'], $args['folderID']);
+            $fileId = $service($files, $args['userID'], $args['folderID']);
+
+
             if (isset($fileId)){
                 $response = $response->withStatus(200)
                     ->withHeader('Content-type', 'application/json')

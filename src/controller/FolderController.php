@@ -94,6 +94,37 @@ class FolderController
      * @param Request $request
      * @param Response $response
      * @param $args
+     */
+    public function getContent(Request $request, Response $response, $args){
+        try{
+            $service = $this->container->get('folder-content-service');
+            $result = $service($args);
+
+            if($result != null) {
+                $response = $response
+                    ->withStatus(200)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg" => "Success", "res" => $result]));
+            }else{
+                $response = $response
+                    ->withStatus(404)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"Folder not found", "res"=>[]]));
+            }
+        }catch (\Exception $e){
+            $response = $response
+                ->withStatus(500)
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
+        } catch (NotFoundExceptionInterface $e) {
+        } catch (ContainerExceptionInterface $e) {}
+        return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
      * @return Response
      */
     public function post(Request $request, Response $response, $args){

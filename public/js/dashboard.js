@@ -3,7 +3,6 @@ var dashLeftTree, pathTitle, centerContent, leftNav;
 var userId, rootFolderId;
 
 function getParentId(id){
-  console.log($("#"+id).parent().parent().parent().prev().attr('id'));
   return $("#"+id).parent().parent().parent().prev().attr('id');
 }
 
@@ -20,7 +19,12 @@ function getFolderBreadcrumb(id){
   }
 
   bc.replace(/-$/, '');
-  return bc.split('-').reverse();
+  return bc.split('-').reverse().splice(1, bc.length-1);
+}
+
+function loadCenterContent(){
+  //todo: cargar los contenidos de la carpeta para su visualizacion
+  
 }
   //-------Inicializaciones de modulos Vue
 
@@ -68,6 +72,8 @@ pathTitle = new Vue({
   methods: {
     setPath: function(path){
       this.path = path;
+
+      loadCenterContent();
     }
   }
 });
@@ -185,3 +191,5 @@ $(document).on('click','a[id^="folder-"]',(event)=>{
   // y el contenido interno del dashCenter
   pathTitle.setPath(getFolderBreadcrumb(id));
 });
+
+
