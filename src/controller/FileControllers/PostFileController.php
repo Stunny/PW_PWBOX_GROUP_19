@@ -27,11 +27,10 @@ class PostFileController
     {
         try{
             $files = $request->getUploadedFiles();
-
+            $rawData = $request->getParsedBody();
             // handle single input with single file upload
             $service = $this->container->get('upload-file-service');
-            $fileId = $service($files, $args['userID'], $args['folderID']);
-
+            $fileId = $service($files, $args['userID'], $args['folderID'], $rawData['fileName']);
 
             if (isset($fileId)){
                 $response = $response->withStatus(200)

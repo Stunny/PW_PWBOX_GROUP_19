@@ -12,7 +12,7 @@ use PWBox\model\File;
 
 interface FileRepository
 {
-    public function post(File $file): File;
+    public function post(int $userID, int $folderID, $fileName): File;
 
     public function download(File $file): File;
 

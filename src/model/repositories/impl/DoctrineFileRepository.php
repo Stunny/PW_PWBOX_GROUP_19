@@ -32,17 +32,16 @@ class DoctrineFileRepository implements FileRepository
         $this->connection = $connection;
     }
 
-    public function post(File $file): File
+    public function post(int $userID, int $folderID, $fileName): File
     {
         $folderRepo = new DoctrineFolderRepository($this->connection);
-        $folderInfo = $folderRepo->get($file->getFolder(), $file->getCreador())->getId();
-        //var_dump($folderRepo->get($file->getFolder(), $file->getCreador()));
-        if (isset($folderInfo)){
+        $folderInfo = $folderRepo->get($folderID, $userID);
+        if ($folderInfo->getNom() != null){
             $sql = self::POST_QUERY;
             $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue("filename", $file->getName(), 'string');
-            $stmt->bindValue("creator", $file->getCreador(), 'integer');
-            $stmt->bindValue("folder", $file->getFolder(), 'integer');
+            $stmt->bindValue("filename", $fileName, 'string');
+            $stmt->bindValue("creator", $folderInfo->getCreador(), 'integer');
+            $stmt->bindValue("folder", $folderInfo->getId(), 'integer');
             $stmt->execute();
 
             $sql = "SELECT `id` FROM `file` ORDER BY `id` DESC LIMIT 1;";
@@ -94,6 +93,7 @@ class DoctrineFileRepository implements FileRepository
         $stmt->bindValue("id", $file->getId(), 'integer');
         $stmt->execute();
         $query_result = $stmt->fetch();
+        var_dump($query_result);
         return new File($query_result['id'], $query_result['name'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
     }
 

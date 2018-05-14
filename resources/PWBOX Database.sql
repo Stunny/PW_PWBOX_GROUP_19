@@ -53,5 +53,3 @@ CREATE TABLE `file`(
   FOREIGN KEY (`folder`) REFERENCES `folder`(`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
-
-SELECT * FROM folder;
