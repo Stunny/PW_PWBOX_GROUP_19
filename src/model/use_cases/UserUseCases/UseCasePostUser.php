@@ -8,20 +8,25 @@
 
 namespace PWBox\model\use_cases\UserUseCases;
 
+use PWBox\model\Folder;
+use PWBox\model\repositories\FolderRepository;
 use PWBox\model\User;
 use PWBox\model\repositories\UserRepository;
 
 class UseCasePostUser
 {
     private $repository;
+    private $folderRepository;
 
     /**
      * UseCasePostUser constructor.
      * @param UserRepository $repository
+     * @param FolderRepository $folderRepository
      */
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $repository, FolderRepository $folderRepository)
     {
         $this->repository = $repository;
+        $this->folderRepository = $folderRepository;
     }
 
     public function __invoke(array $rawData, $uploadedFiles, $generateVerificationService, $postProfileImgService)
@@ -48,6 +53,10 @@ class UseCasePostUser
         );
 
         $verificationHash = $this->repository->save($user);
+        $userId = $this->repository->login($user->getEmail(), $user->getPassword());
+        $rootFolder = $this->folderRepository
+            ->create($userId, new Folder(null, $userId, $user->getUserName(), $user->getUserName(), $now, $now));
+
 
         $generateVerificationService($verificationHash, $user->getEmail());
 

@@ -43,6 +43,22 @@ $container['user-repository'] = function ($container){
     );
     return $repository;
 };
+$container['folder-repository'] = function ($container){
+    $repository = new \PWBox\model\repositories\impl\DoctrineFolderRepository(
+        $container->get('doctrine')
+    );
+    return $repository;
+};
+
+
+$container['file-repository'] = function ($container){
+    $repository = new \PWBox\model\repositories\impl\DoctrineFileRepository(
+        $container->get('doctrine')
+    );
+    return $repository;
+};
+
+//====================================================================================================================//
 
 $container['user-login'] = function ($container){
     $service = new \PWBox\model\use_cases\UseCaseLogin(
@@ -58,7 +74,7 @@ $container['user-logout'] = function (){
 
 $container['post-user-service'] = function ($container){
     $service = new \PWBox\model\use_cases\UserUseCases\UseCasePostUser(
-        $container->get('user-repository')
+        $container->get('user-repository'), $container->get('folder-repository')
     );
     return $service;
 };
@@ -106,12 +122,6 @@ $container['generate-verification-service'] = function ($container){
 };
 
 //----------------------------------------------------------------------------------Folder
-$container['folder-repository'] = function ($container){
-    $repository = new \PWBox\model\repositories\impl\DoctrineFolderRepository(
-        $container->get('doctrine')
-    );
-    return $repository;
-};
 
 $container['post-folder-service'] = function ($container){
     $service = new \PWBox\model\use_cases\FolderUseCases\UseCasePostFolder(
@@ -158,13 +168,6 @@ $container['delete-folder-service'] = function ($container){
 
 
 //----------------------------------------------------------------------------------File
-
-$container['file-repository'] = function ($container){
-    $repository = new \PWBox\model\repositories\impl\DoctrineFileRepository(
-        $container->get('doctrine')
-    );
-    return $repository;
-};
 
 $container['upload-file-service'] = function ($container){
     $service = new \PWBox\model\use_cases\FileUseCases\UseCaseUploadFile(

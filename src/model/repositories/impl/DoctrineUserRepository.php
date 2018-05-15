@@ -55,16 +55,6 @@ class DoctrineUserRepository implements UserRepository
         $stmt->bindValue("updated_at", $user->getUpdatedAt()->format(self::DATE_FORMAT));
         $stmt->execute();
 
-
-        $sql = self::INSERT_FOLDER_QUERY;
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("userId", $this->login($user->getEmail(), $user->getPassword()), 'integer');
-        $stmt->bindValue("nom", $user->getUserName(), 'string');
-        $stmt->bindValue("path", $user->getUserName(), 'string');
-        $stmt->bindValue("created", $user->getCreatedAt()->format(self::DATE_FORMAT));
-        $stmt->bindValue("updated", $user->getUpdatedAt()->format(self::DATE_FORMAT));
-        $stmt->execute();
-
         return $verificationHash;
     }
 

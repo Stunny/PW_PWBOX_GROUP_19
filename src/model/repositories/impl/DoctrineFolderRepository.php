@@ -64,7 +64,7 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id_creador", $creatorId, 'integer');
         $stmt->bindValue("id_folder", intval($folderID['id']), 'integer');
-        $stmt->bindValue("role", "read", 'string');
+        $stmt->bindValue("role", "admin", 'string');
         $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
         $stmt->bindValue("updated_at", $folder->getUpdatedAt()->format(self::DATE_FORMAT));
         $stmt->execute();
