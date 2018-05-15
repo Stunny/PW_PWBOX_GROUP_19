@@ -26,6 +26,14 @@ function loadCenterContent(){
   //todo: cargar los contenidos de la carpeta para su visualizacion
   
 }
+
+function newFile(){
+
+}
+
+function newFolder(){
+    $('.tiny.modal').modal('show');
+}
   //-------Inicializaciones de modulos Vue
 
 dashLeftTree = new Vue({
@@ -190,6 +198,12 @@ $(document).on('click','a[id^="folder-"]',(event)=>{
   //TODO: implementar la funcion que cambia el breadcrumb
   // y el contenido interno del dashCenter
   pathTitle.setPath(getFolderBreadcrumb(id));
+});
+
+$('#new-folder-modal').modal({
+    onApprove: function () {
+        console.log($('#newFolderName').val());
+    }
 });
 
 
