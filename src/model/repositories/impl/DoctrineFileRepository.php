@@ -101,7 +101,6 @@ class DoctrineFileRepository implements FileRepository
 
     public function updateData(File $file, $userID, $newName): File
     {
-        var_dump($file->getName());
         $sql = self::UPDATE_DATA;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("filename", $newName, 'string');
@@ -110,10 +109,8 @@ class DoctrineFileRepository implements FileRepository
         $stmt->bindValue("fileID", $file->getId(), 'integer');
         $stmt->execute();
 
-        var_dump($newName);
-        var_dump($file->getName());
+        $file = $this->getData(new File($file->getId(), null, $userID, $file->getFolder(), null, null, null));
         if ($newName == $file->getName()){
-            echo "file with content";
             $sql = "SELECT * FROM `file` ORDER BY `id` DESC LIMIT 1;";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
@@ -121,7 +118,6 @@ class DoctrineFileRepository implements FileRepository
             return new File($aux['id'], $aux['name'], $aux['creator'], $aux['folder'], $aux['created_at'], $aux['updated_at'], null);
             // TODO: Implement updateData() method. Devolver el objeto de la clase File con los nuevos datos y con su atributo `file` a null
         }else{
-            echo "no content";
             return new File(null, null, null, null, null, null, null);
         }
     }
