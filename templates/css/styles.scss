@@ -90,6 +90,7 @@ hr {
 
 .divider {
   width: 80%;
+  padding-bottom: 1em;
 }
 
 #rightPanelLogin {
@@ -119,6 +120,7 @@ hr {
     width: 15em;
   }
 }
+
 //Profile Page
 
 #topProfile {
@@ -333,13 +335,14 @@ hr {
 }
 
 #topSideList {
-  margin-bottom: 40%;
+  margin-bottom: 20%;
 }
 
 #folderSideList {
-  max-height: 46.5%;
+  max-height: 30%;
   overflow-y: scroll;
 }
+
 
 #childItem {
   margin-left: 15%;
