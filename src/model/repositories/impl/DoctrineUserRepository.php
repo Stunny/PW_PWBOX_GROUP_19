@@ -22,7 +22,8 @@ class DoctrineUserRepository implements UserRepository
 
     private const LOGIN_QUERY = 'SELECT id from `user` where `email`= :email and `password` = md5(:password)';
 
-    private const INSERT_QUERY = 'INSERT INTO `user`(`username`, `email`, `birthdate`, `password`, `created_at`, `updated_at`, `verificationHash`) VALUES(:username, :email, :birthdate, md5(:password), :created_at, :updated_at, :hash);';
+    private const INSERT_USER_QUERY = 'INSERT INTO `user`(`username`, `email`, `birthdate`, `password`, `created_at`, `updated_at`, `verificationHash`) VALUES(:username, :email, :birthdate, md5(:password), :created_at, :updated_at, :hash);';
+    private const INSERT_FOLDER_QUERY = 'INSERT INTO `folder`(`creador`, `nom`, `path`, `created_at`, `updated_at`) values(:userId, :nom, :path, :created, :updated)';
     private const SELECT_QUERY = 'SELECT * FROM `user` WHERE (`id` = :id);';
     private const SELECT_ROOT_FOLDER = 'select `id` from folder where (`creador`=:userId and `nom`=:userName);';
     private const UPDATE_QUERY = 'UPDATE `user` SET `username` = :username, `email` = :email, `birthdate` = :birthdate, `password` = :password WHERE `id` = :id;';
@@ -43,7 +44,7 @@ class DoctrineUserRepository implements UserRepository
     {
         $verificationHash = md5(rand(0,1000));
 
-        $sql = self::INSERT_QUERY;
+        $sql = self::INSERT_USER_QUERY;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("username", $user->getUsername(), 'string');
         $stmt->bindValue("email", $user->getEmail(), 'string');
@@ -52,6 +53,16 @@ class DoctrineUserRepository implements UserRepository
         $stmt->bindValue("hash", $verificationHash, 'string');
         $stmt->bindValue("created_at", $user->getCreatedAt()->format(self::DATE_FORMAT));
         $stmt->bindValue("updated_at", $user->getUpdatedAt()->format(self::DATE_FORMAT));
+        $stmt->execute();
+
+
+        $sql = self::INSERT_FOLDER_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("userId", $this->login($user->getEmail(), $user->getPassword()), 'integer');
+        $stmt->bindValue("nom", $user->getUserName(), 'string');
+        $stmt->bindValue("path", $user->getUserName(), 'string');
+        $stmt->bindValue("created", $user->getCreatedAt()->format(self::DATE_FORMAT));
+        $stmt->bindValue("updated", $user->getUpdatedAt()->format(self::DATE_FORMAT));
         $stmt->execute();
 
         return $verificationHash;

@@ -100,7 +100,7 @@ centerContent = new Vue({
     rowKey: function(items){
         var key = "";
         for(item in items){
-          key += item.filename + "-"
+          key += item.filename + "-";
         }
 
         return key;

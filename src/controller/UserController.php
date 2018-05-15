@@ -77,10 +77,7 @@ class UserController
                 ->withHeader('location', '/login');
 
         }catch (\Exception $e){
-            return $this->container->get('view')
-                ->render($response, 'register.twig', [
-                    'errors'=> $e->getMessage()
-                ]);
+            echo $e->getMessage();
         } catch (NotFoundExceptionInterface $e) {
             echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {

@@ -33,7 +33,7 @@ class UseCaseUploadFile
 
         $qFiles = count($uploadedFiles);
         for($i = 0; $i < $qFiles; $i++){
-            //todo: subir los archivos a la carpeta correspondiente 
+            //todo: subir los archivos a la carpeta correspondiente
         }
 
         $now = new \DateTime('now');
