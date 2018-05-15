@@ -27,11 +27,30 @@ function loadCenterContent(){
   
 }
 
-function newFile(){
+function showFileModal(){
 
 }
 
-function newFolder(){
+function createNewFolder(name){
+
+  $.ajax({
+     url: '/api/user/'+userId+'/folder/',
+     async: true,
+     method: 'post',
+     data:{
+       folderName: name,
+       path: pathTitle.toString()+'/'+name
+     },
+     statusCode:{
+       200: function () {
+           loadDashboardContent();
+       }
+     }
+  });
+
+}
+
+function showFolderModal(){
     $('.tiny.modal').modal('show');
 }
   //-------Inicializaciones de modulos Vue
@@ -82,6 +101,13 @@ pathTitle = new Vue({
       this.path = path;
 
       loadCenterContent();
+    },
+    toString: function () {
+        let res = "";
+        for(let i = 0; i < this.path.length; i++){
+          res += this.path[i]+'/';
+        }
+        return res.substring(0, res.length-1);
     }
   }
 });
@@ -124,11 +150,6 @@ leftNav = new Vue({
     settingsSelected: false
   },
   methods:{
-    tabFiles: function(){
-      this.filesSelected = true;
-      this.profileSelected = false;
-      this.settingsSelected = false;
-    },
     tabProfile: function(){
       this.filesSelected = false;
       this.profileSelected = true;
@@ -202,7 +223,9 @@ $(document).on('click','a[id^="folder-"]',(event)=>{
 
 $('#new-folder-modal').modal({
     onApprove: function () {
-        console.log($('#newFolderName').val());
+        let foldername = $('#newFolderName');
+        createNewFolder(foldername.val());
+        foldername.val("");
     }
 });
 
