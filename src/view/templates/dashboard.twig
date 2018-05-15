@@ -6,6 +6,7 @@
 
 {% block styles %}
   <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.min.css">
 {% endblock %}
 
 {% block preLoadScripts %}
@@ -36,6 +37,9 @@
           </div>
           <div class="item">
             <a class="item" v-on:click="tabSettings()"><b v-if="settingsSelected">Settings</b><span v-else>Settings</span></a>
+          </div>
+          <div class="item">
+            <a class="item" href="/logout"><b v-if="logoutSelected">Logout</b><span v-else>Logout</span></a>
           </div>
         </div>
       </div>
