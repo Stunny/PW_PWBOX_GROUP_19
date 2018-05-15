@@ -65,11 +65,10 @@ class UserController
      * @return Response|static
      */
     public function post(Request $request, Response $response){
-        //todo: validacion de datos de usuario
         try{
-            $data = $request->getParsedBody();
+            $rawData = $request->getParsedBody();
             $service = $this->container->get('post-user-service');
-            $service($data, $request->getUploadedFiles(), $this->container->get('generate-verification-service'), $this->container->get('profile-img-service'));
+            $service($rawData, $request->getUploadedFiles(), $this->container->get('generate-verification-service'), $this->container->get('profile-img-service'));
 
             $this->container->get('flash')->addMessage('user_register', 'User registered successfully');
             $response = $response
@@ -227,6 +226,7 @@ class UserController
      * @param Request $request
      * @param Response $response
      * @param $args
+     * @return Response|static
      */
     public function login(Request $request, Response $response, $args){
 

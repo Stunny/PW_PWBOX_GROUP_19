@@ -24,9 +24,9 @@ class UseCaseGetFile
         $this->repository = $repository;
     }
 
-    public function __invoke($fileId)
+    public function __invoke($fileId, $userId, $folderId)
     {
-        $file = $this->repository->getData(new File($fileId, null, null, null, null, null, null));
+        $file = $this->repository->getData(new File($fileId, null, $userId, $folderId, null, null, null));
         if($file != null){
             return [
                 'name' => $file->getName(),

@@ -27,9 +27,7 @@ class GetFileController
     {
         try{
             $service = $this->container->get('get-file-service');
-            $fileInfo = $service($args['fileID']);
-            var_dump($fileInfo);
-            var_dump($args);
+            $fileInfo = $service($args['fileID'], $args['userID'], $args['folderID']);
             if(!isset($fileInfo['name'])){
                 $response = $response
                     ->withStatus(404)

@@ -26,10 +26,10 @@ class UseCaseDeleteFile
 
     public function __invoke($fileId, $userID, $folderID)
     {
-        $file = $this->repository->getData(new File($fileId, null, null, null, null, null, null));
+        $file = $this->repository->getData(new File($fileId, null, $userID, $folderID, null, null, null));
 
         if($file != null){
-            return $this->repository->delete($file, $userID, $folderID);
+            return $this->repository->delete($file);
         }else{
             return false;
         }

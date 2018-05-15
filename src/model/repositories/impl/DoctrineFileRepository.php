@@ -22,7 +22,7 @@ class DoctrineFileRepository implements FileRepository
 
     private const POST_QUERY = 'INSERT INTO `file`(`name`, `creator`, `folder`) VALUES (:filename, :creator, :folder);';
     private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id) AND `creator` = :id_usuari AND `folder` = :id_folder;';
-    private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id;';
+    private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id AND `folder` = (SELECT `id` FROM `folder` WHERE `id` = :id_folder AND `creador` = :id_user);';
     private const DOWNLOAD_DATA_QUERY = 'SELECT * FROM `file`;';
     private const UPDATE_DATA = 'UPDATE `file` SET `name` = :filename, `folder` = :folder WHERE (`creator` = :userID AND `id` = :fileID);';
 
@@ -32,11 +32,12 @@ class DoctrineFileRepository implements FileRepository
         $this->connection = $connection;
     }
 
-    public function post(int $userID, int $folderID, $fileName): File
+    public function post(int $userID, int $folderID, $fileName): int
     {
         $folderRepo = new DoctrineFolderRepository($this->connection);
         $folderInfo = $folderRepo->get($folderID, $userID);
         if ($folderInfo->getNom() != null){
+            echo "good";
             $sql = self::POST_QUERY;
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("filename", $fileName, 'string');
@@ -49,7 +50,7 @@ class DoctrineFileRepository implements FileRepository
             $stmt->execute();
 
             //TODO: INSERTAR ARCHIVO EN LA CARPETA CORRESPONDIENTE DEL USUARIO
-            return new File($stmt->fetch()['id'], null, null, null, null, null, null);
+            return $stmt->fetch()['id'];
         }else{
             /*
             if (carpeta no existeix){
@@ -60,7 +61,7 @@ class DoctrineFileRepository implements FileRepository
             }
             pd: tots els camps de File a null = 404 i id = -1 igual a 401 per exemple?
             */
-            return new File(null, null, null, null, null, null, null);
+            return -1;
         }
     }
 
@@ -69,16 +70,16 @@ class DoctrineFileRepository implements FileRepository
         // TODO: Implement download() method. Devolver un objeto de la clase File cuyo atributo `file` contenga el archivo
     }
 
-    public function delete(File $file, int $userID, int $folderID)
+    public function delete(File $file)
     {
         $databaseFile = $this->getData($file);
         $databaseFileId = $databaseFile->getId();
-        if (isset($databaseFileId) && $databaseFile->getFolder() == $folderID && $databaseFile->getCreador() == $userID){
+        if (isset($databaseFileId) && $databaseFile->getFolder() == $file->getFolder() && $databaseFile->getCreador() == $file->getCreador()){
             $sql = self::DELETE_QUERY;
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("id", $file->getId(), 'integer');
-            $stmt->bindValue("id_usuari", $userID, 'integer');
-            $stmt->bindValue("id_folder", $folderID, 'integer');
+            $stmt->bindValue("id_usuari", $file->getCreador(), 'integer');
+            $stmt->bindValue("id_folder", $file->getFolder(), 'integer');
             $stmt->execute();
             return true;
         }else{
@@ -91,9 +92,10 @@ class DoctrineFileRepository implements FileRepository
         $sql = self::GET_DATA_QUERY;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id", $file->getId(), 'integer');
+        $stmt->bindValue("id_folder", $file->getFolder(), 'integer');
+        $stmt->bindValue("id_user", $file->getCreador(), 'integer');
         $stmt->execute();
         $query_result = $stmt->fetch();
-        var_dump($query_result);
         return new File($query_result['id'], $query_result['name'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
     }
 

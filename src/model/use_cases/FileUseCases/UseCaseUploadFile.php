@@ -30,7 +30,6 @@ class UseCaseUploadFile
     public function __invoke(array $uploadedFiles, int $userID, int $folderID, $fileName)
     {
         $file = $this->repository->post($userID, $folderID, $fileName);
-
         $qFiles = count($uploadedFiles);
         for($i = 0; $i < $qFiles; $i++){
             //todo: subir los archivos a la carpeta correspondiente

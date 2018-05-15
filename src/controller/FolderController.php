@@ -8,6 +8,7 @@
 
 namespace PWBox\controller;
 
+use function FastRoute\cachedDispatcher;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -94,6 +95,7 @@ class FolderController
      * @param Request $request
      * @param Response $response
      * @param $args
+     * @return Response
      */
     public function getContent(Request $request, Response $response, $args){
         try{
@@ -131,9 +133,9 @@ class FolderController
         //todo: validacion datos de folder
         try {
             $userID = $args['userID'];
-            $data = $request->getParsedBody();
+            $rawData = $request->getParsedBody();
             $service = $this->container->get('post-folder-service');
-            $result = $service($data, $userID);
+            $result = $service($rawData, $userID);
 
             $response = $response
                 ->withStatus($result)
@@ -148,7 +150,6 @@ class FolderController
             echo $e->getMessage();
         } catch (ContainerExceptionInterface $e) {
             echo $e->getMessage();
-
         }
         return $response;
     }

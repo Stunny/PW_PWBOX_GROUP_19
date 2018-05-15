@@ -31,19 +31,14 @@ class PostFileController
             // handle single input with single file upload
             $service = $this->container->get('upload-file-service');
             $fileId = $service($files, $args['userID'], $args['folderID'], $rawData['fileName']);
-
-            if (isset($fileId)){
+            if ($fileId != -1){
                 $response = $response->withStatus(200)
                     ->withHeader('Content-type', 'application/json')
-                    ->write(json_encode(["msg"=>"Uploaded Successsdfully", "res"=>["id"=>$fileId]]));
+                    ->write(json_encode(["msg"=>"Uploaded Successfully", "res"=>["id"=>$fileId]]));
             }else{
-                echo "Implementation for debate";
-                //TODO: EN CASO DE QUERER DIFERENCIAR SI LA CARPETA NO EXISTE, O SI EXISTE PERO PERTENECE A OTRO USUARIO, DEVOLVER ERROR CORRESPONDIENTE
-                /*
                 $response = $response->withStatus(401)
                     ->withHeader('Content-type', 'application/json')
                     ->write(json_encode(["msg"=>"Unauthorised", "res"=>[]]));
-                */
             }
 
         }catch (\Exception $e){
