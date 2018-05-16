@@ -23,6 +23,6 @@ class ProfilePageController
 
     public function __invoke(Request $request, Response $response, array $args)
     {
-        echo "Welcome to the rice fields";
+        $this->container->get('view')->render($response, 'profile.twig', ["form" => "Profile"]);
     }
 }

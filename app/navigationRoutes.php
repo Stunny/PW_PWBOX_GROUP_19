@@ -18,7 +18,7 @@ $this->any('register[/]', \PWBox\controller\NavigationControllers\RegisterPageCo
 
 
 //Profile Page
-$this->any('profile/[{userEmail}[/]]', \PWBox\controller\NavigationControllers\ProfilePageController::class)
+$this->any('profile[/{userEmail}[/]]', \PWBox\controller\NavigationControllers\ProfilePageController::class)
     ->setName("profile-page")->add(\PWBox\controller\middleware\LoginMiddleware::class);
 
 //Dashboard Page
