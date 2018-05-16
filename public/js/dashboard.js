@@ -195,6 +195,10 @@ Dropzone.options.fileDropzone = {
         this.on("complete", (file)=>{
             filesDropzone.removeFile(file);
         });
+
+        this.on("addedfile", (event)=>{
+            this.options.url = '/api/user/'+userId+'/folder/'+currentFolderId.replace(/folder-/, "")+'/file';
+        });
     }
 };
 
@@ -220,10 +224,13 @@ $('#new-folder-modal').modal({
 
 $('#upload-files-modal').modal({
     onApprove: function () {
-        Dropzone.options.fileDropzone.url = '/api/user/'+userId+'/folder/'+currentFolderId.replace(/folder-/, "")+'/file';
         filesDropzone.processQueue();
+    },
+    onDeny: function () {
+        filesDropzone.removeAllFiles(true);
     }
 });
+
 
 loadDashboardContent();
 
