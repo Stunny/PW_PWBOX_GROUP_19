@@ -7,6 +7,14 @@
 {% block styles %}
   <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
   <link rel="stylesheet" type="text/css" href="css/styles.min.css">
+    <style>
+     #dashDivider{
+       margin:0;
+       padding:1em;
+       width:100%;
+
+     }
+    </style>
 {% endblock %}
 
 {% block preLoadScripts %}
@@ -30,18 +38,18 @@
 
         <div class="ui list">
           <div class="item">
-            <a class="item" v-on:click="tabProfile()"><b v-if="profileSelected">My profile</b><span v-else>My profile</span></a>
+            <a class="item" href="/profile">My profile</a>
           </div>
           <div class="item">
-            <a class="item" v-on:click="tabSettings()"><b v-if="settingsSelected">Settings</b><span v-else>Settings</span></a>
+            <a class="item" href="/settings">Settings</a>
           </div>
           <div class="item">
-            <a class="item" href="/logout"><b v-if="logoutSelected">Logout</b><span v-else>Logout</span></a>
+            <a class="item" href="/logout">Logout</a>
           </div>
         </div>
     </div>
 
-    <div class="ui horizontal divider">
+    <div class="ui horizontal divider" id="dashDivider">
       <i class="plus icon"></i>
     </div>
     <div class="center aligned row">
@@ -81,7 +89,7 @@
       </div>
     </div>
 
-    <div class="ui horizontal divider">
+    <div class="ui horizontal divider" id="dashDivider">
       <i class="folder open outline icon"></i>
     </div>
 

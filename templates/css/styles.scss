@@ -25,7 +25,8 @@ hr {
 }
 
 #logoRow {
-  height: 25%;
+  height: 15%;
+  margin: 0px;
 }
 
 .header {
@@ -102,7 +103,8 @@ hr {
 }
 
 #dashLeft {
-  background-color: #e8ebf2;
+  //background-color: #e8ebf2;
+  background-color: blue;
   height: 100%;
   max-width: 17%;
 }
@@ -119,6 +121,11 @@ hr {
     height: 15em;
     width: 15em;
   }
+}
+
+#dashDivider {
+  margin:1em;
+  width: 100%;
 }
 
 //Profile Page
@@ -335,7 +342,7 @@ hr {
 }
 
 #topSideList {
-  margin-bottom: 20%;
+  margin: 0;
 }
 
 #folderSideList {
