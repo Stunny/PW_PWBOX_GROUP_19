@@ -70,7 +70,6 @@ class UseCasePostUser
 
         if(!file_exists("/home/vagrant/pwbox/appdata/user_folders")){
             mkdir("/home/vagrant/pwbox/appdata/user_folders", 0777, true);
-
         }
 
         mkdir("/home/vagrant/pwbox/appdata/user_folders/".$rawData['username']);

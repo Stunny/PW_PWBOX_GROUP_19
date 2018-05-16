@@ -27,14 +27,13 @@ class PostFileController
     {
         try{
             $files = $request->getUploadedFiles();
-            $rawData = $request->getParsedBody();
             // handle single input with single file upload
             $service = $this->container->get('upload-file-service');
-            $fileId = $service($files, $args['userID'], $args['folderID'], $rawData['fileName']);
-            if ($fileId != -1){
+            $uploaded = $service($files, $args['userID'], $args['folderID']);
+            if ($uploaded){
                 $response = $response->withStatus(200)
                     ->withHeader('Content-type', 'application/json')
-                    ->write(json_encode(["msg"=>"Uploaded Successfully", "res"=>["id"=>$fileId]]));
+                    ->write(json_encode(["msg"=>"Uploaded Successfully", "res"=>[]]));
             }else{
                 $response = $response->withStatus(401)
                     ->withHeader('Content-type', 'application/json')

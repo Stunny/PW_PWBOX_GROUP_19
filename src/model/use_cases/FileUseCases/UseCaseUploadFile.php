@@ -16,27 +16,36 @@ use Slim\Http\UploadedFile;
 
 class UseCaseUploadFile
 {
-    private $repository;
+    private $fileRepository;
+    private $folderRepository;
+
+    private const USER_FOLDERS_DIR = "/home/vagrant/pwbox/appdata/user_folders/";
+
 
     /**
      * UseCasePostUser constructor.
-     * @param FileRepository $filefileRepository
+     * @param FileRepository $fileRepository
+     * @param FolderRepository $folderRepository
      */
-    public function __construct(FileRepository $filefileRepository)
+    public function __construct(FileRepository $fileRepository, FolderRepository $folderRepository)
     {
-        $this->repository = $filefileRepository;
+        $this->fileRepository = $fileRepository;
+        $this->folderRepository = $folderRepository;
     }
 
-    public function __invoke(array $uploadedFiles, int $userID, int $folderID, $fileName)
+    /**
+     * @param array $uploadedFiles
+     * @param int $userID
+     * @param int $folderID
+     * @return int
+     */
+    public function __invoke(array $uploadedFiles, int $userID, int $folderID)
     {
-        $file = $this->repository->post($userID, $folderID, $fileName);
-        $qFiles = count($uploadedFiles);
-        for($i = 0; $i < $qFiles; $i++){
-            //todo: subir los archivos a la carpeta correspondiente
+
+        foreach($uploadedFiles as $file){
+            if ($this->fileRepository->post($userID, $folderID, $file)){
+                $file->moveTo(self::USER_FOLDERS_DIR . $this->folderRepository->get($folderID, $userID)->getPath() . DIRECTORY_SEPARATOR . $file->getClientFilename());
+            }
         }
-
-        $now = new \DateTime('now');
-        return $file;
-
     }
 }

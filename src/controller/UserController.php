@@ -162,6 +162,7 @@ class UserController
      * @param Request $request
      * @param Response $response
      * @param $args
+     * @return Response
      */
     public function verifyEmail(Request $request, Response $response, $args){
         try{

@@ -171,7 +171,8 @@ $container['delete-folder-service'] = function ($container){
 
 $container['upload-file-service'] = function ($container){
     $service = new \PWBox\model\use_cases\FileUseCases\UseCaseUploadFile(
-        $container->get('file-repository')
+        $container->get('file-repository'),
+        $container->get('folder-repository')
     );
     return $service;
 };

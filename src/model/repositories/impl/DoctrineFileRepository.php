@@ -32,25 +32,26 @@ class DoctrineFileRepository implements FileRepository
         $this->connection = $connection;
     }
 
-    public function post(int $userID, int $folderID, $fileName): int
+    public function post(int $userID, int $folderID, $file): int
     {
         $folderRepo = new DoctrineFolderRepository($this->connection);
         $folderInfo = $folderRepo->get($folderID, $userID);
         if ($folderInfo->getNom() != null){
-            echo "good";
             $sql = self::POST_QUERY;
             $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue("filename", $fileName, 'string');
+            $stmt->bindValue("filename", $file->getClientFileName(), 'string');
             $stmt->bindValue("creator", $folderInfo->getCreador(), 'integer');
             $stmt->bindValue("folder", $folderInfo->getId(), 'integer');
             $stmt->execute();
 
+            /*
+             * en caso de querer devolver los ID de los files, DESC LIMIT file.size
             $sql = "SELECT `id` FROM `file` ORDER BY `id` DESC LIMIT 1;";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
+            */
 
-            //TODO: INSERTAR ARCHIVO EN LA CARPETA CORRESPONDIENTE DEL USUARIO
-            return $stmt->fetch()['id'];
+            return true;
         }else{
             /*
             if (carpeta no existeix){
@@ -61,7 +62,7 @@ class DoctrineFileRepository implements FileRepository
             }
             pd: tots els camps de File a null = 404 i id = -1 igual a 401 per exemple?
             */
-            return -1;
+            return false;
         }
     }
 
@@ -116,7 +117,6 @@ class DoctrineFileRepository implements FileRepository
             $stmt->execute();
             $aux = $stmt->fetch();
             return new File($aux['id'], $aux['name'], $aux['creator'], $aux['folder'], $aux['created_at'], $aux['updated_at'], null);
-            // TODO: Implement updateData() method. Devolver el objeto de la clase File con los nuevos datos y con su atributo `file` a null
         }else{
             return new File(null, null, null, null, null, null, null);
         }
