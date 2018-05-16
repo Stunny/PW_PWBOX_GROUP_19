@@ -3,12 +3,12 @@ $(document)
         $('#form')
             .form({
                 fields: {
-                    email: {
+                    username: {
                         identifier  : 'email',
                         rules: [
                             {
                                 type   : 'empty',
-                                prompt : 'Please enter your e-mail'
+                                prompt : 'Please enter your Username or Email'
                             }
                         ]
                     },

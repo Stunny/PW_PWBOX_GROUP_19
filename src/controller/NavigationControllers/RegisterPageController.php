@@ -35,6 +35,6 @@ class RegisterPageController
 
         //$userRegisteredMessages = isset($messages['user_register'])? $messages['user_register']: [];
 
-        $this->container->get('view')->render($response, 'register.twig', ["form" => "Register"]);
+        $this->container->get('view')->render($response, 'register.twig', ["form" => "Register", "error"=>$this->container->get('flash')->getMessage('error')]);
     }
 }

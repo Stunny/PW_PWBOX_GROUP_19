@@ -57,7 +57,7 @@
                     <div class="field">
                         <div class="ui left icon input">
                             <i class="{%  if form == "Login" %}user{% else %}envelope{%  endif %} icon"></i>
-                            <input id="email" type="text" name="email" placeholder="E-mail address">
+                            <input id="{% if form == "Login" %}login{% else %}email{% endif %}" type="text" name="{% if form == "Login" %}login{% else %}email{% endif %}" placeholder="{% if form == "Login" %}Username or Email{% else %}Email address{% endif %}">
                         </div>
                     </div>
                     <div class="field">

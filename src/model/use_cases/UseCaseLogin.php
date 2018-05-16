@@ -24,9 +24,9 @@ class UseCaseLogin
         $this->repository = $repository;
     }
 
-    public function __invoke($email, $password)
+    public function __invoke($login, $password)
     {
-        $result = $this->repository->login($email, $password);
+        $result = $this->repository->login($login, $password);
 
 
         if (!is_null($result)){

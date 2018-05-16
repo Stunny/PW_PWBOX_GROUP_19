@@ -32,6 +32,10 @@ class UseCasePostUser
     public function __invoke(array $rawData, $uploadedFiles, $generateVerificationService, $postProfileImgService)
     {
 
+        if($this->repository->exists($rawData['username'], $rawData['email'])){
+            return 409;
+        }
+
         $profileImg = isset($uploadedFiles['profileimg'])?$uploadedFiles['profileimg']: null;
 
         if (!is_null($profileImg)){
@@ -70,6 +74,6 @@ class UseCasePostUser
         }
 
         mkdir("/home/vagrant/pwbox/appdata/user_folders/".$rawData['username']);
-
+        return 200;
     }
 }

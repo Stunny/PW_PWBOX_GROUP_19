@@ -17,7 +17,8 @@ CREATE TABLE `user` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQUE_EMAIL` (`email`)
+  UNIQUE KEY `UNIQUE_EMAIL` (`email`),
+  unique key `unique_username`(`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 CREATE TABLE `folder`(

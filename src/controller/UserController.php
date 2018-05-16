@@ -68,20 +68,23 @@ class UserController
         try{
             $rawData = $request->getParsedBody();
             $service = $this->container->get('post-user-service');
-            $service($rawData, $request->getUploadedFiles(), $this->container->get('generate-verification-service'), $this->container->get('profile-img-service'));
+            $result = $service($rawData, $request->getUploadedFiles(), $this->container->get('generate-verification-service'), $this->container->get('profile-img-service'));
 
-            $this->container->get('flash')->addMessage('user_register', 'User registered successfully');
-            $response = $response
-                ->withStatus(302)
-                ->withHeader('location', '/login');
+            if($result == 409){
+                $response = $response->withStatus(302)->withHeader('location', '/register');
+                $this->container->get('flash')->addMessage('error', 'Username or email already exist');
+
+            }else {
+
+                $this->container->get('flash')->addMessage('user_register', 'User registered successfully');
+                $response = $response
+                    ->withStatus(302)
+                    ->withHeader('location', '/login');
+            }
 
         }catch (\Exception $e){
-            echo $e->getMessage();
-        } catch (NotFoundExceptionInterface $e) {
-            echo $e->getMessage();
-        } catch (ContainerExceptionInterface $e) {
-            echo $e->getMessage();
-
+            $response = $response->withStatus(500);
+            $this->container->get('view')->render($response, 'register.twig', ["form" => "Register", "error"=>["Something went wrong. Try again later."]]);
         }
         return $response;
 
@@ -117,8 +120,6 @@ class UserController
                 ->withStatus(500)
                 ->withHeader('Content-type', 'application/json')
                 ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
-        } catch (NotFoundExceptionInterface $e) {
-        } catch (ContainerExceptionInterface $e) {
         }
         return $response;
     }
@@ -152,8 +153,6 @@ class UserController
                 ->withStatus(500)
                 ->withHeader('Content-type', 'application/json')
                 ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
-        } catch (NotFoundExceptionInterface $e) {
-        } catch (ContainerExceptionInterface $e) {
         }
         return $response;
 
@@ -216,8 +215,6 @@ class UserController
                 ->withStatus(500)
                 ->withHeader('Content-type', 'application/json')
                 ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
-        } catch (NotFoundExceptionInterface $e) {
-        } catch (ContainerExceptionInterface $e) {
         }
         return $response;
     }
@@ -233,7 +230,7 @@ class UserController
         try{
             $service = $this->container->get('user-login');
             $data = $request->getParsedBody();
-            $result = $service($data['email'], $data['password']);
+            $result = $service($data['login'], $data['password']);
 
             if($result == 200){
                 $response = $response

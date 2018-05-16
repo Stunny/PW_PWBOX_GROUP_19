@@ -20,10 +20,10 @@ class DoctrineUserRepository implements UserRepository
 
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
-    private const LOGIN_QUERY = 'SELECT id from `user` where `email`= :email and `password` = md5(:password)';
-
+    private const LOGIN_WITH_EMAIL_QUERY = 'SELECT id from `user` where `email`= :email and `password` = md5(:password)';
+    private const LOGIN_WITH_UNAME_QUERY = 'select id from `user` where `username`=:username and `password` = md5(:password)';
+    
     private const INSERT_USER_QUERY = 'INSERT INTO `user`(`username`, `email`, `birthdate`, `password`, `created_at`, `updated_at`, `verificationHash`) VALUES(:username, :email, :birthdate, md5(:password), :created_at, :updated_at, :hash);';
-    private const INSERT_FOLDER_QUERY = 'INSERT INTO `folder`(`creador`, `nom`, `path`, `created_at`, `updated_at`) values(:userId, :nom, :path, :created, :updated)';
     private const SELECT_QUERY = 'SELECT * FROM `user` WHERE (`id` = :id);';
     private const SELECT_ROOT_FOLDER = 'select `id` from folder where (`creador`=:userId and `nom`=:userName);';
     private const UPDATE_QUERY = 'UPDATE `user` SET `username` = :username, `email` = :email, `birthdate` = :birthdate, `password` = :password WHERE `id` = :id;';
@@ -32,6 +32,9 @@ class DoctrineUserRepository implements UserRepository
 
     private const CHECK_PASS_QUERY = 'select count(*) as count from user where id = :id and password = md5(:password);';
     private const CHANGE_PASS_QUERY = 'update user set password = md5(:password) where id = :id;';
+
+    private const CHECK_EMAIL_QUERY = 'select count(*) as count from user where `email`=:email';
+    private const CHECK_UNAME_QUERY = 'select count(*) as count from user where `username`=:username';
 
     private $connection;
 
@@ -123,14 +126,20 @@ class DoctrineUserRepository implements UserRepository
 
     }
 
-    public function login($userEmail, $userPassword){
+    public function login($login, $userPassword){
 
-        $sql = self::LOGIN_QUERY;
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("email", $userEmail, 'string');
+        if($this->checkEmail($login)) {
+            $sql = self::LOGIN_WITH_EMAIL_QUERY;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("email", $login, 'string');
+        }else{
+            $sql = self::LOGIN_WITH_UNAME_QUERY;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("username", $login, 'string');
+        }
+
         $stmt->bindValue("password", $userPassword, "string");
         $stmt->execute();
-
         $id = $stmt->fetch()['id'];
 
         return $id;
@@ -150,6 +159,39 @@ class DoctrineUserRepository implements UserRepository
         $id = $stmt->fetch()['id'];
 
         return $id;
+    }
+
+    private function checkEmail($email) {
+       if ( strpos($email, '@') !== false ) {
+          $split = explode('@', $email);
+          return (strpos($split['1'], '.') !== false ? true : false);
+       } else {
+            return false;
+       }
+    }
+
+    public function exists($username, $email){
+        $sql = self::CHECK_UNAME_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("username", $username, 'string');
+        $stmt->execute();
+
+        $count = $stmt->fetch()['count'];
+
+        if($count != 0)
+            return true;
+
+        $sql = self::CHECK_EMAIL_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("email", $email, 'string');
+        $stmt->execute();
+
+        $count = $stmt->fetch()['count'];
+
+        if($count != 0)
+            return true;
+
+        return false;
     }
 
 }

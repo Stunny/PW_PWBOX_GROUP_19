@@ -199,7 +199,6 @@ function loadDashboardContent(){
   });
 
   get.done((elmts, textStatus)=>{
-    console.log(JSON.stringify(elmts.res));
     rootFolderTree = elmts.res;
     dashLeftTree.setTree([elmts.res]);
   });

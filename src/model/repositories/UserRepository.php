@@ -25,7 +25,9 @@ interface UserRepository
 
     public function verify($verificationHash);
 
-    public function login($userEmail, $userPassword);
+    public function login($login, $userPassword);
 
     public function getRootFolderId($userId);
+
+    public function exists($username, $email);
 }
