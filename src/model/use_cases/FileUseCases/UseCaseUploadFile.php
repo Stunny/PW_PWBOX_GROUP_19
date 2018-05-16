@@ -42,12 +42,11 @@ class UseCaseUploadFile
     public function __invoke(array $uploadedFiles, int $userID, int $folderID)
     {
         $allUploaded = false;
-        foreach($uploadedFiles as $file){
+        foreach($uploadedFiles as $fileArray){
+            $file = $fileArray[0];
             if ($this->fileRepository->post($userID, $folderID, $file)){
                 $file->moveTo(self::USER_FOLDERS_DIR . $this->folderRepository->get($folderID, $userID)->getPath() . DIRECTORY_SEPARATOR . $file->getClientFilename());
                 $allUploaded = true;
-            }else{
-                $allUploaded = false;
             }
         }
         return $allUploaded;

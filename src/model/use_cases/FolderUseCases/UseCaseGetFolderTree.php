@@ -48,9 +48,9 @@ class UseCaseGetFolderTree
             if($item == "." || $item == "..")
                 continue;
 
-            $subcontent = scandir(self::FOLDERS_DIR . $path . '/' . $item);
+            $isDir = is_dir(self::FOLDERS_DIR . $path . '/' . $item);
 
-            if($subcontent != false){
+            if($isDir){
                 $childObj =  $this->repository->getByName($item, $this->userId);
                 $child = new FolderTree($item, $childObj->getId());
                 $tree->addChild($child);

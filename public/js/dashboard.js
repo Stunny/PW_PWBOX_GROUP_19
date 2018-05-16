@@ -1,13 +1,25 @@
 
-var dashLeftTree, pathTitle, centerContent, leftNav;
-var userId, rootFolderId;
+var dashLeftTree, pathTitle, centerContent, leftNav, filesDropzone;
+var userId, rootFolderId, currentFolderId;
+
+function loadDashboardContent(){
+    var get = $.ajax({
+        async : true,
+        type : 'get',
+        url: '/api/user/'+userId+'/folder/'+rootFolderId+'/tree'
+    });
+
+    get.done((elmts, textStatus)=>{
+        rootFolderTree = elmts.res;
+        dashLeftTree.setTree([elmts.res]);
+    });
+}
 
 function getParentId(id){
   return $("#"+id).parent().parent().parent().prev().attr('id');
 }
 
 function getFolderBreadcrumb(id){
-
   let bc = $("#"+id).text()+'-';
   let folderID = id;
   let parentId;
@@ -29,6 +41,7 @@ function loadCenterContent(){
 
 function showFileModal(){
 
+    $('.fullscreen.modal').modal('show');
 }
 
 function createNewFolder(name){
@@ -53,7 +66,12 @@ function createNewFolder(name){
 function showFolderModal(){
     $('.tiny.modal').modal('show');
 }
-  //-------Inicializaciones de modulos Vue
+
+//Inicializacion de las globales
+userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
+rootFolderId = document.cookie.match(/rootFolderId=[^;]+/)[0].split('=')[1];
+currentFolderId = 'folder-'+rootFolderId;
+//-------Inicializaciones de modulos Vue--------------------------------------------//
 
 dashLeftTree = new Vue({
   el: '#dashLeftTree',
@@ -155,68 +173,40 @@ leftNav = new Vue({
       this.profileSelected = true;
       this.settingsSelected = false;
 
-      changeToProfile();
-    },
-    tabSettings: function(){
-      this.filesSelected = false;
-      this.profileSelected = false;
-      this.settingsSelected = true;
-
-      changeToSettings();
+      window.location.href = '/profile';
     }
   }
 });
 
-//------------------------Scripts auxiliares de la pagina----------------------------------//
+//-----------------------------------------------Configuracion del dropzone--------------------------//
 
-function changeToFiles(){
-  var get = $.ajax({
-    async : true,
-    type : 'get',
-    url: '/api/user/'+userId+'/folder/'+rootFolderId+'/tree'
-  });
+Dropzone.options.fileDropzone = {
+    url: '/api/user/'+userId+'/folder/'+currentFolderId.replace(/folder-/, "")+'/file',
+    method: 'post',
+    uploadMultiple: true,
+    createImageThumbnails: true,
+    maxFiles: 5,
+    clickable: true,
+    autoProcessQueue: false,
+    ignoreHiddenFiles: true,
+    addRemoveLinks: true,
+    init: function () {
+        filesDropzone = this;
+        this.on("complete", (file)=>{
+            filesDropzone.removeFile(file);
+        });
+    }
+};
 
-  get.done((elmts, textStatus)=>{
-    console.log(JSON.stringify(elmts.res));
-    rootFolderTree = elmts.res;
-    dashLeftTree.setTree([elmts.res]);
-  });
-}
-
-function changeToProfile(){
-    window.location.href = "";
-}
-
-function changeToSettings(){
-  window.location.href = "";
-}
-
-function loadDashboardContent(){
-  var get = $.ajax({
-    async : true,
-    type : 'get',
-    url: '/api/user/'+userId+'/folder/'+rootFolderId+'/tree'
-  });
-
-  get.done((elmts, textStatus)=>{
-    rootFolderTree = elmts.res;
-    dashLeftTree.setTree([elmts.res]);
-  });
-}
+//------------------------Listeners de jQuery----------------------------------//
 
 $("#userIcon").click((event)=>{
   leftNav.tabProfile();
 });
 
-userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1]; 
-rootFolderId = document.cookie.match(/rootFolderId=[^;]+/)[0].split('=')[1]
-loadDashboardContent();
-
 $(document).on('click','a[id^="folder-"]',(event)=>{
-  let id = event.target.id,
-      content = $('#'+id).text();
-  //TODO: implementar la funcion que cambia el breadcrumb
-  // y el contenido interno del dashCenter
+  let id = event.target.id;
+    currentFolderId = id;
   pathTitle.setPath(getFolderBreadcrumb(id));
 });
 
@@ -227,5 +217,14 @@ $('#new-folder-modal').modal({
         foldername.val("");
     }
 });
+
+$('#upload-files-modal').modal({
+    onApprove: function () {
+        Dropzone.options.fileDropzone.url = '/api/user/'+userId+'/folder/'+currentFolderId.replace(/folder-/, "")+'/file';
+        filesDropzone.processQueue();
+    }
+});
+
+loadDashboardContent();
 
 

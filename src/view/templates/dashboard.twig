@@ -7,14 +7,30 @@
 {% block styles %}
   <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
   <link rel="stylesheet" type="text/css" href="css/styles.min.css">
-    <style>
-     #dashDivider{
-       margin:0;
-       padding:1em;
-       width:100%;
+  <link rel="stylesheet" type="text/css" href="dropzone/dropzone.css">
+  <style>
+   #dashDivider{
+     margin:0;
+     padding:1em;
+     width:100%;
+   }
+   .dropzone.dz-clickable {
+     cursor: pointer;
+   }
 
-     }
-    </style>
+   .dropzone {
+     border: 2px dashed #0087F7;
+     border-radius: 5px;
+     background: white;
+   }
+   .dropzone {
+     min-height: 150px;
+     padding: 54px 54px;
+   }
+   .dropzone, .dropzone * {
+     box-sizing: border-box;
+   }
+  </style>
 {% endblock %}
 
 {% block preLoadScripts %}
@@ -22,6 +38,7 @@
   <script src="semantic/dist/semantic.min.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="dropzone/dropzone.js"></script>
 
 {% endblock %}
 
@@ -57,7 +74,7 @@
 
         <div class="item">
           <button class="ui primary button" onclick="showFileModal()">
-            Add File
+            Add Files
           </button> </div>
 
         <div class="item">
@@ -85,6 +102,24 @@
         <div class="ui green ok inverted button">
           <i class="checkmark icon"></i>
           Create Folder
+        </div>
+      </div>
+    </div>
+
+    <div class="ui fullscreen modal" id="upload-files-modal">
+      <div class="content">
+        <form class="dropzone" id="file-dropzone" enctype="multipart/form-data">
+
+        </form>
+      </div>
+      <div class="actions">
+        <div class="ui red cancel inverted button">
+          <i class="remove icon"></i>
+          Cancel
+        </div>
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon" id="uploadFiles"></i>
+          Upload Files
         </div>
       </div>
     </div>
