@@ -179,7 +179,8 @@ $container['upload-file-service'] = function ($container){
 
 $container['download-file-service'] = function ($container){
     $service = new \PWBox\model\use_cases\FileUseCases\UseCaseDownloadFile(
-        $container->get('file-repository')
+        $container->get('file-repository'),
+        $container->get('folder-repository')
     );
     return $service;
 };

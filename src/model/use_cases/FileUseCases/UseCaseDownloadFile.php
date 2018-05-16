@@ -9,29 +9,33 @@
 namespace PWBox\model\use_cases\FileUseCases;
 
 use PWBox\model\repositories\FileRepository;
+use PWBox\model\repositories\FolderRepository;
 
 class UseCaseDownloadFile
 {
-    private $repository;
+    private $fileRepository;
+    private $folderRepository;
 
     /**
      * UseCasePostUser constructor.
      * @param FileRepository $repository
+     * @param FolderRepository $folderRepository
      */
-    public function __construct(FileRepository $repository)
+    public function __construct(FileRepository $repository, FolderRepository $folderRepository)
     {
-        $this->repository = $repository;
+        $this->fileRepository = $repository;
+        $this->folderRepository = $folderRepository;
     }
 
     public function __invoke($fileId)
     {
-        $file = $this->repository->getData($fileId);
+        $file = $this->fileRepository->getData($fileId);
 
-        if($file != null){
-            $content = $this->repository->download($file)->getFile();
+        if($file->getName() != null){
+            $content = $this->fileRepository->download($file, $this->folderRepository->get($file->getFolder(), $file->getCreador()))->getFile();
             return $content;
         }else{
-            return null;
+            return false;
         }
     }
 }

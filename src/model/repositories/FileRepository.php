@@ -9,12 +9,13 @@
 namespace PWBox\model\repositories;
 
 use PWBox\model\File;
+use PWBox\model\Folder;
 
 interface FileRepository
 {
     public function post(int $userID, int $folderID, $file): int;
 
-    public function download(File $file): File;
+    public function download(File $file, Folder $folder): File;
 
     public function delete(File $file);
 

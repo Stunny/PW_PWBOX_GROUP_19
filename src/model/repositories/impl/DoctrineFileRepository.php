@@ -12,6 +12,7 @@ namespace PWBox\model\repositories\impl;
 use Doctrine\DBAL\Logging\EchoSQLLogger;
 use function PHPSTORM_META\type;
 use PWBox\model\File;
+use PWBox\model\Folder;
 use PWBox\model\repositories\FileRepository;
 use Doctrine\DBAL\Connection;
 
@@ -20,10 +21,11 @@ class DoctrineFileRepository implements FileRepository
 
     private $connection;
 
+    private const USER_FOLDERS_DIR = "/home/vagrant/pwbox/appdata/user_folders/";
+
     private const POST_QUERY = 'INSERT INTO `file`(`name`, `creator`, `folder`) VALUES (:filename, :creator, :folder);';
     private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id) AND `creator` = :id_usuari AND `folder` = :id_folder;';
     private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id AND `folder` = (SELECT `id` FROM `folder` WHERE `id` = :id_folder AND `creador` = :id_user);';
-    private const DOWNLOAD_DATA_QUERY = 'SELECT * FROM `file`;';
     private const UPDATE_DATA = 'UPDATE `file` SET `name` = :filename, `folder` = :folder WHERE (`creator` = :userID AND `id` = :fileID);';
 
 
@@ -66,9 +68,21 @@ class DoctrineFileRepository implements FileRepository
         }
     }
 
-    public function download(File $file): File
+    public function download(File $file, Folder $folder): File
     {
-        // TODO: Implement download() method. Devolver un objeto de la clase File cuyo atributo `file` contenga el archivo
+        $path = self::USER_FOLDERS_DIR . $folder->getPath() . DIRECTORY_SEPARATOR . $file->getName();
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $file->getName() . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($file));
+        ob_clean();
+        flush();
+        readfile($path);
+        exit;
+        return true;
     }
 
     public function delete(File $file)

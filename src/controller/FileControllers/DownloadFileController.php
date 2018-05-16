@@ -13,6 +13,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
+use PWBox\model\File;
 
 class DownloadFileController
 {
@@ -27,18 +28,13 @@ class DownloadFileController
     {
         try {
             $service = $this->container->get('download-file-service');
-            $file = $service($args['id']);
+            $downloaded = $service(new File($args['fileID'], null, $args['userID'], $args['folderID'], null, null, null));
 
-            if($file != null){
+            if($downloaded){
                 $response = $response
-                    ->withHeader('Content-Description', 'File Transfer')
-                    ->withHeader('Content-Type', 'application/octet-stream')
-                    ->withHeader('Content-Disposition', 'attachment;filename="'.basename($file).'"')
-                    ->withHeader('Expires', '0')
-                    ->withHeader('Cache-Control', 'must-revalidate')
-                    ->withHeader('Pragma', 'public')
-                    ->withHeader('Content-Length', filesize($file));
-                readfile($file);
+                    ->withStatus(200)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"File downloaded", "res"=>[]]));
             }else{
                 $response = $response
                     ->withStatus(404)
