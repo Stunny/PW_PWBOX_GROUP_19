@@ -29,6 +29,7 @@ class UseCasePostProfileImage
 
     public function __invoke(UploadedFile $profileImg, $userName)
     {
+
         $extension = pathinfo($profileImg->getClientFilename(), PATHINFO_EXTENSION);
         $basename = $userName;
         $filename = sprintf('%s.%0.8s', $basename, $extension);

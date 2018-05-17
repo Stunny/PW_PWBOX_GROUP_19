@@ -66,6 +66,8 @@ class UserController
      */
     public function post(Request $request, Response $response){
         try{
+            var_dump($request->getUploadedFiles());
+            die();
             $rawData = $request->getParsedBody();
             $service = $this->container->get('post-user-service');
             $result = $service($rawData, $request->getUploadedFiles(), $this->container->get('generate-verification-service'), $this->container->get('profile-img-service'));
@@ -256,6 +258,24 @@ class UserController
         try{
             $service = $this->container->get('user-logout');
             $service();
+
+            $response = $response->withStatus(302)
+                ->withHeader('location', '/');
+
+        }catch (\Exception $e){
+            $response = $response
+                ->withStatus(500)
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
+        }
+
+        return $response;
+    }
+
+    public function changeProfileImage(Request $request, Response $response, $args){
+        try{
+            $service = $this->container->get('profile-img-service');
+            $service($request->getUploadedFiles()['file'], $this->container->get('user-repository')->get($args['userID'])['username']);
 
             $response = $response->withStatus(302)
                 ->withHeader('location', '/');
