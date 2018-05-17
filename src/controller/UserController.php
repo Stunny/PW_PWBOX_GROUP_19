@@ -15,6 +15,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
+
 class UserController
 {
 
@@ -66,8 +72,6 @@ class UserController
      */
     public function post(Request $request, Response $response){
         try{
-            var_dump($request->getUploadedFiles());
-            die();
             $rawData = $request->getParsedBody();
             $service = $this->container->get('post-user-service');
             $result = $service($rawData, $request->getUploadedFiles(), $this->container->get('generate-verification-service'), $this->container->get('profile-img-service'));
@@ -77,6 +81,12 @@ class UserController
                 $this->container->get('flash')->addMessage('error', 'Username or email already exist');
 
             }else {
+                $msg = "Please click on the following link to verify your account:\nhttp://pwbox.test/someRandomHash";
+                $msg = wordwrap($msg,70);
+                $to      = $rawData['email'];
+                $subject = 'Verification email for PWBOX';
+                //TODO: ENVIAR EMAIL DE CONFIRMACION AL USUARIO QUE SE HA REGISTRADO
+                //self::sendMail($to, $subject, $msg, $rawData['username']);
 
                 $this->container->get('flash')->addMessage('user_register', 'User registered successfully');
                 $response = $response
@@ -89,7 +99,26 @@ class UserController
             $this->container->get('view')->render($response, 'register.twig', ["form" => "Register", "error"=>["Something went wrong. Try again later."]]);
         }
         return $response;
+    }
 
+    private function sendMail($to, $subject, $message, $userName){
+        var_dump($to);
+        var_dump($subject);
+        var_dump($message);
+        var_dump($userName);
+
+        $transport = (new Swift_SmtpTransport('smtp.live.com', 587, 'tls'))
+            ->setUsername('pw2box@hotmail.com')
+            ->setPassword('emailPassword1');
+        $mailer = new Swift_Mailer($transport);
+
+        $message = (new Swift_Message($subject))
+            ->setFrom(['pw2box@hotmail.com' => 'PWBOX confirmation mail'])
+            ->setTo([$to, $to => $userName])
+            ->setBody($message);
+
+        $result = $mailer->send($message);
+        var_dump($result);
     }
 
     /**
@@ -104,6 +133,9 @@ class UserController
             $service = $this->container->get('put-user-service');
             $data = $request->getParsedBody();
             $result = $service($data, $args['userID']);
+            $rawData = $request->getParsedBody();
+            var_dump($rawData);
+            var_dump($args);
 
             if($result){
                 $response = $response

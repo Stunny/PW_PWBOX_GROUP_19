@@ -166,6 +166,13 @@ $container['delete-folder-service'] = function ($container){
     return $service;
 };
 
+$container['share-folder-service'] = function ($container){
+    $service = new \PWBox\model\use_cases\FolderUseCases\UseCaseShareFolder(
+        $container->get('folder-repository')
+    );
+    return $service;
+};
+
 
 //----------------------------------------------------------------------------------File
 

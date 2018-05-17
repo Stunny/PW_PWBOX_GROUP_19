@@ -27,6 +27,7 @@ class DoctrineFolderRepository implements FolderRepository
     private const INSERT_FOLDER_QUERY = 'INSERT INTO `folder`(`creador`, `nom`, `path`, `created_at`, `updated_at`) VALUES (:creador, :nom, :path, :created_at, :updated_at);';
     private const UPDATE_QUERY = 'UPDATE `folder` SET `nom` = :nom, `path` = :path WHERE `id` = :id;';
     private const INSERT_ROLES_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
+    private const SHARE_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`) VALUES (:id_creador, :id_folder, :role);';
     private const NEW_FOLDER_ID = 'SELECT `id` FROM `folder` WHERE `creador` = :id_creador ORDER BY `id` DESC LIMIT 1;';
     private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id) AND `id` = (SELECT `folder` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari);';
     private const SELECT_BY_NAME_QUERY = 'select * from `folder` where(`creador`=:userID and `nom`=:folderName)';
@@ -128,8 +129,8 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt->bindValue("id_usuari", $userID, 'integer');
         $stmt->bindValue("id", $folderID, 'integer');
         $stmt->execute();
-
         $userID = $stmt->fetch();
+
         if (isset($userID)){
             $sql = self::ROLE_DELETE_QUERY;
             $stmt = $this->connection->prepare($sql);
@@ -150,5 +151,70 @@ class DoctrineFolderRepository implements FolderRepository
         }else{
             return false;
         }
+    }
+
+    public function shareFolder(int $folderID, int $userID, $email)
+    {
+        //var_dump($userID);
+        if ($userID != null){
+            //comprueba si el usuario que quiere compartir existe
+            $sql = "SELECT username FROM `user` WHERE `id` = :id_usuari;";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("id_usuari", $userID, 'integer');
+            $stmt->execute();
+            $sharingUser = $stmt->fetch();
+            //var_dump($sharingUser);
+            if ($sharingUser != null){
+                //comprueba si la carpeta a compartir existe
+                $sql = "SELECT nom FROM `folder` WHERE `creador` = :id_usuari AND `id` = :id_carpeta;";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue("id_usuari", $userID, 'integer');
+                $stmt->bindValue("id_carpeta", $folderID, 'integer');
+                $stmt->execute();
+                $folder = $stmt->fetch();
+                //var_dump($folder);
+                if ($folder != null){
+                    //comprueba si el usuario al que compartir existe
+                    $sql = "SELECT id FROM `user` WHERE `email` = :email_usuari;";
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindValue("email_usuari", $email, 'string');
+                    $stmt->execute();
+                    $sharedUser = $stmt->fetch();
+                    //var_dump($sharedUser);
+                    if ($sharedUser != null){
+                        //comprueba si el usuario que quiere compartir es admin
+                        $sql = "SELECT role FROM `role` WHERE `usuari` = :id_usuari AND `folder` = :id_carpeta;";
+                        $stmt = $this->connection->prepare($sql);
+                        $stmt->bindValue("id_usuari", $userID, 'integer');
+                        $stmt->bindValue("id_carpeta", $folderID, 'integer');
+                        $stmt->execute();
+                        $role = $stmt->fetch();
+                        //var_dump($role);
+                        if ($role['role'] === "admin"){
+                            //insertamos carpeta compartida en la tabla role
+                            $sql = self::SHARE_QUERY;
+                            $stmt = $this->connection->prepare($sql);
+                            $stmt->bindValue("id_creador", $sharedUser['id'], 'integer');
+                            $stmt->bindValue("id_folder", $folderID, 'integer');
+                            $stmt->bindValue("role", "read", 'string');
+                            $stmt->execute();
+                        }
+                    }else{
+                        //echo "usuario que quiere compartir no es admin";
+                        return 401;
+                    }
+                }else{
+                    //echo "usuario al que compartir existe";
+                    return 404;
+                }
+            }else{
+                ///echo "carpeta no existe";
+                return 404;
+            }
+        }else{
+            //echo "usuario no existe";
+            return 404;
+        }
+        return 200;
     }
 }

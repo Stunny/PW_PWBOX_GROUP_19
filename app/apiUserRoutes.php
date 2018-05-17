@@ -35,6 +35,8 @@ $this->group('/{userID}', function (){
 
     $this->get('/folder/{folderID}/content[/]', 'PWBox\controller\FolderController:getContent')->setName('get-folder-content');
 
+    $this->put('/folder/{folderID}/share/{userEmail}[/]', 'PWBox\controller\FolderController:shareFolder')->setName('share-folder');
+
 
 //----------------------------------------------------------File
     $this->get('/folder/{folderID}/file/{fileID}[/]', PWBox\controller\FileControllers\GetFileController::class)->setName('get-file');

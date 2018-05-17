@@ -9,6 +9,7 @@
 namespace PWBox\controller;
 
 use function FastRoute\cachedDispatcher;
+use PHPMailer\PHPMailer\Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -217,6 +218,44 @@ class FolderController
 
 
         }catch (\Exception $e){
+            $response = $response
+                ->withStatus(500)
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
+        } catch (NotFoundExceptionInterface $e) {
+        } catch (ContainerExceptionInterface $e) {
+        }
+        return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return Response
+     */
+    public function shareFolder(Request $request, Response $response, $args){
+        try{
+            $service = $this->container->get('share-folder-service');
+            $result = $service($args['folderID'], $args['userID'], $args['userEmail']);
+
+            if($result == 200){
+                $response = $response
+                    ->withStatus(200)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>'Shared successfully', "res"=>[]]));
+            }else if ($result == 401){
+                $response = $response
+                    ->withStatus(401)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"Unauthorised", "res"=>[]]));
+            }else if ($result == 404){
+                $response = $response
+                    ->withStatus(404)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"Not found", "res"=>[]]));
+            }
+        }catch (Exception $e){
             $response = $response
                 ->withStatus(500)
                 ->withHeader('Content-type', 'application/json')
