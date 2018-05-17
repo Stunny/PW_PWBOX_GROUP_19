@@ -37,7 +37,7 @@ class FolderController
             $service = $this->container->get('get-folder-service');
             $folderData = $service($args);
 
-            if(!isset($folderData)){
+            if($folderData['folderID'] == null){
                 $response = $response
                     ->withStatus(404)
                     ->withHeader('Content-type', 'application/json')
@@ -238,7 +238,6 @@ class FolderController
         try{
             $service = $this->container->get('share-folder-service');
             $result = $service($args['folderID'], $args['userID'], $args['userEmail']);
-
             if($result == 200){
                 $response = $response
                     ->withStatus(200)

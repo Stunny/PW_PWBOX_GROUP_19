@@ -26,8 +26,8 @@ class UseCaseGetFolder
     {
         $folder = $this->repository->get($rawData['folderID'], $rawData['userID']);
 
-        if($folder == null){
-            return [];
+        if($folder->getPath() == null){
+            return ["folderID" => null];
         }
 
         return [
