@@ -112,7 +112,13 @@ function shareFolder(email, role){
        },
        statusCode:{
            200: function (res) {
-                console.log(res.msg);
+                alert(res.msg);
+           },
+           404: function (res) {
+               alert(res.msg);
+           },
+           401: function (res) {
+               alert(res.msg);
            }
        }
     });
