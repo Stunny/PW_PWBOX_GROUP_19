@@ -21,7 +21,7 @@ interface FileRepository
 
     public function getData(File $file): File;
 
-    public function updateData(File $file, $userID, $newName): File;
+    public function updateData(File $file, $userID, $newName);
 
     public function getFileId($userId, $folderId);
 

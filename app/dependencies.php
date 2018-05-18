@@ -202,7 +202,8 @@ $container['get-file-service'] = function ($container){
 
 $container['put-file-service'] = function ($container){
     $service = new \PWBox\model\use_cases\FileUseCases\UseCasePutFile(
-        $container->get('file-repository')
+        $container->get('file-repository'),
+        $container->get('folder-repository')
     );
     return $service;
 };

@@ -115,26 +115,19 @@ class DoctrineFileRepository implements FileRepository
         return new File($query_result['id'], $query_result['name'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
     }
 
-    public function updateData(File $file, $userID, $newName): File
+    public function updateData(File $file, $userID, $newName)
     {
+        $ext = pathinfo($file->getName(), PATHINFO_EXTENSION);
+
         $sql = self::UPDATE_DATA;
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("filename", $newName, 'string');
+        $stmt->bindValue("filename", $newName . "." . $ext, 'string');
         $stmt->bindValue("folder", $file->getFolder(), 'integer');
         $stmt->bindValue("userID", $userID, 'integer');
         $stmt->bindValue("fileID", $file->getId(), 'integer');
         $stmt->execute();
 
-        $file = $this->getData(new File($file->getId(), null, $userID, $file->getFolder(), null, null, null));
-        if ($newName == $file->getName()){
-            $sql = "SELECT * FROM `file` ORDER BY `id` DESC LIMIT 1;";
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute();
-            $aux = $stmt->fetch();
-            return new File($aux['id'], $aux['name'], $aux['creator'], $aux['folder'], $aux['created_at'], $aux['updated_at'], null);
-        }else{
-            return new File(null, null, null, null, null, null, null);
-        }
+        $this->getData(new File($file->getId(), null, $userID, $file->getFolder(), null, null, null));
     }
 
     public function getFileId($userId, $folderId)

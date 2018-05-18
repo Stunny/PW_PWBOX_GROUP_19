@@ -23,6 +23,14 @@ class UseCaseUpdateFolder
 
     function __invoke(array $rawData, int $folderID, int $userID)
     {
-        return $this->repository->update(new Folder($folderID, null, $rawData['foldername'], null, null, null), $userID);
+        $response = $this->repository->update(new Folder($folderID, null, $rawData['foldername'], null, null, null), $userID);
+        if ($response){
+            //rename folder y todos aquellos path que contengan ese folder -_-
+            $path = $this->repository->get($folderID, $userID)->getPath();
+            //rename("/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $file->getName(), "/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $return->getName());
+            return true;
+        }else{
+            return false;
+        }
     }
 }
