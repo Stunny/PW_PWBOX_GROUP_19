@@ -8,6 +8,7 @@
 
 namespace PWBox\model\use_cases\FileUseCases;
 
+use PWBox\model\File;
 use PWBox\model\repositories\FileRepository;
 use PWBox\model\repositories\FolderRepository;
 
@@ -27,9 +28,13 @@ class UseCaseDownloadFile
         $this->folderRepository = $folderRepository;
     }
 
-    public function __invoke($fileId)
+    public function __invoke(File $fileInfo)
     {
-        $file = $this->fileRepository->getData($fileId);
+        //si se puede acceder a la carpeta (porque bien sea propietario o se la hayan compartido) poner el id del creador correcto, else dejar id incorrecto y no hara la descarga
+        if($this->folderRepository->get($fileInfo->getFolder(), $fileInfo->getCreador())->getNom() != null){
+            $fileInfo->setCreador($this->folderRepository->get($fileInfo->getFolder(), $fileInfo->getId())->getCreador());
+        }
+        $file = $this->fileRepository->getData($fileInfo);
 
         if($file->getName() != null){
             $content = $this->fileRepository->download($file, $this->folderRepository->get($file->getFolder(), $file->getCreador()))->getFile();
