@@ -23,6 +23,7 @@ class SettingsPageController
 
     public function __invoke(Request $request, Response $response, array $args)
     {
-        echo "Welcome to the rice fields";
+        //echo "Welcome to the rice fields";
+        $this->container->get('view')->render($response, 'settings.twig', ["form" => "Settings"]);
     }
 }
