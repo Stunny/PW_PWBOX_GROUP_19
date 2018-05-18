@@ -38,7 +38,7 @@ class UseCasePutFile
             $return = $this->fileRepo->getData(new File($args['fileID'], null, $args['userID'], $args['folderID'], null, null, null));
             if ($return->getId() != null){
                 //rename file
-                $path = $this->folderRepo->get($file->getFolder(), $file->getId())->getPath();
+                $path = $this->folderRepo->get($file->getFolder(), $args['userID'])->getPath();
                 rename("/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $file->getName(), "/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $return->getName());
                 return true;
             }else{

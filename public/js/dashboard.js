@@ -155,7 +155,7 @@ function requestRenameFileItem(newName) {
         async: true,
         method: 'post',
         data:{
-            fileName: newName
+            filename: newName
         },
         statusCode:{
             200: function (res) {
