@@ -27,10 +27,10 @@ class PostFileController
     {
         try{
             $files = $request->getUploadedFiles();
-            // handle single input with single file upload
             $service = $this->container->get('upload-file-service');
-            echo $args['userID'].' '.$args['folderID'];
+
             $uploaded = $service($files, $args['userID'], $args['folderID']);
+
             if ($uploaded){
                 $response = $response->withStatus(200)
                     ->withHeader('Content-type', 'application/json')
