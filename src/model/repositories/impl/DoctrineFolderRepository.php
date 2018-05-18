@@ -93,18 +93,12 @@ class DoctrineFolderRepository implements FolderRepository
             $stmt->execute();
 
             //rename de los path de las carpetas dentro de la carpeta modificada
-            var_dump($olderFolder->getPath() . ' %');
-            var_dump($newPath);
-            var_dump('UPDATE `folder` SET `path` = REPLACE(`path`, :old_path, :new_path) WHERE `path` LIKE :old_path;');
-
-            /*
             $sql = 'UPDATE `folder` SET `path` = REPLACE(`path`, :old_path1, :new_path) WHERE `path` LIKE :old_path2;';
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("old_path1", $olderFolder->getPath(), 'string');
-            $stmt->bindValue("old_path2", $olderFolder->getPath() . ' %', 'string');
+            $stmt->bindValue("old_path2", $olderFolder->getPath() . '%', 'string');
             $stmt->bindValue("new_path", $newPath, 'string');
             $stmt->execute();
-            */
             return true;
         }else{
             return false;
