@@ -49,6 +49,11 @@ function showFileModal(){
 
 function createNewFolder(name){
 
+  if(name.includes("/")){
+      alert("Folder name can't contain character '/'");
+      return;
+  }
+
   $.ajax({
      url: '/api/user/'+userId+'/folder/',
      async: true,
@@ -193,6 +198,7 @@ Dropzone.options.fileDropzone = {
     autoProcessQueue: false,
     ignoreHiddenFiles: true,
     addRemoveLinks: true,
+    acceptedFiles: 'image/jpg, image/jpeg, image/gif, image/png, application/pdf, .txt, .md',
     init: function () {
         filesDropzone = this;
         this.on("complete", (file)=>{

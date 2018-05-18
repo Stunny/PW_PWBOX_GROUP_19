@@ -131,10 +131,16 @@ class FolderController
      * @return Response
      */
     public function post(Request $request, Response $response, $args){
-        //todo: validacion datos de folder
         try {
             $userID = $args['userID'];
             $rawData = $request->getParsedBody();
+
+            if(strpos($rawData['folderName'], "/") !== false){
+                return $response->withStatus(400)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>'Folder name can not contain character "/"']));
+            }
+
             $service = $this->container->get('post-folder-service');
             $result = $service($rawData, $userID);
 
