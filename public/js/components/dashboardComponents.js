@@ -1,10 +1,10 @@
 Vue.component('folder-item', {
-  props: ['filename', 'itemType'],
+  props: ['filename', 'itemType', 'dataid'],
   data: function(){
     return {}
   },
   template: `
-  <div class="four wide center aligned column">
+  <div class="file one wide center aligned column" :data-id="dataid">
     <div class="dashItem">
       <img class="ui image" v-bind:src="'media/'+itemType+'.png'">
       <h4 class="ui grey header">
@@ -28,6 +28,7 @@ Vue.component('folder-item-row', {
           :filename="item.filename"
           :itemType="item.type"
           :id="'centeritem-'+item.type+'-'+item.id"
+          :dataid="'centeritem-'+item.type+'-'+item.id"
           :key="item.filename"
         >
         </folder-item>

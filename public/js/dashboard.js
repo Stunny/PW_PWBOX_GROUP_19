@@ -1,6 +1,6 @@
 
 var dashLeftTree, pathTitle, centerContent, leftNav, filesDropzone;
-var userId, rootFolderId, currentFolderId, currentCenterRows;
+var userId, rootFolderId, currentFolderId, selectedFileId, selectedFolderId, currentCenterRows;
 
 function loadDashboardContent(){
     var get = $.ajax({
@@ -73,6 +73,17 @@ function showShareModal(){
     $('.small.modal').modal('show');
 }
 
+function showFolderModal(){
+    $('.tiny.modal').modal('show');
+}
+
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//--------------------------------ITEM ACTIONS-------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+
 function createNewFolder(name){
 
   if(name.includes("/")){
@@ -124,16 +135,74 @@ function shareFolder(email, role){
     });
 }
 
-function showFolderModal(){
-    $('.tiny.modal').modal('show');
+function renameFolder(folderId) {
+
+    selectedFolderId = folderId;
+    $("#renameFolderModal").modal("show");
 }
 
-//Inicializacion de las globales
+function renameFileItem(fileId){
+    selectedFileId = fileId;
+
+    $("#renameFileModal").modal("show");
+}
+
+function requestRenameFileItem(newName) {
+
+    console.log("Rename file with id: "+selectedFileId);
+    $.ajax({
+        url: '/api/user/'+userId+'/folder/'+currentFolderId.replace("folder-","")+'/file/'+selectedFileId.replace("file-", ""),
+        async: true,
+        method: 'post',
+        data:{
+            fileName: newName
+        },
+        statusCode:{
+            200: function (res) {
+                alert(res.msg);
+                loadCenterContent();
+            },
+            404: function (res) {
+                alert("Error 404: "+res.msg);
+            },
+            401: function (res) {
+                alert("Error 401: "+res.msg);
+            }
+        }
+    });
+}
+
+function requestRenameFolder(newName){
+
+}
+
+function deleteFileItem(fileId){
+    selectedFileId = fileId;
+
+}
+
+function deleteFolder(folderId) {
+
+    selectedFolderId = folderId;
+}
+
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//-------------------------------VARIABLES GLOBALES--------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+
 userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
 rootFolderId = document.cookie.match(/rootFolderId=[^;]+/)[0].split('=')[1];
 currentFolderId = 'folder-'+rootFolderId;
-//-------Inicializaciones de modulos Vue--------------------------------------------//
 
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//-------------------------------COMPONENTES VUE-----------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
 dashLeftTree = new Vue({
   el: '#dashLeftTree',
   data: {
@@ -239,7 +308,12 @@ leftNav = new Vue({
   }
 });
 
-//-----------------------------------------------Configuracion del dropzone--------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//-------------------------------DROPZONE--------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
 
 Dropzone.options.fileDropzone = {
     url: '/api/user/'+userId+'/folder/'+currentFolderId.replace(/folder-/, "")+'/file',
@@ -269,7 +343,12 @@ Dropzone.options.fileDropzone = {
     }
 };
 
-//------------------------Listeners de jQuery----------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//-------------------------------LISTENERS JQUERY----------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
 
 $("#userIcon").click((event)=>{
   leftNav.tabProfile();
@@ -318,7 +397,36 @@ $("#share-folder-modal").modal({
     }
 });
 
+$("#renameFileModal").modal({
+    onDeny: function () {
+        $("input#renameFileName").val("");
+    },
+    onHide: function () {
+        $("input#renameFileName").val("");
+    },
+    onApprove: function () {
+        requestRenameFileItem($("input#renameFileName").val())
+    }
+});
 
+$("#renameFolderModal").modal({
+    onDeny: function () {
+        $("input#newFolderName").val("");
+    },
+    onHide: function () {
+        $("input#newFolderName").val("");
+    },
+    onApprove: function () {
+        requestRenameFolder($("input#newFolderName").val())
+    }
+});
+
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//-------------------------------INICIAR DASHBOARD---------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
 loadDashboardContent();
 
 
