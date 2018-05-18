@@ -45,6 +45,13 @@ function loadCenterContent(){
     });
 }
 
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//--------------------------------HELPERS------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------//
+
 function getParentId(id){
   return $("#"+id).parent().parent().parent().prev().attr('id');
 }
@@ -174,6 +181,27 @@ function requestRenameFileItem(newName) {
 
 function requestRenameFolder(newName){
     console.log(selectedFolderId+"'s new name is"+newName);
+
+    $.ajax({
+        url: '/api/user/'+userId+'/folder/'+selectedFolderId.replace("folder-",""),
+        async: true,
+        method: 'post',
+        data:{
+            foldername: newName
+        },
+        statusCode:{
+            200: function (res) {
+                alert(res.msg);
+                loadCenterContent();
+            },
+            404: function (res) {
+                alert("Error 404: "+res.msg);
+            },
+            401: function (res) {
+                alert("Error 401: "+res.msg);
+            }
+        }
+    });
 }
 
 function deleteFileItem(fileId){
@@ -317,9 +345,6 @@ leftNav = new Vue({
   },
   methods:{
     tabProfile: function(){
-      this.filesSelected = false;
-      this.profileSelected = true;
-      this.settingsSelected = false;
 
       window.location.href = '/profile';
     }
@@ -446,5 +471,3 @@ $("#renameFolderModal").modal({
 //---------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------//
 loadDashboardContent();
-
-
