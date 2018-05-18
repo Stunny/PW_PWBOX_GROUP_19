@@ -26,7 +26,7 @@ class DoctrineFolderRepository implements FolderRepository
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
     private const INSERT_FOLDER_QUERY = 'INSERT INTO `folder`(`creador`, `nom`, `path`, `created_at`, `updated_at`) VALUES (:creador, :nom, :path, :created_at, :updated_at);';
-    private const UPDATE_QUERY = 'UPDATE `folder` SET `nom` = :nom WHERE `id` = :id;';
+    private const UPDATE_QUERY = 'UPDATE `folder` SET `nom` = :nom, `path` = :path WHERE `id` = :id;';
     private const INSERT_ROLES_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
     private const SHARE_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`) VALUES (:id_creador, :id_folder, :role);';
     private const NEW_FOLDER_ID = 'SELECT `id` FROM `folder` WHERE `creador` = :id_creador ORDER BY `id` DESC LIMIT 1;';
@@ -80,17 +80,14 @@ class DoctrineFolderRepository implements FolderRepository
 
     public function update(Folder $folder, int $userID)
     {
-        var_dump($folder);
-
-        $oldPath = $this->get($folder->getId(), $userID)->getPath();
-        //$newPath =
-
-
+        $olderFolder = $this->get($folder->getId(), $userID);
+        $newPath = str_replace($olderFolder->getNom(), $folder->getNom(), $olderFolder->getPath());
 
         if ($this->get($folder->getId(), $userID)->getCreador() == $userID){
             $sql = self::UPDATE_QUERY;
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("nom", $folder->getNom(), 'string');
+            $stmt->bindValue("path", $newPath, 'string');
             $stmt->bindValue("id", $folder->getId(), 'integer');
             $stmt->execute();
             return true;
