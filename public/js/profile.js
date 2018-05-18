@@ -20,6 +20,8 @@ $(document).ready(()=>{
   $('#progBar').progress({
   percent: 77
   });
+
+
 });
 
 /*$('#loginButton').on('click',function() {

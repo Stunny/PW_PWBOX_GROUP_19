@@ -7,6 +7,8 @@
 {% endblock %}
 
 {% block styles %}
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+
     <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
     <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
 
@@ -26,6 +28,9 @@
     <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
 
     <link rel="stylesheet" href="css/lpstyles.min.css">
+    <link rel="stylesheet" href="css/styles.min.css">
+
+
 {% endblock %}
 
 {% block preLoadScripts %}
@@ -46,7 +51,9 @@
             <div class="three wide column">
 
                 <div class="row" id="logoRowSettings">
+                    <a href="/dashboard">
                     <img class="ui circular image" src="media/image.png" alt="image">
+                    </a>
                 </div>
             </div>
 
@@ -64,13 +71,13 @@
 
                 <div class="row">
                     <div class="ui vertical padded segment" id="settingsListItem">
-                        <a id="leftText" href="">Dashboard</a>
+                        <a id="leftText" href="/dashboard">Dashboard</a>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="ui vertical padded segment" id="settingsListItem">
-                        <a id="leftText" href="">My Account</a>
+                        <a id="leftText" href="/profile">My Account</a>
                     </div>
                 </div>
 
