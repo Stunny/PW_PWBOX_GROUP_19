@@ -45,7 +45,7 @@ class UseCaseUploadFile
         foreach($uploadedFiles['file'] as $file){
             $extension = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
             //Skip files that are not supported by the application requirements
-            if(preg_match("/(jpg|jpeg|png|gif|pdf|txt|md)/", $extension) == 0){
+            if($file->getSize() > 2000 || preg_match("/(jpg|jpeg|png|gif|pdf|txt|md)/", $extension) == 0){
                 continue;
             }
 

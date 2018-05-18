@@ -194,6 +194,7 @@ Dropzone.options.fileDropzone = {
     uploadMultiple: true,
     createImageThumbnails: true,
     maxFiles: 5,
+    maxFilesize: 5,
     clickable: true,
     autoProcessQueue: false,
     ignoreHiddenFiles: true,
