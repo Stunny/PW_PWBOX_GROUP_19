@@ -104,27 +104,16 @@ class DoctrineFolderRepository implements FolderRepository
 
     public function get(int $folderID, int $userID): Folder
     {
-/*
-        $sql = self::SELECT_QUERY;
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("id", $folderID, 'integer');
-        $stmt->bindValue("id_usuari", $userID, 'integer');
-        $stmt->execute();
-        $aux = $stmt->fetch();
-        return new Folder($aux['id'], $aux['creador'], $aux['nom'], $aux['path'], $aux['created_at'], $aux['updated_at']);
-*/
-
         $sql = self::SELECT_QUERY_2;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id", $folderID, 'integer');
         //$stmt->bindValue("id_usuari", $userID, 'integer');
         $stmt->execute();
-        $aux = $stmt->fetch();
+        $aux1 = $stmt->fetch();
 
-        if ($aux != null){
-            //si la carpeta es suya o es a la que le asignaron los permisos directamente
-            $folderPath = $aux['path'];
-            $folderPathLength = strlen($folderPath);
+        if ($aux1 != null){
+            //si la carpeta es suya, es a la que le asignaron los permisos directamente o es una subcarpeta de la carpeta a la que le dieron permisos
+            $folderPath = $aux1['path'];
 
             $sql = self::ACCESIBLE_FOLDERS;
             $stmt = $this->connection->prepare($sql);
@@ -141,25 +130,14 @@ class DoctrineFolderRepository implements FolderRepository
                 $stmt->bindValue("id_usuari", $userID, 'integer');
                 $stmt->execute();
                 $aux = $stmt->fetch();
-
-                echo "path al que comprobo si puc accedir";
-                var_dump($aux['path']);
-                echo "comparat amb el path que demano";
-                var_dump($folderPath);
-                echo "el resultat es";
-                var_dump(substr($aux['path'], 0, $folderPathLength) == $folderPath);
-
-                echo "comparo " . substr($aux['path'], 0, $folderPathLength) . " amb " . $folderPath;
-
-                if (substr($aux['path'], 0, $folderPathLength) == $folderPath){
-                    var_dump($aux);
-                    return new Folder($aux['id'], $aux['creador'], $aux['nom'], $aux['path'], $aux['created_at'], $aux['updated_at']);
+                $folderPathLength = strlen($aux['path']);
+                if (substr($folderPath, 0, $folderPathLength) == $aux['path']){
+                    return new Folder($aux1['id'], $aux1['creador'], $aux1['nom'], $aux1['path'], $aux1['created_at'], $aux1['updated_at']);
                 }
             }
             return new Folder(null, null ,null, null, null, null);
         }else{
-            //si no tiene permisos o es una subcarpeta de la carpeta a la que le dieron permisos
-            echo "putaaaa";
+            //si no tiene permisos. return redundante
             return new Folder(null, null ,null, null, null, null);
         }
     }
