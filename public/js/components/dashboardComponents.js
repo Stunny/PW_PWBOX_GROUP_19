@@ -1,14 +1,14 @@
 Vue.component('folder-item', {
-  props: ['filename', 'extension', 'itemType'],
+  props: ['filename', 'itemType'],
   data: function(){
     return {}
   },
   template: `
   <div class="four wide center aligned column">
     <div class="dashItem">
-      <img class="ui image" src="media/{{itemType}}.png">
+      <img class="ui image" v-bind:src="'media/'+itemType+'.png'">
       <h4 class="ui grey header">
-        {{filename}}.{{extension}}
+        {{filename}}
       </h4>
     </div>
   </div>
@@ -26,9 +26,9 @@ Vue.component('folder-item-row', {
         <folder-item
           v-for="item in items"
           :filename="item.filename"
-          :extension="item.extension"
           :itemType="item.type"
-          :key="item.filename+'.'+item.extension"
+          :id="'centeritem-'+item.type+'-'+item.id"
+          :key="item.filename"
         >
         </folder-item>
       </span>

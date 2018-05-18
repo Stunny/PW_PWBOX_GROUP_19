@@ -51,6 +51,8 @@
       <img class="ui medium circular image" src="media/logo.png" alt="logo">
     </div>
 
+    <!-- NAV -->
+
     <div class="center aligned row" id="topSideList">
 
         <div class="ui list">
@@ -69,6 +71,9 @@
     <div class="ui horizontal divider" id="dashDivider">
       <i class="plus icon"></i>
     </div>
+
+    <!-- Botones laterales -->
+
     <div class="center aligned row">
       <div class="ui list">
 
@@ -82,8 +87,18 @@
             Create Folder
           </button>
         </div>
+
+        <div class="item">
+          <button class="ui primary button" onclick="showShareModal()">
+            Share Folder
+          </button>
+        </div>
       </div>
     </div>
+
+    <!-- MODALS -->
+
+    <!-- New folder modal -->
 
     <div class="ui tiny modal" id="new-folder-modal">
       <div class="header">New Folder</div>
@@ -106,6 +121,8 @@
       </div>
     </div>
 
+    <!-- New file modal -->
+
     <div class="ui fullscreen modal" id="upload-files-modal">
       <div class="content">
         <form class="dropzone" id="file-dropzone" enctype="multipart/form-data">
@@ -124,9 +141,39 @@
       </div>
     </div>
 
+    <!-- Share folder modal -->
+    <div class="ui small modal" id="share-folder-modal">
+      <div class="header">
+        Share folder with
+      </div>
+      <div class="content">
+        <form class="ui form" id="shareFolderForm" onsubmit="event.preventDefault();">
+          <div class="field">
+            <input id="shareEmail" type="email" name="shareemail" placeholder="Email of person to share with">
+          </div>
+          <div class="ui checkbox">
+            <input type="checkbox" name="role" id="shareRole">
+            <label>Share as admin</label>
+          </div>
+        </form>
+      </div>
+      <div class="actions">
+        <div class="ui red cancel inverted button">
+          <i class="remove icon" id="cancelUpload"></i>
+          Cancel
+        </div>
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon" id="uploadFiles"></i>
+          Share
+        </div>
+      </div>
+    </div>
+
     <div class="ui horizontal divider" id="dashDivider">
       <i class="folder open outline icon"></i>
     </div>
+
+    <!-- ARBOL DE CARPETAS -->
 
     <div class="row">
       <div class="ui list" id="dashLeftTree">
@@ -136,17 +183,25 @@
 
   </div>
 
+  <!-- CONTENIDO CENTRAL -->
+
   <div class="ui eleven wide column centered grid" id="dashCenter">
     <div class="row" id="pathRow">
+
+      <!-- Breadcrumb -->
         <div class="centered aligned column" id="pathTitle">
           <!-- Content loaded dynamically by VueJS -->
         </div>
       </div>
+
       <div class="row" id="dividerDash">
         <div class="ui horizontal divider">
           <i class="folder outline icon"></i>
         </div>
       </div>
+
+    <!-- Archivos -->
+
       <div class="row" id="contentGrid">
         <div class="column" id="folder-list-column">
           <div class="ui middle aligned centered grid" id="rows">

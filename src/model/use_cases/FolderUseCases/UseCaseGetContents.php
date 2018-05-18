@@ -41,10 +41,13 @@ class UseCaseGetContents
             foreach ($fileIds as $clave){
                 $fileData = $this->fileRepo->getData(new File($clave['id'], null, $userId, $folderId, null, null, null));
                 $aux = array();
-                array_push($aux, $fileData->getId());
+                /*array_push($aux, $fileData->getId());
                 array_push($aux, 'file');
                 array_push($aux, $fileData->getName());
-
+                */
+                $aux['id'] = $fileData->getId();
+                $aux['type'] = 'file';
+                $aux['filename'] = $fileData->getName();
                 array_push($contentArray, $aux);
             }
 
@@ -58,9 +61,12 @@ class UseCaseGetContents
                         $folderName = substr($clave['path'], $currentFolderLength + 1, strlen($clave['path']));
                         $folder = $this->folderRepo->getByName($folderName, $userId);
                         $aux = array();
-                        array_push($aux, $folder->getId());
+                        /*array_push($aux, $folder->getId());
                         array_push($aux, 'folder');
-                        array_push($aux, $folderName);
+                        array_push($aux, $folderName);*/
+                        $aux['id'] = $folder->getId();
+                        $aux['type'] = 'folder';
+                        $aux['filename'] = $folderName;
 
                         array_push($contentArray, $aux);
                     }
@@ -69,7 +75,7 @@ class UseCaseGetContents
 
             //borramos todas aquellas carpetas que no son las que estan directamente debajo de la seleccionada (campo id = null)
             foreach ($contentArray as $clave => $valor){
-                if (strlen($valor[0]) == null){
+                if (strlen($valor['id']) == null){
                     unset($contentArray[$clave]);
                 }
             }

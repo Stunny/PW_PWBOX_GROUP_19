@@ -1,6 +1,6 @@
 
 var dashLeftTree, pathTitle, centerContent, leftNav, filesDropzone;
-var userId, rootFolderId, currentFolderId;
+var userId, rootFolderId, currentFolderId, currentCenterRows;
 
 function loadDashboardContent(){
     var get = $.ajax({
@@ -14,13 +14,35 @@ function loadDashboardContent(){
         dashLeftTree.setTree([elmts.res]);
     });
 
-    loadCenterContent();
 }
 
 
 function loadCenterContent(){
-    //todo: cargar los contenidos de la carpeta para su visualizacion
+    var get = $.ajax({
+        async : true,
+        type : 'get',
+        url: '/api/user/'+userId+'/folder/'+currentFolderId.replace(/folder-/, "")+'/content',
+        statusCode: {
+            200: function(elmts){
+                let result = Object.values(elmts.res);
+                let qRows = Math.ceil(result.length/4);
 
+                currentCenterRows = [];
+
+                let i, j, chunk = 4;
+                for (i = 0, j = result.length; i < j; i += chunk){
+                    let rowObject = {};
+                    rowObject.items = result.slice(i, i+chunk);
+                    currentCenterRows.push(rowObject);
+                }
+                centerContent.setRows(currentCenterRows);
+
+            },
+            404: function () {
+                alert("Folder not found");
+            }
+        }
+    });
 }
 
 function getParentId(id){
@@ -47,6 +69,10 @@ function showFileModal(){
     $('.fullscreen.modal').modal('show');
 }
 
+function showShareModal(){
+    $('.small.modal').modal('show');
+}
+
 function createNewFolder(name){
 
   if(name.includes("/")){
@@ -69,6 +95,27 @@ function createNewFolder(name){
      }
   });
 
+}
+
+function shareFolder(email, role){
+    if(email.match(/^\s+$/) || !email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+        alert("Invalid email to share");
+        return;
+    }
+
+    $.ajax({
+       url: '/api/user/'+userId+'/folder/'+currentFolderId.replace(/folder-/, "")+'/share/'+email,
+       async: true,
+       method: 'post',
+       data:{
+           role: role
+       },
+       statusCode:{
+           200: function (res) {
+                console.log(res.msg);
+           }
+       }
+    });
 }
 
 function showFolderModal(){
@@ -157,7 +204,7 @@ centerContent = new Vue({
     setRows: function(rows){
       this.rows = rows;
     },
-    rowKey: function(items){
+    rowkey: function(items){
         var key = "";
         for(item in items){
           key += item.filename + "-";
@@ -209,6 +256,10 @@ Dropzone.options.fileDropzone = {
         this.on("addedfile", (event)=>{
             this.options.url = '/api/user/'+userId+'/folder/'+currentFolderId.replace(/folder-/, "")+'/file';
         });
+
+        this.on("complete", ()=>{
+            loadCenterContent();
+        });
     }
 };
 
@@ -229,6 +280,14 @@ $('#new-folder-modal').modal({
         let foldername = $('#newFolderName');
         createNewFolder(foldername.val());
         foldername.val("");
+    },
+    onDeny: function () {
+        let foldername = $('#newFolderName');
+        foldername.val("");
+    },
+    onHide: function () {
+        let foldername = $('#newFolderName');
+        foldername.val("");
     }
 });
 
@@ -238,6 +297,18 @@ $('#upload-files-modal').modal({
     },
     onDeny: function () {
         filesDropzone.removeAllFiles(true);
+    }
+});
+
+$("#share-folder-modal").modal({
+    onApprove: function () {
+        shareFolder($("input#shareEmail").val(), $("input#shareRole").checkbox("is checked")? "admnin":"read");
+    },
+    onDeny: function () {
+        $("input#shareEmail").val("");
+    },
+    onHide: function () {
+        $("input#shareEmail").val("");
     }
 });
 
