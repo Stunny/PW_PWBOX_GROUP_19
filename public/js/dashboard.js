@@ -173,11 +173,29 @@ function requestRenameFileItem(newName) {
 }
 
 function requestRenameFolder(newName){
-
+    console.log(selectedFolderId+"'s new name is"+newName);
 }
 
 function deleteFileItem(fileId){
     selectedFileId = fileId;
+
+    $.ajax({
+        url: '/api/user/'+userId+'/folder/'+currentFolderId.replace("folder-","")+'/file/'+selectedFileId.replace("file-", ""),
+        async: true,
+        method: 'delete',
+        statusCode:{
+            200: function (res) {
+                alert(res.msg);
+                loadCenterContent();
+            },
+            404: function (res) {
+                alert("Error 404: "+res.msg);
+            },
+            401: function (res) {
+                alert("Error 401: "+res.msg);
+            }
+        }
+    });
 
 }
 
@@ -417,7 +435,7 @@ $("#renameFolderModal").modal({
         $("input#newFolderName").val("");
     },
     onApprove: function () {
-        requestRenameFolder($("input#newFolderName").val())
+        requestRenameFolder($("input#renameFolderName").val())
     }
 });
 
