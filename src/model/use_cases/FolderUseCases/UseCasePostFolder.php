@@ -23,7 +23,8 @@ class UseCasePostFolder
 
     /**
      * UseCasePostUser constructor.
-     * @param UserRepository $repository
+     * @param FolderRepository|UserRepository $repository
+     * @param UserRepository $userRepository
      */
     public function __construct(FolderRepository $repository, UserRepository $userRepository)
     {

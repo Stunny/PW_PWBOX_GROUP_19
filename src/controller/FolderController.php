@@ -162,7 +162,6 @@ class FolderController
     }
 
     /**
-     * @deprecated
      * @param Request $request
      * @param Response $response
      * @param $args

@@ -27,9 +27,6 @@ $this->group('/{userID}', function (){
 
     $this->get('/folder/{folderID}[/]', 'PWBox\controller\FolderController:get')->setName('get-folder');
 
-    /**
-     * @deprecated
-     */
     $this->post('/folder/{folderID}[/]', 'PWBox\controller\FolderController:put')->setName('update-folder');
 
     $this->delete('/folder/{folderID}[/]', 'PWBox\controller\FolderController:delete')->setName('delete-folder');
