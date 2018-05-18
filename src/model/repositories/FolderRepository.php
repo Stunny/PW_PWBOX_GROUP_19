@@ -24,4 +24,7 @@ interface FolderRepository
     public function delete(int $folderID, int $userID);
 
     public function shareFolder(int $folderID, int $userID, $email);
+
+    public function getPathAndId($userId);
+
 }

@@ -23,4 +23,6 @@ interface FileRepository
 
     public function updateData(File $file, $userID, $newName): File;
 
+    public function getFileId($userId, $folderId);
+
 }

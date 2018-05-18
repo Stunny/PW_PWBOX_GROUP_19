@@ -35,7 +35,8 @@ class DoctrineFolderRepository implements FolderRepository
     private const SELECT_BY_NAME_QUERY = 'select * from `folder` where(`creador`=:userID and `nom`=:folderName)';
     private const FOLDER_DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id) AND `creador` = :id_usuari;';
     private const ROLE_DELETE_QUERY = 'DELETE FROM `role` WHERE `usuari` = :id_usuari AND `folder` = :id_folder;';
-    private const ACCESIBLE_FOLDERS = 'SELECT `folder` FROM `role` WHERE `usuari` = :id_usuari;';
+    private const ACCESSIBLE_FOLDERS = 'SELECT `folder` FROM `role` WHERE `usuari` = :id_usuari;';
+    private const GET_FOLDER_PATH_ID = 'SELECT `id`, `path` FROM `folder` WHERE `creador` = :id_creador;';
 
 
     public function __construct(Connection $connection)
@@ -115,7 +116,7 @@ class DoctrineFolderRepository implements FolderRepository
             //si la carpeta es suya, es a la que le asignaron los permisos directamente o es una subcarpeta de la carpeta a la que le dieron permisos
             $folderPath = $aux1['path'];
 
-            $sql = self::ACCESIBLE_FOLDERS;
+            $sql = self::ACCESSIBLE_FOLDERS;
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("id_usuari", $userID, 'integer');
 
@@ -248,5 +249,15 @@ class DoctrineFolderRepository implements FolderRepository
             return 404;
         }
         return 200;
+    }
+
+    public function getPathAndId($userId)
+    {
+        $sql = self::GET_FOLDER_PATH_ID;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id_creador", $userId, 'integer');
+        $stmt->execute();
+
+        return $stmt->fetchAll();
     }
 }

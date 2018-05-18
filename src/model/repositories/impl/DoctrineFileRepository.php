@@ -27,6 +27,7 @@ class DoctrineFileRepository implements FileRepository
     private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id) AND `creator` = :id_usuari AND `folder` = :id_folder;';
     private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id AND `folder` = (SELECT `id` FROM `folder` WHERE `id` = :id_folder AND `creador` = :id_user);';
     private const UPDATE_DATA = 'UPDATE `file` SET `name` = :filename, `folder` = :folder WHERE (`creator` = :userID AND `id` = :fileID);';
+    private const GET_FILE_ID = 'SELECT `id` FROM `file` WHERE `folder` = :id_folder AND `creator` = :id_creador;';
 
 
     public function __construct(Connection $connection)
@@ -134,5 +135,16 @@ class DoctrineFileRepository implements FileRepository
         }else{
             return new File(null, null, null, null, null, null, null);
         }
+    }
+
+    public function getFileId($userId, $folderId)
+    {
+        $sql = self::GET_FILE_ID;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id_folder", $folderId, 'integer');
+        $stmt->bindValue("id_creador", $userId, 'integer');
+        $stmt->execute();
+
+        return $stmt->fetchAll();
     }
 }
