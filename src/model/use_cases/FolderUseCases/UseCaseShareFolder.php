@@ -19,9 +19,9 @@ class UseCaseShareFolder
         $this->repository = $repository;
     }
 
-    function __invoke(int $folderID, int $userID, $email)
+    function __invoke(int $folderID, int $userID, $email, $role)
     {
-        return $this->repository->shareFolder($folderID, $userID, $email);
+        return $this->repository->shareFolder($folderID, $userID, $email, $role);
 
     }
 }

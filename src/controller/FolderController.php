@@ -162,6 +162,7 @@ class FolderController
     }
 
     /**
+     * @deprecated
      * @param Request $request
      * @param Response $response
      * @param $args
@@ -171,8 +172,8 @@ class FolderController
         //todo: validacion de datos de fichero
         try{
             $service = $this->container->get('put-folder-service');
-            $data = $request->getParsedBody();
-            $result = $service($data, $args['folderID'], $args['userID']);
+            $rawData = $request->getParsedBody();
+            $result = $service($rawData, $args['folderID'], $args['userID']);
 
             if($result){
                 $response = $response
@@ -243,7 +244,9 @@ class FolderController
     public function shareFolder(Request $request, Response $response, $args){
         try{
             $service = $this->container->get('share-folder-service');
-            $result = $service($args['folderID'], $args['userID'], $args['userEmail']);
+            $rawData = $request->getParsedBody();
+            parse_str(file_get_contents("php://input"),$post_vars);
+            $result = $service($args['folderID'], $args['userID'], $args['userEmail'], $rawData['role']);
             if($result == 200){
                 $response = $response
                     ->withStatus(200)

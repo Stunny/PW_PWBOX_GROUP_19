@@ -14,9 +14,9 @@ $this->group('/{userID}', function (){
 
     $this->get('[/]', 'PWBox\controller\UserController:get')->setName('get-user');
 
-    $this->put('[/]', 'PWBox\controller\UserController:put')->setName('update-user');
+    $this->post('[/]', 'PWBox\controller\UserController:put')->setName('update-user');
 
-    $this->put('/password[/]', 'PWBox\controller\UserController:changePassword')->setName('change-user-password');
+    $this->post('/password[/]', 'PWBox\controller\UserController:changePassword')->setName('change-user-password');
 
     $this->post('/profileImg[/]', 'PWBox\controller\UserController:changeProfileImage')->setName('change-user-img');
 
@@ -27,7 +27,10 @@ $this->group('/{userID}', function (){
 
     $this->get('/folder/{folderID}[/]', 'PWBox\controller\FolderController:get')->setName('get-folder');
 
-    $this->put('/folder/{folderID}[/]', 'PWBox\controller\FolderController:put')->setName('update-folder');
+    /**
+     * @deprecated
+     */
+    $this->post('/folder/{folderID}[/]', 'PWBox\controller\FolderController:put')->setName('update-folder');
 
     $this->delete('/folder/{folderID}[/]', 'PWBox\controller\FolderController:delete')->setName('delete-folder');
 
@@ -35,13 +38,13 @@ $this->group('/{userID}', function (){
 
     $this->get('/folder/{folderID}/content[/]', 'PWBox\controller\FolderController:getContent')->setName('get-folder-content');
 
-    $this->put('/folder/{folderID}/share/{userEmail}[/]', 'PWBox\controller\FolderController:shareFolder')->setName('share-folder');
+    $this->post('/folder/{folderID}/share/{userEmail}[/]', 'PWBox\controller\FolderController:shareFolder')->setName('share-folder');
 
 
 //----------------------------------------------------------File
     $this->get('/folder/{folderID}/file/{fileID}[/]', PWBox\controller\FileControllers\GetFileController::class)->setName('get-file');
 
-    $this->put('/folder/{folderID}/file/{fileID}[/]', PWBox\controller\FileControllers\PutFileController::class)->setName('update-file');
+    $this->post('/folder/{folderID}/file/{fileID}[/]', PWBox\controller\FileControllers\PutFileController::class)->setName('update-file');
 
     $this->delete('/folder/{folderID}/file/{fileID}[/]', PWBox\controller\FileControllers\DeleteFileController::class)->setName('delete-file');
 

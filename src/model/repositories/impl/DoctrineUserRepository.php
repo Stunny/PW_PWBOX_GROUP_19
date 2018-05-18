@@ -26,7 +26,8 @@ class DoctrineUserRepository implements UserRepository
     private const INSERT_USER_QUERY = 'INSERT INTO `user`(`username`, `email`, `birthdate`, `password`, `created_at`, `updated_at`, `verificationHash`) VALUES(:username, :email, :birthdate, md5(:password), :created_at, :updated_at, :hash);';
     private const SELECT_QUERY = 'SELECT * FROM `user` WHERE (`id` = :id);';
     private const SELECT_ROOT_FOLDER = 'select `id` from folder where (`creador`=:userId and `nom`=:userName);';
-    private const UPDATE_QUERY = 'UPDATE `user` SET `username` = :username, `email` = :email, `birthdate` = :birthdate, `password` = :password WHERE `id` = :id;';
+    private const UPDATE_QUERY = 'UPDATE `user` SET `username` = :username, `email` = :email, `birthdate` = :birthdate WHERE `id` = :id;';
+    private const UPDATE_PASSWORD = 'UPDATE `user` SET `password` = :password WHERE `id` = :id;';
     private const DELETE_QUERY = 'DELETE FROM `user` WHERE (`id` = :id);';
     private const VERIFY_QUERY = 'update user set verified = true where verificationHash = :hash;';
 
@@ -75,7 +76,7 @@ class DoctrineUserRepository implements UserRepository
         $stmt->bindValue("id", $userId, 'integer');
         $stmt->execute();
 
-        $user =  $stmt->fetch();
+        $user = $stmt->fetch();
         if(isset($user['password'])){
             unset($user['password']);
         }
@@ -83,16 +84,13 @@ class DoctrineUserRepository implements UserRepository
     }
 
     public function update(User $user){
-
-        $sql = self::UPDATE_QUERY;
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("username", $user->getUsername(), 'string');
-        $stmt->bindValue("email", $user->getEmail(), 'string');
-        $stmt->bindValue("birthdate", $user->getBirthDate(), 'date');
-        $stmt->bindValue("password", $user->getPassword(), 'string');
-        $stmt->bindValue("id", $user->getId(), 'integer');
-        $stmt->execute();
-
+            $sql = self::UPDATE_QUERY;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("username", $user->getUsername(), 'string');
+            $stmt->bindValue("email", $user->getEmail(), 'string');
+            $stmt->bindValue("birthdate", $user->getBirthDate(), 'string');
+            $stmt->bindValue("id", $user->getId(), 'integer');
+            $stmt->execute();
     }
 
     public function changePassword($userId, $oldPassword, $newPassword){

@@ -119,15 +119,11 @@ class UserController
      * @return Response
      */
     public function put(Request $request, Response $response, $args){
-        //todo: validacion de datos de usuario
+        //todo: implementacion de la obtencion de los datos metodo PUT
         try{
             $service = $this->container->get('put-user-service');
-            $data = $request->getParsedBody();
-            $result = $service($data, $args['userID']);
             $rawData = $request->getParsedBody();
-            var_dump($rawData);
-            var_dump($args);
-
+            $result = $service($rawData, $args['userID']);
             if($result){
                 $response = $response
                     ->withStatus(200)

@@ -186,7 +186,7 @@ class DoctrineFolderRepository implements FolderRepository
         }
     }
 
-    public function shareFolder(int $folderID, int $userID, $email)
+    public function shareFolder(int $folderID, int $userID, $email, $roleToAssing)
     {
         //var_dump($userID);
         if ($userID != null){
@@ -224,28 +224,49 @@ class DoctrineFolderRepository implements FolderRepository
                         $role = $stmt->fetch();
                         //var_dump($role);
                         if ($role['role'] === "admin"){
-                            //insertamos carpeta compartida en la tabla role
-                            $sql = self::SHARE_QUERY;
+                            //comprobamos que no haya una relacion ya existente
+                            $sql = "SELECT role FROM `role` WHERE `usuari` = :id_usuari AND `folder` = :id_carpeta;";
                             $stmt = $this->connection->prepare($sql);
-                            $stmt->bindValue("id_creador", $sharedUser['id'], 'integer');
-                            $stmt->bindValue("id_folder", $folderID, 'integer');
-                            $stmt->bindValue("role", "read", 'string');
+                            $stmt->bindValue("id_usuari", $sharedUser['id'], 'integer');
+                            $stmt->bindValue("id_carpeta", $folderID, 'integer');
                             $stmt->execute();
+                            $exist = $stmt->fetch();
+                            //var_dump($exist);
+                            if ($exist['role'] == null){
+                                //insertamos carpeta compartida en la tabla role
+                                $sql = self::SHARE_QUERY;
+                                $stmt = $this->connection->prepare($sql);
+                                $stmt->bindValue("id_creador", $sharedUser['id'], 'integer');
+                                $stmt->bindValue("id_folder", $folderID, 'integer');
+                                $stmt->bindValue("role", $roleToAssing, 'string');
+                                $stmt->execute();
+                            }else{
+                                //actualizamos con el nuevo rol
+                                $sql = "UPDATE `role` SET `role` = :role WHERE `usuari` = :id_creador AND `folder` = :id_folder;";
+                                $stmt = $this->connection->prepare($sql);
+                                $stmt->bindValue("id_creador", $sharedUser['id'], 'integer');
+                                $stmt->bindValue("id_folder", $folderID, 'integer');
+                                $stmt->bindValue("role", $roleToAssing, 'string');
+                                $stmt->execute();
+                            }
+                        }else{
+                            //echo "usuario que quiere compartir no es admin";
+                            return 401;
                         }
                     }else{
-                        //echo "usuario que quiere compartir no es admin";
-                        return 401;
+                        //echo "usuario al que compartir no existe";
+                        return 404;
                     }
                 }else{
-                    //echo "usuario al que compartir existe";
+                    //echo "carpeta no existe";
                     return 404;
                 }
             }else{
-                ///echo "carpeta no existe";
+                //echo "el usuario que quiere compartir no existe";
                 return 404;
             }
         }else{
-            //echo "usuario no existe";
+            //echo "no hay id de usuario";
             return 404;
         }
         return 200;
