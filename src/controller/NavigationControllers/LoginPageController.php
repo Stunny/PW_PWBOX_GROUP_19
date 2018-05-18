@@ -31,11 +31,11 @@ class LoginPageController
             return $response;
         }
 
-        $messages = $this->container->get('flash')->getMessages();
+        $user_register = $this->container->get('flash')->getMessage('user_register');
 
         //$userRegisteredMessages = isset($messages['user_register'])? $messages['user_register']: [];
 
-        $this->container->get('view')->render($response, 'login.twig', ["form" => "Login"]);
+        $this->container->get('view')->render($response, 'login.twig', ["form" => "Login", "user_register"=>$user_register]);
 
     }
 }

@@ -13,6 +13,14 @@ function loadDashboardContent(){
         rootFolderTree = elmts.res;
         dashLeftTree.setTree([elmts.res]);
     });
+
+    loadCenterContent();
+}
+
+
+function loadCenterContent(){
+    //todo: cargar los contenidos de la carpeta para su visualizacion
+
 }
 
 function getParentId(id){
@@ -32,11 +40,6 @@ function getFolderBreadcrumb(id){
 
   bc.replace(/-$/, '');
   return bc.split('-').reverse().splice(1, bc.length-1);
-}
-
-function loadCenterContent(){
-  //todo: cargar los contenidos de la carpeta para su visualizacion
-  
 }
 
 function showFileModal(){

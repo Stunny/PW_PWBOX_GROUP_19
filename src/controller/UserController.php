@@ -66,9 +66,33 @@ class UserController
      */
     public function post(Request $request, Response $response){
         try{
-            $rawData = $request->getParsedBody();
+            $data = $request->getParsedBody();
+
+            if(empty($data['username']) || empty($data['email']) || empty($data['password']) || empty($data['repeat-password']) || empty($data['birthdate'])){
+
+                $this->container->get('flash')->addMessage('error', 'Credentials shouldn|\'t be empty to register');
+                return $response->withStatus(401)->withHeader('location', '/register');
+            }
+
+            if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)){
+
+                $this->container->get('flash')->addMessage('error', 'Please enter a valid email');
+                return $response->withStatus(401)->withHeader('location', '/register');
+            }
+
+            if(strlen($data['username'])>20){
+                $this->container->get('flash')->addMessage('error', 'User name too long');
+                return $response->withStatus(401)->withHeader('location', '/register');
+            }
+
+            if(strcmp($data['password'], $data['repeat-password']) != 0){
+                $this->container->get('flash')->addMessage('error', 'Passwords don\'t match');
+                return $response->withStatus(401)->withHeader('location', '/register');
+            }
+
+
             $service = $this->container->get('post-user-service');
-            $result = $service($rawData, $request->getUploadedFiles(), $this->container->get('generate-verification-service'), $this->container->get('profile-img-service'));
+            $result = $service($data, $request->getUploadedFiles(), $this->container->get('generate-verification-service'), $this->container->get('profile-img-service'));
 
             if($result == 409){
                 $response = $response->withStatus(302)->withHeader('location', '/register');
@@ -232,6 +256,13 @@ class UserController
         try{
             $service = $this->container->get('user-login');
             $data = $request->getParsedBody();
+
+            if(empty($data['login']) || empty($data['password'])){
+
+                $this->container->get('view')->render($response, 'login.twig', ["form" => "Login", "error"=>["Credentials shouldn't be empty."]]);
+                return $response->withStatus(401);
+            }
+
             $result = $service($data['login'], $data['password']);
 
             if($result == 200){

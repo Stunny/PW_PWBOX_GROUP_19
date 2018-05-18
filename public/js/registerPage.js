@@ -11,6 +11,10 @@ $(document).ready(()=>{
                     {
                         type   : 'empty',
                         prompt : 'Please enter your desired username'
+                    },
+                    {
+                        type   : 'maxLength[20]',
+                        prompt : 'Username too long. Max 20 characters'
                     }
                 ]
             },
