@@ -225,6 +225,11 @@ function menuItemListener( link ) {
                 deleteFolder(itemId)
             }
             break;
+        case "downlaod":
+            if(itemId.match(/file-[0-9]+/)){
+                downloadFile(itemId);
+            }
+            break;
         default:
     }
 }

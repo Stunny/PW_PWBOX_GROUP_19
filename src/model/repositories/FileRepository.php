@@ -15,7 +15,7 @@ interface FileRepository
 {
     public function post(int $userID, int $folderID, $file): int;
 
-    public function download(File $file, Folder $folder): File;
+    public function download(File $file, Folder $folder);
 
     public function delete(File $file);
 

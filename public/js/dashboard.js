@@ -223,6 +223,10 @@ function deleteFolder(folderId) {
     selectedFolderId = folderId;
 }
 
+function downloadFile(fileId){
+    window.open('/api/user/'+userId+'/folder/'+currentFolderId.replace("folder-","")+'/file/'+fileId.replace("file-", "")+'/download', '_blank');
+}
+
 //---------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------//
 //-------------------------------VARIABLES GLOBALES--------------------------------------//
@@ -343,7 +347,7 @@ leftNav = new Vue({
 
 //---------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------//
-//-------------------------------DROPZONE--------------------------------------//
+//-------------------------------DROPZONE------------------------------------------------//
 //---------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------//
@@ -391,6 +395,11 @@ $(document).on('click','a[id^="folder-"]',(event)=>{
   let id = event.target.id;
     currentFolderId = id;
   pathTitle.setPath(getFolderBreadcrumb(id));
+});
+
+$(document).on('dblclick', '.file.dashItem.three.wide.column', (event)=>{
+    currentFolderId = $(event.target).parent().attr('id');
+    pathTitle.setPath(getFolderBreadcrumb(currentFolderId));
 });
 
 $('#new-folder-modal').modal({

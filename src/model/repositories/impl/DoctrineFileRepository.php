@@ -105,6 +105,7 @@ class DoctrineFileRepository implements FileRepository
 
     public function getData(File $file): File
     {
+        var_dump($file);
         $sql = self::GET_DATA_QUERY;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id", $file->getId(), 'integer');
@@ -112,6 +113,7 @@ class DoctrineFileRepository implements FileRepository
         $stmt->bindValue("id_user", $file->getCreador(), 'integer');
         $stmt->execute();
         $query_result = $stmt->fetch();
+
         return new File($query_result['id'], $query_result['name'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
     }
 
