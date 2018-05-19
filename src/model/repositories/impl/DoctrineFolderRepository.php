@@ -96,7 +96,7 @@ class DoctrineFolderRepository implements FolderRepository
             $sql = 'UPDATE `folder` SET `path` = REPLACE(`path`, :old_path1, :new_path) WHERE `path` LIKE :old_path2;';
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("old_path1", $olderFolder->getPath(), 'string');
-            $stmt->bindValue("old_path2", $olderFolder->getPath() . '%', 'string');
+            $stmt->bindValue("old_path2", '%'.$olderFolder->getPath() . '%', 'string');
             $stmt->bindValue("new_path", $newPath, 'string');
             $stmt->execute();
             return true;

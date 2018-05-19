@@ -73,15 +73,15 @@ function getFolderBreadcrumb(id){
 
 function showFileModal(){
 
-    $('.fullscreen.modal').modal('show');
+    $('#upload-files-modal').modal('show');
 }
 
 function showShareModal(){
-    $('.small.modal').modal('show');
+    $('#share-folder-modal').modal('show');
 }
 
 function showFolderModal(){
-    $('.tiny.modal').modal('show');
+    $('#new-folder-modal').modal('show');
 }
 
 //---------------------------------------------------------------------------------------//
@@ -192,7 +192,7 @@ function requestRenameFolder(newName){
         statusCode:{
             200: function (res) {
                 alert(res.msg);
-                loadCenterContent();
+                loadDashboardContent();
             },
             404: function (res) {
                 alert("Error 404: "+res.msg);
