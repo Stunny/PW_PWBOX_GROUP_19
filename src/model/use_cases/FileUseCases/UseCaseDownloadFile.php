@@ -40,8 +40,6 @@ class UseCaseDownloadFile
             $content = $this->fileRepository->download($file, $this->folderRepository->get($file->getFolder(), $file->getCreador()))->getFile();
             return $content;
         }else{
-            var_dump($file);
-            die();
             return false;
         }
     }
