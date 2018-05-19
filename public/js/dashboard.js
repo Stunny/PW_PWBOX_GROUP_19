@@ -25,17 +25,8 @@ function loadCenterContent(){
         statusCode: {
             200: function(elmts){
                 let result = Object.values(elmts.res);
-                let qRows = Math.ceil(result.length/4);
 
-                currentCenterRows = [];
-
-                let i, j, chunk = 4;
-                for (i = 0, j = result.length; i < j; i += chunk){
-                    let rowObject = {};
-                    rowObject.items = result.slice(i, i+chunk);
-                    currentCenterRows.push(rowObject);
-                }
-                centerContent.setRows(currentCenterRows);
+                centerContent.setElements(result);
 
             },
             404: function () {
@@ -307,31 +298,30 @@ pathTitle = new Vue({
 });
 
 centerContent = new Vue({
-  el: '#rows',
+  el: '#contentGrid',
   template: `
-    <span>
-      <folder-item-row
-        v-for="row in rows"
-        :items="row.items"
-        :key="rowkey(row.items)"
+    <div class="ui grid container" id="itemGrid">
+      <folder-item
+        v-for="item in items"
+        :key="elmtKey(item)"
+        :filename="item.filename"
+        :itemType="item.type"
+        :data-id="item.type+'-'+item.id"
+        :id="item.type+'-'+item.id"
       >
-      </folder-item-row>
-    </span>
+      </folder-item>
+    </div>
   `,
   data: {
-    rows: []
+    items: []
   },
   methods:{
-    setRows: function(rows){
-      this.rows = rows;
+    setElements: function(items){
+      this.items = items;
     },
-    rowkey: function(items){
-        var key = "";
-        for(item in items){
-          key += item.filename + "-";
-        }
+    elmtKey: function(itemObj){
 
-        return key;
+        return itemObj.type+'-'+itemObj.filename;
     }
   }
 });
