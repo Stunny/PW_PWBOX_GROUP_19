@@ -1,5 +1,5 @@
-drop database PWBOX;
-CREATE DATABASE PWBOX;
+
+-- CREATE DATABASE PWBOX;
 USE PWBOX;
 
 DROP TABLE IF EXISTS `role` CASCADE;
@@ -18,8 +18,7 @@ CREATE TABLE `user` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQUE_EMAIL` (`email`),
-  unique key `unique_username`(`username`)
+  UNIQUE KEY `UNIQUE_EMAIL` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 CREATE TABLE `folder`(
@@ -30,17 +29,17 @@ CREATE TABLE `folder`(
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`creador`) REFERENCES `user`(`id`)
+  FOREIGN KEY (`creador`) REFERENCES `user`(`id`) ON DELETE CASCADE
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 CREATE TABLE `role`(
   `usuari` INT unsigned NOT NULL,
   `folder` INT unsigned NOT NULL,
-  `role` VARCHAR(255) NOT NULL DEFAULT 'read',
+  `role` VARCHAR(255) NOT NULL DEFAULT 'admin',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (`usuari`) REFERENCES `user`(`id`),
-  FOREIGN KEY (`folder`) REFERENCES `folder`(`id`)
+  FOREIGN KEY (`usuari`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`folder`) REFERENCES `folder`(`id`) ON DELETE CASCADE
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 CREATE TABLE `file`(
@@ -51,7 +50,7 @@ CREATE TABLE `file`(
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`creator`) REFERENCES `user`(`id`),
-  FOREIGN KEY (`folder`) REFERENCES `folder`(`id`)
+  FOREIGN KEY (`creator`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`folder`) REFERENCES `folder`(`id`) ON DELETE CASCADE
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
