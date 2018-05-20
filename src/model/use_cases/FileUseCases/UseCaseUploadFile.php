@@ -41,18 +41,28 @@ class UseCaseUploadFile
      */
     public function __invoke(array $uploadedFiles, int $userID, int $folderID)
     {
+
+        $userPath = $this->folderRepository->get($folderID, $userID)->getPath();
+
+        $f = self::USER_FOLDERS_DIR.$userPath;
+        $io = popen ( '/usr/bin/du -sk ' . $f, 'r' );
+        $size = fgets ( $io, 4096);
+        $currentFolderSize = intval(substr ( $size, 0, strpos ( $size, "\t" )));
+
+
         $allUploaded = false;
         foreach($uploadedFiles as $files)
             foreach ($files as $file){
             $extension = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
             //Skip files that are not supported by the application requirements
             $extension = strtolower($extension);
-            if($file->getSize() > 2000000 || preg_match("/(jpg|jpeg|png|gif|pdf|txt|md)/", $extension) == 0){
+            $fileSize = $file->getSize();
+            if($fileSize > 2000000 || (($currentFolderSize*1000)+$fileSize) > 1000000000 || preg_match("/(jpg|jpeg|png|gif|pdf|txt|md)/", $extension) == 0){
                 continue;
             }
 
             if ($this->fileRepository->post($userID, $folderID, $file)){
-                $file->moveTo(self::USER_FOLDERS_DIR . $this->folderRepository->get($folderID, $userID)->getPath() . DIRECTORY_SEPARATOR . $file->getClientFilename());
+                $file->moveTo(self::USER_FOLDERS_DIR . $userPath . DIRECTORY_SEPARATOR . $file->getClientFilename());
                 $allUploaded = true;
             }
         }
