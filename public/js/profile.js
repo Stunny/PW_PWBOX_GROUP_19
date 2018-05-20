@@ -19,10 +19,39 @@ $(document).ready(()=>{
 
   $('#progBar').progress({
   percent: 77
-  });
-
+  })
 
 });
+
+userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
+
+window.onload = function loadDataProfile(){
+    console.log("Loaded function");
+    console.log(userId);
+
+    var get = $.ajax({
+        async : true,
+        type : 'get',
+        url: 'api/user/'+userId,
+        dataType: 'json',
+
+        statusCode: {
+            200: function(){
+                console.log("Data found");
+                console.log(get.responseJSON.res);
+                console.log(get.responseJSON.res.username);
+                console.log(get.responseJSON.res.email);
+
+                $("#profileName").text(get.responseJSON.res.username);
+                $("#profileEmail").text(get.responseJSON.res.email);
+
+            },
+            404: function () {
+                alert("Data not found");
+            }
+        }
+    });
+}
 
 /*$('#loginButton').on('click',function() {
     console.log('pressed login!');

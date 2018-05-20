@@ -166,12 +166,27 @@ h1 {
   padding: 0;
 }
 
-#profileInfoRow {
+#profileInfoRowRight {
   padding: 1.5em;
 
   .ui.checkbox {
     margin-bottom: 1em;
     float: right;
+  }
+  p{
+    text-align: right;
+  }
+}
+
+#profileInfoRowLeft {
+  padding: 1.5em;
+
+  .ui.checkbox {
+    margin-bottom: 1em;
+    float: right;
+  }
+  p{
+    text-align: left;
   }
 }
 
@@ -384,7 +399,3 @@ h1 {
     margin: 0.3em 0 0;
   }
 }
-
-
-
-//------ NEW Settings
