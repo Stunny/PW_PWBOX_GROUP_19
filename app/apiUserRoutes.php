@@ -14,6 +14,8 @@ $this->group('/{userID}', function (){
 
     $this->get('[/]', 'PWBox\controller\UserController:get')->setName('get-user');
 
+    $this->get('/space[/]', 'PWBox\controller\UserController:getUsedSpace')->setName('get-used-space');
+
     $this->post('[/]', 'PWBox\controller\UserController:put')->setName('update-user');
 
     $this->post('/password[/]', 'PWBox\controller\UserController:changePassword')->setName('change-user-password');

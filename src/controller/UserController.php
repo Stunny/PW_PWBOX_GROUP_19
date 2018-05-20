@@ -53,8 +53,38 @@ class UserController
                 ->withStatus(500)
                 ->withHeader('Content-type', 'application/json')
                 ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
-        } catch (NotFoundExceptionInterface $e) {
-        } catch (ContainerExceptionInterface $e) {
+        }
+        return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
+    public function getUsedSpace(Request $request, Response $response, array $args){
+        try{
+            $service = $this->container->get('get-user-space');
+            $userSpace = $service($args['userID']);
+
+            if(!isset($userSpace['space'])){
+                $response = $response
+                    ->withStatus(404)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"User not found", "res"=>[]]));
+            }else{
+                $response = $response
+                    ->withStatus(200)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"Success", "res"=>$userSpace]));
+            }
+
+        }catch (\Exception $e){
+            $response = $response
+                ->withStatus(500)
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         }
         return $response;
     }

@@ -86,6 +86,13 @@ $container['get-user-service'] = function ($container){
     return $service;
 };
 
+$container['get-user-space'] = function ($container){
+    $service = new \PWBox\model\use_cases\UserUseCases\UseCaseGetSpace(
+        $container->get('user-repository')
+    );
+    return $service;
+};
+
 $container['put-user-service'] = function ($container){
     $service = new \PWBox\model\use_cases\UserUseCases\UseCaseUpdateUser(
         $container->get('user-repository')
