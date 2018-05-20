@@ -53,11 +53,9 @@ class DoctrineFileRepository implements FileRepository
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             */
-            echo "true";
-            return true;
 
+            return true;
         }else{
-            echo "false";
             /*
             if (carpeta no existeix){
                 retornar 404
