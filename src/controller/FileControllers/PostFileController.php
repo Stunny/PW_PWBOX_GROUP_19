@@ -27,9 +27,11 @@ class PostFileController
     {
         try{
             $files = $request->getUploadedFiles();
+//            var_dump($files);
+            //TODO: QUE files CONTENGA TODAS LAS IMAGENES QUE EL USUARIO QUIERE SUBIR
             $service = $this->container->get('upload-file-service');
-
             $uploaded = $service($files, $args['userID'], $args['folderID']);
+            //var_dump($uploaded);
 
             if ($uploaded){
                 $response = $response->withStatus(200)

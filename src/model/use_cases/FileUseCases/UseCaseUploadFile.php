@@ -42,9 +42,10 @@ class UseCaseUploadFile
     public function __invoke(array $uploadedFiles, int $userID, int $folderID)
     {
         $allUploaded = false;
-        foreach($uploadedFiles['file'] as $file){
+        foreach($uploadedFiles as $file){
             $extension = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
             //Skip files that are not supported by the application requirements
+            $extension = strtolower($extension);
             if($file->getSize() > 2000000 || preg_match("/(jpg|jpeg|png|gif|pdf|txt|md)/", $extension) == 0){
                 continue;
             }
