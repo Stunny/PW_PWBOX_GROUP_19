@@ -230,14 +230,14 @@
             <div class="description">
                 <div class="ui header">Enter your password:</div>
                 <div class="ui input focus">
-                    <input placeholder="Enter current password..." type="password">
+                    <input placeholder="Enter current password..." type="password" id="oldPassSettings">
                 </div>
             </div>
             <div class="description">
                 <div class="ui header">Enter new password:</div>
                 <div class="ui input focus">
-                    <input placeholder="Enter new password..." type="password">
-                    <input placeholder="Repeat new password..." type="password">
+                    <input placeholder="Enter new password..." type="password" id="newPassSettings1">
+                    <input placeholder="Repeat new password..." type="password" id="newPassSettings2">
                 </div>
             </div>
         </div>
@@ -245,7 +245,7 @@
             <div class="ui black deny button">
                 Cancel
             </div>
-            <div class="ui positive right labeled icon button">
+            <div class="ui positive right labeled icon button" id="changePassSettings">
                 Accept
                 <i class="checkmark icon"></i>
             </div>

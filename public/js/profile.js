@@ -16,7 +16,8 @@ $(document).ready(()=>{
 
 userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
 
-window.onload = function loadDataProfile(){
+function loadDataProfile(){
+
     console.log("Loaded function");
     console.log(userId);
 
@@ -51,7 +52,8 @@ window.onload = function loadDataProfile(){
         }
     });
 }
-window.onload = function loadDataSpace(){
+
+function loadDataSpace(){
     console.log("Loaded data space");
 
     var get = $.ajax({
@@ -78,5 +80,10 @@ window.onload = function loadDataSpace(){
             }
         }
     });
+}
+
+window.onload = function loadAll(){
+    loadDataProfile();
+    loadDataSpace();
 }
 

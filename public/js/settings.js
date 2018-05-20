@@ -15,6 +15,49 @@ $(document).ready(()=>{
     e.preventDefault();
     })
 
+    $('#changePassSettings').on("click", function changePass(){
+
+        var oldpass = document.getElementById('oldPassSettings').value;
+        var newp1 = document.getElementById('newPassSettings1').value;
+        var newp2 = document.getElementById('newPassSettings2').value;
+        console.log("changePass function called");
+        console.log(oldpass);
+        console.log(newp1);
+        console.log(newp2);
+
+        if(!newp2.match(newp1)){
+            console.log("error matching")
+        }else{
+            console.log("Matching pass")
+        }
+
+        $.ajax({
+            async : true,
+            type : 'post',
+            url: 'api/user/'+userId+'/password',
+            data: {
+                oldpassword : oldpass,
+                newpassword : newp1,
+            },
+
+            statusCode: {
+                200: function(){
+                    console.log("todo ok");
+                },
+
+                403: function(){
+
+                    console.log("403 bruh")
+                },
+
+                404: function () {
+                    alert("nope");
+                }
+            }
+        });
+
+    });
+
 });
 userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
 
