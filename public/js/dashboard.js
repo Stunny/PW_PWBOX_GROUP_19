@@ -145,6 +145,12 @@ function renameFileItem(fileId){
     $("#renameFileModal").modal("show");
 }
 
+function deleteFolder(folderId) {
+
+    selectedFolderId = folderId;
+    $("#deleteFolderModal").modal("show");
+}
+
 function requestRenameFileItem(newName) {
 
     console.log("Rename file with id: "+selectedFileId);
@@ -182,7 +188,6 @@ function requestRenameFolder(newName){
         },
         statusCode:{
             200: function (res) {
-                alert(res.msg);
                 loadDashboardContent();
             },
             404: function (res) {
@@ -218,9 +223,23 @@ function deleteFileItem(fileId){
 
 }
 
-function deleteFolder(folderId) {
-
-    selectedFolderId = folderId;
+function requestDeleteFolder(){
+    $.ajax({
+        url: '/api/user/'+userId+'/folder/'+selectedFolderId.replace("folder-",""),
+        async: true,
+        method: 'delete',
+        statusCode:{
+            200: function (res) {
+                loadCenterContent();
+            },
+            404: function (res) {
+                alert("Error 404: "+res.msg);
+            },
+            401: function (res) {
+                alert("Error 401: "+res.msg);
+            }
+        }
+    });
 }
 
 function downloadFile(fileId){
@@ -460,6 +479,12 @@ $("#renameFolderModal").modal({
     },
     onApprove: function () {
         requestRenameFolder($("input#renameFolderName").val())
+    }
+});
+
+$("#deleteFolderModal").modal({
+    onApprove: function () {
+        requestDeleteFolder(selectedFolderId);
     }
 });
 

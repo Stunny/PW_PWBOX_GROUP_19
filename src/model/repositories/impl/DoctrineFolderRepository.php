@@ -159,6 +159,9 @@ class DoctrineFolderRepository implements FolderRepository
 
     public function delete(int $folderID, int $userID)
     {
+        $folderPath = self::USER_FOLDERS_DIR.$this->get($folderID, $userID)->getPath();
+
+
         $sql = "SELECT `usuari` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari;";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id_usuari", $userID, 'integer');
@@ -178,6 +181,9 @@ class DoctrineFolderRepository implements FolderRepository
             $stmt->bindValue("id", $folderID, 'integer');
             $stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
             $stmt->execute();
+
+            shell_exec('rm -rf '.$folderPath);
+
             if (isset($userID['usuari'])){
                 return true;
             }else{
