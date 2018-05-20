@@ -1,10 +1,5 @@
 $(document).ready(()=>{
 
-  $("#profileLink").on("click", (e)=>{
-    $('#confirmPassModal').modal('show');
-  e.preventDefault();
-  })
-
   $("#deleteAccountButton").on("click", (e)=>{
     $('#deleteAccModal')
   .modal('show');
@@ -41,9 +36,12 @@ window.onload = function loadDataProfile(){
                 console.log(get.responseJSON.res);
                 console.log(get.responseJSON.res.username);
                 console.log(get.responseJSON.res.email);
+                console.log(get.responseJSON.res.birthdate)
 
                 $("#profileName").text(get.responseJSON.res.username);
                 $("#profileEmail").text(get.responseJSON.res.email);
+                $("#profileBirth").text(get.responseJSON.res.birthdate);
+
 
             },
             404: function () {
