@@ -27,4 +27,6 @@ interface FolderRepository
 
     public function getPathAndId($userId);
 
+    public function mySharedFolders($userId);
+
 }

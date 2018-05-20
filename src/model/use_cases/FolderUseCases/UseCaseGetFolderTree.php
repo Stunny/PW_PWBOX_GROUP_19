@@ -35,6 +35,7 @@ class UseCaseGetFolderTree
         }
 
         $tree = new FolderTree($folder->getNom(), $folder->getId());
+        var_dump(tree);
         $this->buildTree($folder->getPath(), $tree);
 
         return $tree->toArray();

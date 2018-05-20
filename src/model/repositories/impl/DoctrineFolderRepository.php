@@ -36,6 +36,7 @@ class DoctrineFolderRepository implements FolderRepository
     private const FOLDER_DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id) AND `creador` = :id_usuari;';
     private const ACCESSIBLE_FOLDERS = 'SELECT `folder` FROM `role` WHERE `usuari` = :id_usuari;';
     private const GET_FOLDER_PATH_ID = 'SELECT `id`, `path` FROM `folder` WHERE `creador` = :id_creador;';
+    private const GET_MY_SHARED_FOLDERS = 'SELECT `id`, `nom` FROM `folder` WHERE `creador` = :id_creador;';
 
 
     public function __construct(Connection $connection)
@@ -288,5 +289,31 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt->execute();
 
         return $stmt->fetchAll();
+    }
+
+    public function mySharedFolders($userId){
+        $sql = self::ACCESSIBLE_FOLDERS;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id_usuari", $userId, 'integer');
+
+        $stmt->execute();
+        //ID de todas las carpetas a las que puedo acceder
+        $accessibleFolderId = $stmt->fetchAll();
+
+        $mySharedFolders = array();
+        foreach ($accessibleFolderId as $valor){
+            $sharedFolderData = array();
+            //por cada carpeta a la que puedo acceder, recupero su id y su nombre
+            $sql = self::GET_MY_SHARED_FOLDERS;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("id_usuari", $valor['file'], 'integer');
+            $stmt->execute();
+            $aux = $stmt->fetchAll();
+            $sharedFolderData['id'] = $aux['file']['id'];
+            $sharedFolderData['nom'] = $aux['file']['nom'];
+
+            array_push($mySharedFolders, $sharedFolderData);
+        }
+        return $mySharedFolders;
     }
 }
