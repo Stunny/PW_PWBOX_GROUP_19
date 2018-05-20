@@ -85,7 +85,7 @@
 
                 <div class="row">
                     <div class="ui vertical padded segment" id="settingsListItem">
-                        <a id="leftText" href="">Help</a>
+                        <a id="leftText" href="/logout">Logout</a>
                     </div>
                 </div>
 
@@ -236,8 +236,8 @@
             <div class="description">
                 <div class="ui header">Enter new password:</div>
                 <div class="ui input focus">
-                    <input placeholder="Enter new password..." type="password" id="newPassSettings1">
-                    <input placeholder="Repeat new password..." type="password" id="newPassSettings2">
+                    <input placeholder="Enter new password..." type="password" id="newPassSettings1" autocomplete="off">
+                    <input placeholder="Repeat new password..." type="password" id="newPassSettings2" autocomplete="off">
                 </div>
             </div>
         </div>
@@ -269,6 +269,19 @@
             <div class="ui black deny button">
                 Cancel
             </div>
+            <div class="ui positive right labeled icon button" id="changeImageButton">
+                Accept
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui tiny modal" id="passChangedModalAlert">
+        <div class="header"></div>
+        <div class="content">
+            <p>Password Changed Successfully</p>
+        </div>
+        <div class="actions">
             <div class="ui positive right labeled icon button">
                 Accept
                 <i class="checkmark icon"></i>

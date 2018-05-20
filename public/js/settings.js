@@ -43,6 +43,8 @@ $(document).ready(()=>{
             statusCode: {
                 200: function(){
                     console.log("todo ok");
+                    $('#passChangedModalAlert').modal('show');
+                    e.preventDefault();
                 },
 
                 403: function(){
@@ -57,6 +59,39 @@ $(document).ready(()=>{
         });
 
     });
+
+    $('#changeImageButton').on('click', function (){
+
+        var img
+
+        $.ajax({
+            async : true,
+            type : 'post',
+            url: 'api/user/'+userId+'/profileImg',
+            data: {
+                oldpassword : oldpass,
+                newpassword : newp1,
+            },
+
+            statusCode: {
+                200: function(){
+                    console.log("todo ok");
+                    $('#passChangedModalAlert').modal('show');
+                    e.preventDefault();
+                },
+
+                403: function(){
+
+                    console.log("403 bruh")
+                },
+
+                404: function () {
+                    alert("nope");
+                }
+            }
+        });
+
+    })
 
 });
 userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];

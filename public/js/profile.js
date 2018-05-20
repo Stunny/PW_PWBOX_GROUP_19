@@ -1,3 +1,5 @@
+userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
+
 $(document).ready(()=>{
 
   $("#deleteAccountButton").on("click", (e)=>{
@@ -13,8 +15,6 @@ $(document).ready(()=>{
   })
 
 });
-
-userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
 
 function loadDataProfile(){
 
@@ -39,6 +39,7 @@ function loadDataProfile(){
                 $("#profileName").text(get.responseJSON.res.username);
                 $("#profileEmail").text(get.responseJSON.res.email);
                 $("#profileBirth").text(get.responseJSON.res.birthdate);
+                $("#profileImage").attr("src", '/profile_imgs/'+get.responseJSON.res.username+'.jpg');
 
                 if(get.responseJSON.res.verified == 1){
                     $('.ui.checkbox').checkbox('set checked');
@@ -81,6 +82,7 @@ function loadDataSpace(){
         }
     });
 }
+
 
 window.onload = function loadAll(){
     loadDataProfile();
