@@ -34,7 +34,6 @@ class DoctrineFolderRepository implements FolderRepository
     private const SELECT_QUERY_2 = 'SELECT * FROM `folder` WHERE (`id` = :id);';
     private const SELECT_BY_NAME_QUERY = 'select * from `folder` where(`creador`=:userID and `nom`=:folderName)';
     private const FOLDER_DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id) AND `creador` = :id_usuari;';
-    private const ROLE_DELETE_QUERY = 'DELETE FROM `role` WHERE `usuari` = :id_usuari AND `folder` = :id_folder;';
     private const ACCESSIBLE_FOLDERS = 'SELECT `folder` FROM `role` WHERE `usuari` = :id_usuari;';
     private const GET_FOLDER_PATH_ID = 'SELECT `id`, `path` FROM `folder` WHERE `creador` = :id_creador;';
 
@@ -159,8 +158,7 @@ class DoctrineFolderRepository implements FolderRepository
 
     public function delete(int $folderID, int $userID)
     {
-        $folderPath = self::USER_FOLDERS_DIR.$this->get($folderID, $userID)->getPath();
-
+        $folderPath = $this->get($folderID, $userID)->getPath();
 
         $sql = "SELECT `usuari` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari;";
         $stmt = $this->connection->prepare($sql);
@@ -170,18 +168,20 @@ class DoctrineFolderRepository implements FolderRepository
         $userID = $stmt->fetch();
 
         if (isset($userID)){
-            $sql = self::ROLE_DELETE_QUERY;
+            //el usuario tiene permisos para borrar la carpeta
+            $sql = "SELECT `id` FROM `folder` WHERE `path` LIKE :path;";
             $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
-            $stmt->bindValue("id_folder", $folderID, 'integer');
+            $stmt->bindValue("path", '%'.$folderPath . '%', 'string');
             $stmt->execute();
+            $foldersToDelete = $stmt->fetchAll();
 
-            $sql = self::FOLDER_DELETE_QUERY;
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue("id", $folderID, 'integer');
-            $stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
-            $stmt->execute();
-
+            foreach ($foldersToDelete as $value){
+                $sql = self::FOLDER_DELETE_QUERY;
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue("id", $value['id'], 'integer');
+                $stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
+                $stmt->execute();
+            }
             shell_exec('rm -rf '.$folderPath);
 
             if (isset($userID['usuari'])){

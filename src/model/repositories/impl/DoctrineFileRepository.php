@@ -39,6 +39,13 @@ class DoctrineFileRepository implements FileRepository
     {
         $folderRepo = new DoctrineFolderRepository($this->connection);
         $folderInfo = $folderRepo->get($folderID, $userID);
+
+        $sql = 'SELECT * FROM `file` WHERE `name` = :file_name;';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("file_name", $file->getClientFileName(), 'string');
+        $stmt->execute();
+        $response = $stmt->fetchAll();
+
         if ($folderInfo->getNom() != null){
             $sql = self::POST_QUERY;
             $stmt = $this->connection->prepare($sql);

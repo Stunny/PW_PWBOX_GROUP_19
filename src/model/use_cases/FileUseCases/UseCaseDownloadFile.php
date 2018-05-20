@@ -35,13 +35,12 @@ class UseCaseDownloadFile
             $fileInfo->setCreador($this->folderRepository->get($fileInfo->getFolder(), $fileInfo->getId())->getCreador());
         }
         $file = $this->fileRepository->getData($fileInfo);
+        var_dump($file);
 
         if($file->getFolder() != null){
             $content = $this->fileRepository->download($file, $this->folderRepository->get($file->getFolder(), $file->getCreador()))->getFile();
             return $content;
         }else{
-            var_dump($file);
-            die();
             return false;
         }
     }
