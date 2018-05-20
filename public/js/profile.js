@@ -37,12 +37,17 @@ window.onload = function loadDataProfile(){
                 console.log(get.responseJSON.res.username);
                 console.log(get.responseJSON.res.email);
                 console.log(get.responseJSON.res.birthdate)
+                console.log(get.responseJSON.res.verified)
 
                 $("#profileName").text(get.responseJSON.res.username);
                 $("#profileEmail").text(get.responseJSON.res.email);
                 $("#profileBirth").text(get.responseJSON.res.birthdate);
 
-
+                if(get.responseJSON.res.verified == 1){
+                    $('.ui.checkbox').checkbox('set checked');
+                }else{
+                    $('.ui.checkbox').checkbox('set unchecked');
+                }
             },
             404: function () {
                 alert("Data not found");
