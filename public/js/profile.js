@@ -12,10 +12,6 @@ $(document).ready(()=>{
   e.preventDefault();
   })
 
-  $('#progBar').progress({
-  percent: 77
-  })
-
 });
 
 userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
@@ -55,28 +51,32 @@ window.onload = function loadDataProfile(){
         }
     });
 }
+window.onload = function loadDataSpace(){
+    console.log("Loaded data space");
 
-/*$('#loginButton').on('click',function() {
-    console.log('pressed login!');
-    .transition('fade');
-});
+    var get = $.ajax({
+        async : true,
+        type : 'get',
+        url: 'api/user/'+userId+'/space',
+        datatype: 'json',
 
-$('#registerButton').on('click',function() {
-    console.log('pressed register!');
-});*/
-/*
-$(document).ready(function(){
-  $("#registerButton").click(function(){
-    .hide();
+        statusCode: {
+            200: function(){
+                console.log("Data found");
+                console.log(get.responseJSON.res.space);
+                var total = (get.responseJSON.res.space /1048576)*100;
+                var result = total.toFixed();
+
+                $('#progBar').progress({
+                    percent: result
+                })
+                $('#spaceUsed').text(result+'% Space Used');
+
+            },
+            404: function () {
+                alert("Data not found");
+            }
+        }
+    });
 }
-};
 
-function checkbox() {
-    var check = document.getElementById("conditionsCheck");
-    var text = document.getElementById("text");
-    if (check.checked == true){
-        text.style.display = "block";
-    }else{
-        text.style.display = "none";
-    }
-}*/
