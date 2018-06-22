@@ -1,21 +1,22 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: alex
- * Date: 18/4/18
- * Time: 10:27
+ * User: angel
+ * Date: 22/06/2018
+ * Time: 13:18
  */
 
 namespace PWBox\model\use_cases\UserUseCases;
 
 use PWBox\model\repositories\UserRepository;
 
-class UseCaseChangePassword
+class UseCaseChangeMail
 {
+
     private $repository;
 
     /**
-     * UseCasePostUser constructor.
+     * UseCaseChangeMail constructor.
      * @param UserRepository $repository
      */
     public function __construct(UserRepository $repository)
@@ -23,15 +24,15 @@ class UseCaseChangePassword
         $this->repository = $repository;
     }
 
-    public function __invoke(array $rawData, $userId)
+    function __invoke(array $rawData, $userId)
     {
+        // TODO: Implement __invoke() method.
         $user = $this->repository->get($userId);
-
         if(isset($user['username'])) {
-            $result = $this->repository->changePassword($userId, $rawData['oldpassword'], $rawData['newpassword']);
-            return $result? 200: 403;
-        }else{
-            return 404;
+            $result = $this->repository->changeMail($userId, $rawData['mail']);
+            return $result;
         }
+        return 404;
     }
+
 }

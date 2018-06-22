@@ -30,4 +30,6 @@ interface UserRepository
     public function getRootFolderId($userId);
 
     public function exists($username, $email);
+
+    public function changeMail($userId, $newMail);
 }

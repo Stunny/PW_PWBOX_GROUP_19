@@ -206,7 +206,7 @@
             <div class="description">
                 <div class="ui header">Enter Email:</div>
                 <div class="ui input focus">
-                    <input placeholder="Enter new Email..." type="text">
+                    <input placeholder="Enter new Email..." type="text" id="newMailSettings">
                 </div>
             </div>
         </div>
@@ -214,7 +214,7 @@
             <div class="ui black deny button">
                 Cancel
             </div>
-            <div class="ui positive right labeled icon button">
+            <div class="ui positive right labeled icon button" id="changeMailSettings">
                 Accept
                 <i class="checkmark icon"></i>
             </div>
@@ -289,6 +289,18 @@
         </div>
     </div>
 
+    <div class="ui tiny modal" id="mailChangedModalAlert">
+        <div class="header"></div>
+        <div class="content">
+            <p>Email Changed Successfully</p>
+        </div>
+        <div class="actions">
+            <div class="ui positive right labeled icon button">
+                Accept
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
 
 
 {% endblock %}

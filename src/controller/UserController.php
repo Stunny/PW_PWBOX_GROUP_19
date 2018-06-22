@@ -346,4 +346,39 @@ class UserController
         return $response;
     }
 
+    public function changeMail(Request $request, Response $response, $args){
+        try{
+
+            $service = $this->container->get('update-mail-service');
+            $data = $request->getParsedBody();
+            $result = $service($data, $args['userID']);
+
+            switch($result){
+                case 200:
+                    $response = $response
+                        ->withStatus(200)
+                        ->withHeader('Content-type', 'application/json')
+                        ->write(json_encode(["msg"=>'Updated successfully', "res"=>[]]));
+                    break;
+                case 404:
+                    $response = $response
+                        ->withStatus(404)
+                        ->withHeader('Content-type', 'application/json')
+                        ->write(json_encode(["msg"=>"User not found", "res"=>[]]));
+                    break;
+                default:
+                    $response = $response
+                        ->withStatus(403)
+                        ->withHeader('Content-type', 'application/json')
+                        ->write(json_encode(["msg"=>"Forbidden", "res"=>[]]));
+                    }
+            }catch (\Exception $e){
+                $response = $response
+                ->withStatus(500)
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
+        }
+        return $response;
+    }
+
 }

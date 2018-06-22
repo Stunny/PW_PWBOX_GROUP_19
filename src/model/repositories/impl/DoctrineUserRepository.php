@@ -37,6 +37,8 @@ class DoctrineUserRepository implements UserRepository
     private const CHECK_EMAIL_QUERY = 'select count(*) as count from user where `email`=:email';
     private const CHECK_UNAME_QUERY = 'select count(*) as count from user where `username`=:username';
 
+    private const UPDATE_MAIL_QUERY = 'UPDATE `user` SET `email` = :email WHERE `id` = :id;';
+
     private $connection;
 
     public function __construct(Connection $connection)
@@ -116,7 +118,6 @@ class DoctrineUserRepository implements UserRepository
 
 
     public function verify($verificationHash){
-
         $sql = self::VERIFY_QUERY;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("hash", $verificationHash, 'string');
@@ -192,4 +193,16 @@ class DoctrineUserRepository implements UserRepository
         return false;
     }
 
+
+    public function changeMail($userId, $newMail){
+        if ($this->checkEmail($newMail)){
+            $sql = self::UPDATE_MAIL_QUERY;
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("email", $newMail, 'string');
+            $stmt->bindValue("id", $userId, 'integer');
+            $stmt->execute();
+            return 200;
+        }
+        return 404;
+    }
 }

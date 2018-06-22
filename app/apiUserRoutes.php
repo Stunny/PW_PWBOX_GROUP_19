@@ -20,6 +20,8 @@ $this->group('/{userID}', function (){
 
     $this->post('/password[/]', 'PWBox\controller\UserController:changePassword')->setName('change-user-password');
 
+    $this->post('/mail[/]', 'PWBox\controller\UserController:changeMail')->setName('change-user-mail');
+
     $this->post('/profileImg[/]', 'PWBox\controller\UserController:changeProfileImage')->setName('change-user-img');
 
     $this->delete('[/]', 'PWBox\controller\UserController:delete')->setName('delete-user');

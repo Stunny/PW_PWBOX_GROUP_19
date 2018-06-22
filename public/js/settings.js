@@ -30,7 +30,7 @@ $(document).ready(()=>{
             window.alert('Error! New password must match.');
         }else{
             console.log("Matching pass");
-            if (newp1.value = oldpass.value){
+            if (newp1 == oldpass){
                 window.alert('New password can\'t be same as old password');
             }else {
                 $.ajax({
@@ -55,6 +55,7 @@ $(document).ready(()=>{
                         },
 
                         404: function () {
+                            window.alert('Error! Something went wrong.');
                             alert("404 nope");
                         }
                     }
@@ -67,6 +68,42 @@ $(document).ready(()=>{
 
         }
     });
+
+    document.getElementById("changeMailSettings").onclick = function () {
+        var mail = document.getElementById('newMailSettings').value;
+        if (validateEmail(mail)){
+            $.ajax({
+                async: true,
+                type: 'post',
+                url: 'api/user/'+userId+'/mail',
+                data: {
+                    mail : mail,
+                },
+                statusCode: {
+                    200: function(){
+                        $('#mailChangedModalAlert').modal('show');
+                        $("#settingsEmail").text(mail);
+                        e.preventDefault();
+                    },
+
+                    403: function(){
+                        console.log("403")
+                    },
+
+                    404: function () {
+                        alert("404");
+                    }
+                }
+            })
+        }else {
+            window.alert("Error! Email is not valid.")
+        }
+    };
+
+    function validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
 
     $('#changeImageButton').on('click', function (){
 
