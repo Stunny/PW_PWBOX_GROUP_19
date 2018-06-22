@@ -25,39 +25,47 @@ $(document).ready(()=>{
         console.log(newp1);
         console.log(newp2);
 
-        if(!newp2.match(newp1)){
-            console.log("error matching")
+        if(newp1 != newp2){
+            console.log("Error matching");
+            window.alert('Error! New password must match.');
         }else{
-            console.log("Matching pass")
-        }
+            console.log("Matching pass");
+            if (newp1.value = oldpass.value){
+                window.alert('New password can\'t be same as old password');
+            }else {
+                $.ajax({
+                    async : true,
+                    type : 'post',
+                    url: 'api/user/'+userId+'/password',
+                    data: {
+                        oldpassword : oldpass,
+                        newpassword : newp1,
+                    },
 
-        $.ajax({
-            async : true,
-            type : 'post',
-            url: 'api/user/'+userId+'/password',
-            data: {
-                oldpassword : oldpass,
-                newpassword : newp1,
-            },
+                    statusCode: {
+                        200: function(){
+                            console.log("todo ok");
+                            $('#passChangedModalAlert').modal('show');
+                            e.preventDefault();
+                        },
 
-            statusCode: {
-                200: function(){
-                    console.log("todo ok");
-                    $('#passChangedModalAlert').modal('show');
-                    e.preventDefault();
-                },
+                        403: function(){
+                            window.alert('Error! Password introduced is not correct.');
+                            console.log("403 bruh")
+                        },
 
-                403: function(){
-
-                    console.log("403 bruh")
-                },
-
-                404: function () {
-                    alert("nope");
-                }
+                        404: function () {
+                            alert("404 nope");
+                        }
+                    }
+                });
+                //TODO: VACIAR LOS CAMPOS
+                //document.getElementById("newPassSettings1").innerHTML = '';
+                //document.getElementById("newPassSettings2").innerHTML = "";
+                //document.getElementById("newPassSettings2").textContent = "";
             }
-        });
 
+        }
     });
 
     $('#changeImageButton').on('click', function (){
