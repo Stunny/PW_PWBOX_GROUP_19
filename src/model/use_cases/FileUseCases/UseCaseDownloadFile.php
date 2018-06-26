@@ -32,10 +32,11 @@ class UseCaseDownloadFile
     {
         //si se puede acceder a la carpeta (porque bien sea propietario o se la hayan compartido) poner el id del creador correcto, else dejar id incorrecto y no hara la descarga
         if($this->folderRepository->get($fileInfo->getFolder(), $fileInfo->getCreador())->getNom() != null){
-            $fileInfo->setCreador($this->folderRepository->get($fileInfo->getFolder(), $fileInfo->getId())->getCreador());
+            echo $this->folderRepository->get($fileInfo->getFolder(), $fileInfo->getCreador())->getNom();
+            echo $this->folderRepository->get($fileInfo->getFolder(), $fileInfo->getCreador())->getCreador();
+            $fileInfo->setCreador($this->folderRepository->get($fileInfo->getFolder(), $fileInfo->getCreador())->getCreador());
         }
         $file = $this->fileRepository->getData($fileInfo);
-        var_dump($file);
 
         if($file->getFolder() != null){
             $content = $this->fileRepository->download($file, $this->folderRepository->get($file->getFolder(), $file->getCreador()))->getFile();

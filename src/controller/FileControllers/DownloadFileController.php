@@ -29,7 +29,6 @@ class DownloadFileController
         try {
             $service = $this->container->get('download-file-service');
             $downloaded = $service(new File($args['fileID'], null, $args['userID'], $args['folderID'], null, null, null));
-            var_dump($downloaded);
 
             if($downloaded){
                 $response = $response

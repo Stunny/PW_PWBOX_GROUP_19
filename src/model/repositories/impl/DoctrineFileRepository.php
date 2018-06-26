@@ -78,6 +78,7 @@ class DoctrineFileRepository implements FileRepository
 
     public function download(File $file, Folder $folder): File
     {
+        var_dump($file);
         $path = self::USER_FOLDERS_DIR . $folder->getPath() . DIRECTORY_SEPARATOR . $file->getName();
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
