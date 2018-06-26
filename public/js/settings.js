@@ -56,7 +56,6 @@ $(document).ready(()=>{
 
                         404: function () {
                             window.alert('Error! Something went wrong.');
-                            alert("404 nope");
                         }
                     }
                 });
@@ -86,12 +85,8 @@ $(document).ready(()=>{
                         e.preventDefault();
                     },
 
-                    403: function(){
-                        console.log("403")
-                    },
-
                     404: function () {
-                        alert("404");
+                        window.alert('Error! Something went wrong.');
                     }
                 }
             })
@@ -107,16 +102,10 @@ $(document).ready(()=>{
 
     $('#changeImageButton').on('click', function (){
 
-        var img
-
         $.ajax({
             async : true,
             type : 'post',
             url: 'api/user/'+userId+'/profileImg',
-            data: {
-                oldpassword : oldpass,
-                newpassword : newp1,
-            },
 
             statusCode: {
                 200: function(){
@@ -134,6 +123,7 @@ $(document).ready(()=>{
                     alert("nope");
                 }
             }
+
         });
 
     })

@@ -11,10 +11,42 @@ $(document).ready(()=>{
   $("#deleteConfirmButton").on("click", (e)=>{
     $('#deleteAccModal2')
   .modal('show');
-  e.preventDefault();
-  })
+      e.preventDefault();
+  });
 
+    $("#deleteConfirmButton2").on("click", (event)=> {
+        deleteAccount(event)
+    });
 });
+
+
+function deleteAccount(event) {
+    var password = document.getElementById("passwordDeleteAccount").value;
+    console.log(password);
+    $.ajax({
+        async: true,
+        type: "POST",
+        url: 'api/user/'+userId+'/delete',
+        data: {
+            password : password
+        },
+        statusCode: {
+            200: function(){
+                window.alert("Account deleted successfully");
+                event.preventDefault();
+                window.location.href = '/logout'
+            },
+
+            404: function () {
+                window.alert('Error! Something went wrong.');
+            },
+
+            500: function () {
+                window.alert('Error! 500.');
+            }
+        }
+    })
+}
 
 function loadDataProfile(){
 

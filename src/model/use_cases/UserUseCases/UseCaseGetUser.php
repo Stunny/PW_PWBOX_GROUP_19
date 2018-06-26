@@ -35,6 +35,7 @@ class UseCaseGetUser
         return [
             "userID" => $user['id'],
             "username" => $user['username'],
+            "password" => $user['password'],
             "email" => $user['email'],
             "created_at" => $user['created_at'],
             "birthdate" => $user['birthdate'],

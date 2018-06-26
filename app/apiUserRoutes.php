@@ -24,7 +24,7 @@ $this->group('/{userID}', function (){
 
     $this->post('/profileImg[/]', 'PWBox\controller\UserController:changeProfileImage')->setName('change-user-img');
 
-    $this->delete('[/]', 'PWBox\controller\UserController:delete')->setName('delete-user');
+    $this->post('/delete[/]', 'PWBox\controller\UserController:delete')->setName('delete-user');
 
 //---------------------------------------------------------Folder
     $this->post('/folder[/]', 'PWBox\controller\FolderController:post')->setName('post-folder');

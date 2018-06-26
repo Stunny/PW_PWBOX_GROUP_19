@@ -31,5 +31,5 @@ interface UserRepository
 
     public function exists($username, $email);
 
-    public function changeMail($userId, $newMail);
+    public function changeMail($userId, $newMai);
 }

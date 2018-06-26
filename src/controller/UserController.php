@@ -13,6 +13,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use PWBox\model\User;
 
 
 class UserController
@@ -183,30 +184,42 @@ class UserController
      */
     public function delete(Request $request, Response $response, $args){
         try{
-            $service = $this->container->get('delete-user-service');
-            $result = $service($args['userID']);
+            $service = $this->container->get('get-user-service');
+            $user = $service($args['userID']);
 
-            if($result){
-                $response = $response
-                    ->withStatus(200)
-                    ->withHeader('Content-type', 'application/json')
-                    ->write(json_encode(["msg"=>'Deleted successfully', "res"=>[]]));
+            $data = $request->getParsedBody();
+
+            if (md5($data['password']) == $user['password']){
+
+                $service = $this->container->get('delete-user-service');
+                $result = $service($user);
+
+                if($result){
+                    $response = $response
+                        ->withStatus(200)
+                        ->withHeader('Content-type', 'application/json')
+                        ->write(json_encode(["msg"=>'Deleted successfully', "res"=>[]]));
+                }else{
+                    $response = $response
+                        ->withStatus(500)
+                        ->withHeader('Content-type', 'application/json')
+                        ->write(json_encode(["msg"=>"Internal server error", "res"=>[]]));
+                }
+
             }else{
                 $response = $response
                     ->withStatus(404)
                     ->withHeader('Content-type', 'application/json')
                     ->write(json_encode(["msg"=>"User not found", "res"=>[]]));
             }
-
-
         }catch (\Exception $e){
             $response = $response
                 ->withStatus(500)
                 ->withHeader('Content-type', 'application/json')
                 ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
         }
-        return $response;
 
+        return $response;
     }
 
     /**
@@ -328,8 +341,18 @@ class UserController
         return $response;
     }
 
+    function console_log( $data ){
+        echo '<script>';
+        echo 'console.log('. json_encode( $data ) .')';
+        echo '</script>';
+    }
+
     public function changeProfileImage(Request $request, Response $response, $args){
         try{
+            $this->console_log($request);
+            $this->console_log($response);
+            $this->console_log($args);
+            die();
             $service = $this->container->get('profile-img-service');
             $service($request->getUploadedFiles()['file'], $this->container->get('user-repository')->get($args['userID'])['username']);
 

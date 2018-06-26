@@ -64,11 +64,11 @@ class DoctrineUserRepository implements UserRepository
         return $verificationHash;
     }
 
-    public function delete($userId)
+    public function delete($user)
     {
         $sql = self::DELETE_QUERY;
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("id", $userId['id'], 'integer');
+        $stmt->bindValue("id", $user['userID'], 'integer');
         $stmt->execute();
     }
 
@@ -79,9 +79,6 @@ class DoctrineUserRepository implements UserRepository
         $stmt->execute();
 
         $user = $stmt->fetch();
-        if(isset($user['password'])){
-            unset($user['password']);
-        }
         return $user;
     }
 
@@ -115,7 +112,6 @@ class DoctrineUserRepository implements UserRepository
 
         return true;
     }
-
 
     public function verify($verificationHash){
         $sql = self::VERIFY_QUERY;
@@ -192,7 +188,6 @@ class DoctrineUserRepository implements UserRepository
 
         return false;
     }
-
 
     public function changeMail($userId, $newMail){
         if ($this->checkEmail($newMail)){
