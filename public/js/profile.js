@@ -3,10 +3,16 @@ userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
 $(document).ready(()=>{
 
   $("#deleteAccountButton").on("click", (e)=>{
-    $('#deleteAccModal')
-  .modal('show');
-  e.preventDefault();
-  })
+      $('#deleteAccModal').modal('show');
+      e.preventDefault();
+  });
+
+    $('#deleteAccModal2').modal({
+        onHidden: function(){
+            $("#passwordDeleteAccount").val("");
+        }
+    });
+
 
   $("#deleteConfirmButton").on("click", (e)=>{
     $('#deleteAccModal2')

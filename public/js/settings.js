@@ -3,17 +3,32 @@ $(document).ready(()=>{
     $("#changeMail").on("click", (e)=>{
         $('#changeMailModal').modal('show');
         e.preventDefault();
-    })
+    });
+
+    $("#changeMailModal").modal({
+        onHidden: function(){
+            $("#newMailSettings").val("")
+        }
+    });
+
 
     $("#changePassButton").on("click", (e)=>{
         $('#changePassModal').modal('show');
         e.preventDefault();
-    })
+    });
+
+    $('#changePassModal').modal({
+        onHidden: function(){
+            $("#oldPassSettings").val("");
+            $("#newPassSettings1").val("");
+            $("#newPassSettings2").val("");
+        }
+    });
 
     $("#changeImageButton").on("click", (e)=>{
       $('#changeImageModal').modal('show');
     e.preventDefault();
-    })
+    });
 
     $('#changePassSettings').on("click", function changePass(){
 

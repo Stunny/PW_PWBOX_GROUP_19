@@ -302,17 +302,29 @@ class DoctrineFolderRepository implements FolderRepository
 
         $mySharedFolders = array();
         foreach ($accessibleFolderId as $valor){
-            $sharedFolderData = array();
+            $sql = 'select `creador` from folder where `id`=:id_folder';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("id_folder", $valor['folder'], 'integer');
+            $stmt->execute();
+            $idCreador = $stmt->fetch()['creador'];
+
+            if($idCreador == $userId) continue;
+
+            $sharedFolderData = new Folder(null, null, null, null, null, null);
             //por cada carpeta a la que puedo acceder, recupero su id y su nombre
             $sql = self::GET_MY_SHARED_FOLDERS;
             $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue("id_usuari", $valor['file'], 'integer');
+            $stmt->bindValue("id_creador", $idCreador, 'integer');
             $stmt->execute();
-            $aux = $stmt->fetchAll();
-            $sharedFolderData['id'] = $aux['file']['id'];
-            $sharedFolderData['nom'] = $aux['file']['nom'];
 
-            array_push($mySharedFolders, $sharedFolderData);
+            while($aux = $stmt->fetch()){
+
+                $sharedFolderData->setId( $aux['id']);
+                $sharedFolderData->setNom( $aux['nom']);
+
+                array_push($mySharedFolders, $sharedFolderData);
+            }
+
         }
         return $mySharedFolders;
     }

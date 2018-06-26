@@ -35,8 +35,13 @@ class UseCaseGetFolderTree
         }
 
         $tree = new FolderTree($folder->getNom(), $folder->getId());
-        var_dump(tree);
+
         $this->buildTree($folder->getPath(), $tree);
+
+        $sharedFolders = $this->repository->mySharedFolders($urlArgs['userID']);
+        foreach ($sharedFolders as $sharedFolder){
+            $tree->addChild(new FolderTree($sharedFolder->getNom(), $sharedFolder->getId()));
+        }
 
         return $tree->toArray();
 
