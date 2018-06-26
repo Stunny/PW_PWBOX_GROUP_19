@@ -341,23 +341,16 @@ class UserController
         return $response;
     }
 
-    function console_log( $data ){
-        echo '<script>';
-        echo 'console.log('. json_encode( $data ) .')';
-        echo '</script>';
-    }
 
     public function changeProfileImage(Request $request, Response $response, $args){
         try{
-            $this->console_log($request);
-            $this->console_log($response);
-            $this->console_log($args);
-            die();
+
+            //die();
             $service = $this->container->get('profile-img-service');
             $service($request->getUploadedFiles()['file'], $this->container->get('user-repository')->get($args['userID'])['username']);
 
-            $response = $response->withStatus(302)
-                ->withHeader('location', '/');
+            //$response = $response->withStatus(302)
+            //    ->withHeader('location', '/');
 
         }catch (\Exception $e){
             $response = $response

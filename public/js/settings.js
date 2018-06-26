@@ -27,7 +27,7 @@ $(document).ready(()=>{
 
     $("#changeImageButton").on("click", (e)=>{
       $('#changeImageModal').modal('show');
-    e.preventDefault();
+        e.preventDefault();
     });
 
     $('#changePassSettings').on("click", function changePass(){
@@ -115,33 +115,50 @@ $(document).ready(()=>{
         return re.test(String(email).toLowerCase());
     }
 
-    $('#changeImageButton').on('click', function (){
+    $('#changeImageModal').modal({
+        onApprove: function () {
 
-        $.ajax({
-            async : true,
-            type : 'post',
-            url: 'api/user/'+userId+'/profileImg',
-
-            statusCode: {
-                200: function(){
-                    console.log("todo ok");
-                    $('#passChangedModalAlert').modal('show');
-                    e.preventDefault();
-                },
-
-                403: function(){
-
-                    console.log("403 bruh")
-                },
-
-                404: function () {
-                    alert("nope");
-                }
+            if($('#myFile').val()==''){
+                return;
             }
 
-        });
+            var data = new FormData();
+            data.append('file', $('#myFile')[0].files[0], $('#myFile')[0].files[0].name);
 
-    })
+
+            $.ajax({
+                async : true,
+                type : 'post',
+                url: 'api/user/'+userId+'/profileImg',
+                enctype:'multipart/form-data',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                method:'post',
+                statusCode: {
+                    200: function(){
+                        console.log("todo ok");
+                        //$('#passChangedModalAlert').modal('show');
+                        e.preventDefault();
+                    },
+
+                    403: function(){
+
+                        console.log("403 bruh")
+                    },
+
+                    404: function () {
+                        alert("nope");
+                    }
+                }
+
+            });
+        },
+        onHidden: function(){
+            $("#myFile").val("");
+        }
+    });
 
 });
 userId = document.cookie.match(/user=[^;]+/)[0].split('=')[1];
