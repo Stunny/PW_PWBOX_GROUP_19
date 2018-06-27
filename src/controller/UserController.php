@@ -345,12 +345,9 @@ class UserController
     public function changeProfileImage(Request $request, Response $response, $args){
         try{
 
-            //die();
             $service = $this->container->get('profile-img-service');
             $service($request->getUploadedFiles()['file'], $this->container->get('user-repository')->get($args['userID'])['username']);
 
-            //$response = $response->withStatus(302)
-            //    ->withHeader('location', '/');
 
         }catch (\Exception $e){
             $response = $response

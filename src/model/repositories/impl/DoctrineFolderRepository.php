@@ -159,9 +159,17 @@ class DoctrineFolderRepository implements FolderRepository
 
     public function delete(int $folderID, int $userID)
     {
-        $folderPath = $this->get($folderID, $userID)->getPath();
 
-        $sql = "SELECT `usuari` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari;";
+        $folderPath = $this->get($folderID, $userID)->getPath();
+        if(!file_exists(self::USER_FOLDERS_DIR.$folderPath)){
+            return 404;
+        }
+
+        if(!$this->folderIsEmpty(self::USER_FOLDERS_DIR.$folderPath)){
+            return 400;
+        }
+
+        $sql = "SELECT `usuari` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari and `role`='admin';";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id_usuari", $userID, 'integer');
         $stmt->bindValue("id", $folderID, 'integer');
@@ -183,15 +191,12 @@ class DoctrineFolderRepository implements FolderRepository
                 $stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
                 $stmt->execute();
             }
-            shell_exec('rm -rf '.$folderPath);
 
-            if (isset($userID['usuari'])){
-                return true;
-            }else{
-                return false;
-            }
+            rmdir(self::USER_FOLDERS_DIR.$folderPath);
+
+            return 200;
         }else{
-            return false;
+            return 401;
         }
     }
 
@@ -327,5 +332,15 @@ class DoctrineFolderRepository implements FolderRepository
 
         }
         return $mySharedFolders;
+    }
+
+    private function folderIsEmpty($dir) {
+        $handle = opendir($dir);
+        while (false !== ($entry = readdir($handle))) {
+            if ($entry != "." && $entry != "..") {
+                return FALSE;
+            }
+        }
+        return TRUE;
     }
 }

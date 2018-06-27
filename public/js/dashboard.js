@@ -29,8 +29,12 @@ function loadCenterContent(){
                 centerContent.setElements(result);
 
             },
-            404: function () {
-                alert("Folder not found");
+            404: function (res) {
+                swal(
+                    'Error 404',
+                    'Folder not found',
+                    'error'
+                );
             }
         }
     });
@@ -85,7 +89,11 @@ function showFolderModal(){
 function createNewFolder(name){
 
   if(name.includes("/")){
-      alert("Folder name can't contain character '/'");
+      swal(
+          'Oops...',
+          'Folder name can not contain character "/"',
+          'error'
+      );
       return;
   }
 
@@ -108,7 +116,11 @@ function createNewFolder(name){
 
 function shareFolder(email, role){
     if(email.match(/^\s+$/) || !email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
-        alert("Invalid email to share");
+        swal(
+            'Oops',
+            'Enter a valid email to share with',
+            'error'
+        );
         return;
     }
 
@@ -121,13 +133,25 @@ function shareFolder(email, role){
        },
        statusCode:{
            200: function (res) {
-                alert(res.msg);
+               swal(
+                   'Success',
+                   'Folder shared successfully',
+                   'success'
+               );
            },
            404: function (res) {
-               alert(res.msg);
+               swal(
+                   'Error 404',
+                   'Folder not found',
+                   'error'
+               );
            },
            401: function (res) {
-               alert(res.msg);
+               swal(
+                   'Error 401',
+                   'Unauthorised',
+                   'error'
+               );
            }
        }
     });
@@ -163,14 +187,26 @@ function requestRenameFileItem(newName) {
         },
         statusCode:{
             200: function (res) {
-                alert(res.msg);
+                swal(
+                    'Success',
+                    'File renamed successfully: ',
+                    'success'
+                );
                 loadCenterContent();
             },
             404: function (res) {
-                alert("Error 404: "+res.msg);
+                swal(
+                    'Error 404',
+                    'File not found',
+                    'error'
+                );
             },
             401: function (res) {
-                alert("Error 401: "+res.msg);
+                swal(
+                    'Error 401',
+                    'Unauthorised',
+                    'error'
+                );
             }
         }
     });
@@ -191,10 +227,18 @@ function requestRenameFolder(newName){
                 loadDashboardContent();
             },
             404: function (res) {
-                alert("Error 404: "+res.msg);
+                swal(
+                    'Error 404',
+                    'Folder not found',
+                    'error'
+                );
             },
             401: function (res) {
-                alert("Error 401: "+res.msg);
+                swal(
+                    'Error 401',
+                    'Unauthorised',
+                    'error'
+                );
             }
         }
     });
@@ -209,14 +253,26 @@ function deleteFileItem(fileId){
         method: 'delete',
         statusCode:{
             200: function (res) {
-                alert(res.msg);
+                swal(
+                    'Success',
+                    'File deleted successfully: ',
+                    'success'
+                );
                 loadCenterContent();
             },
             404: function (res) {
-                alert("Error 404: "+res.msg);
+                swal(
+                    'Error 404',
+                    'File not found',
+                    'error'
+                );
             },
             401: function (res) {
-                alert("Error 401: "+res.msg);
+                swal(
+                    'Error 401',
+                    'Unauthorised',
+                    'error'
+                );
             }
         }
     });
@@ -224,19 +280,42 @@ function deleteFileItem(fileId){
 }
 
 function requestDeleteFolder(){
+
+
+
     $.ajax({
         url: '/api/user/'+userId+'/folder/'+selectedFolderId.replace("folder-",""),
         async: true,
         method: 'delete',
         statusCode:{
             200: function (res) {
+                swal(
+                    'Deleted!',
+                    'Folder deleted successfully',
+                    'success'
+                );
                 loadCenterContent();
             },
             404: function (res) {
-                alert("Error 404: "+res.msg);
+                swal(
+                    'Error 404',
+                    'Folder not found',
+                    'error'
+                );
             },
             401: function (res) {
-                alert("Error 401: "+res.msg);
+                swal(
+                    'Error 401',
+                    'Unauthorised',
+                    'error'
+                );
+            },
+            400: function(res){
+                swal(
+                    'Could not delete folder',
+                    'Folder is not empty so you can not delete it',
+                    'error'
+                );
             }
         }
     });
