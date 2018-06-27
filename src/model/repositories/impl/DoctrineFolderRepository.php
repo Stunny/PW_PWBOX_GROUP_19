@@ -28,7 +28,7 @@ class DoctrineFolderRepository implements FolderRepository
     private const INSERT_FOLDER_QUERY = 'INSERT INTO `folder`(`creador`, `nom`, `path`, `created_at`, `updated_at`) VALUES (:creador, :nom, :path, :created_at, :updated_at);';
     private const UPDATE_QUERY = 'UPDATE `folder` SET `nom` = :nom, `path` = :path WHERE `id` = :id;';
     private const INSERT_ROLES_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
-    private const SHARE_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`) VALUES (:id_creador, :id_folder, :role);';
+    private const SHARE_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
     private const NEW_FOLDER_ID = 'SELECT `id` FROM `folder` WHERE `creador` = :id_creador ORDER BY `id` DESC LIMIT 1;';
     private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id) AND `id` = (SELECT `folder` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari);';
     private const SELECT_QUERY_2 = 'SELECT * FROM `folder` WHERE (`id` = :id);';
@@ -248,11 +248,16 @@ class DoctrineFolderRepository implements FolderRepository
                             //var_dump($exist);
                             if ($exist['role'] == null){
                                 //insertamos carpeta compartida en la tabla role
+                                $now = new \DateTime('now');
+
+
                                 $sql = self::SHARE_QUERY;
                                 $stmt = $this->connection->prepare($sql);
                                 $stmt->bindValue("id_creador", $sharedUser['id'], 'integer');
                                 $stmt->bindValue("id_folder", $folderID, 'integer');
                                 $stmt->bindValue("role", $roleToAssing, 'string');
+                                $stmt->bindValue("created_at", $now->format(self::DATE_FORMAT));
+                                $stmt->bindValue("updated_at", $now->format(self::DATE_FORMAT));
                                 $stmt->execute();
                             }else{
                                 //actualizamos con el nuevo rol

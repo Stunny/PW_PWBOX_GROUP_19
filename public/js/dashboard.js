@@ -527,7 +527,7 @@ $('#upload-files-modal').modal({
 
 $("#share-folder-modal").modal({
     onApprove: function () {
-        shareFolder($("input#shareEmail").val(), $("input#shareRole").checkbox("is checked")? "admnin":"read");
+        shareFolder($("input#shareEmail").val(), $("input#shareRole").prop("checked")? "admin":"read");
     },
     onDeny: function () {
         $("input#shareEmail").val("");
