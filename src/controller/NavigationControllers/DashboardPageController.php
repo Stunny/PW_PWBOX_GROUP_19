@@ -24,11 +24,14 @@ class DashboardPageController
     public function __invoke(Request $request, Response $response, array $args)
     {
         if(!isset($_SESSION['user'])){
-            $response = $response->withStatus(302)
+            $this->container->get('flash')->addMessage('error', 'Error 403: Please Login before accessing any user page.');
+            $response = $response
+                ->withStatus(302)
                 ->withHeader('location', '/login');
             return $response;
         }
 
         $this->container->get('view')->render($response, 'dashboard.twig', []);
+        return $response;
     }
 }

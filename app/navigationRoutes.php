@@ -19,12 +19,12 @@ $this->any('register[/]', \PWBox\controller\NavigationControllers\RegisterPageCo
 
 //Profile Page
 $this->any('profile[/{userEmail}[/]]', \PWBox\controller\NavigationControllers\ProfilePageController::class)
-    ->setName("profile-page")->add(\PWBox\controller\middleware\LoginMiddleware::class);
+    ->setName("profile-page");
 
 //Dashboard Page
 $this->any('dashboard[/]', \PWBox\controller\NavigationControllers\DashboardPageController::class)
-    ->setName("dashboard")->add(\PWBox\controller\middleware\LoginMiddleware::class);
+    ->setName("dashboard");
 
 //Settings Page
 $this->any('settings[/]', \PWBox\controller\NavigationControllers\SettingsPageController::class)
-    ->setName("settings-page")->add(\PWBox\controller\middleware\LoginMiddleware::class);
+    ->setName("settings-page");

@@ -11,7 +11,7 @@ namespace PWBox\controller\middleware;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-class LoginMiddleware
+class ApiAuthenticationMiddleware
 {
 
     public function __construct()
@@ -22,8 +22,11 @@ class LoginMiddleware
     public function __invoke(Request $request, Response $response, callable $next)
     {
         if(!isset($_SESSION['user'])){
-            $response = $response->withStatus(302)
-                ->withHeader('location', '/login');
+            $response = $response
+                ->withStatus(403)
+                ->withHeader('Content-type', 'application/json')
+                ->write(json_encode(["msg"=>"Unauthorised. Please Login", "res"=>[]]));
+
             return $response;
         }
 

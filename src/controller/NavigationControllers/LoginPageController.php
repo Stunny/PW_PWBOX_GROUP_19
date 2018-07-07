@@ -32,10 +32,9 @@ class LoginPageController
         }
 
         $user_register = $this->container->get('flash')->getMessage('user_register');
+        $error = $this->container->get('flash')->getMessage('error');
 
-        //$userRegisteredMessages = isset($messages['user_register'])? $messages['user_register']: [];
-
-        $this->container->get('view')->render($response, 'login.twig', ["form" => "Login", "user_register"=>$user_register]);
+        $this->container->get('view')->render($response, 'login.twig', ["form" => "Login", "user_register"=>$user_register, "error"=>$error]);
 
     }
 }

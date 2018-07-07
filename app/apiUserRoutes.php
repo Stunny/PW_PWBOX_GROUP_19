@@ -55,4 +55,4 @@ $this->group('/{userID}', function (){
 
     $this->post('/folder/{folderID}/file[/]', PWBox\controller\FileControllers\PostFileController::class)->setName('upload-file');
 
-})/*->add(\PWBox\controller\middleware\ApiAuthenticationMiddleware::class)*/;
+})->add(\PWBox\controller\middleware\ApiAuthenticationMiddleware::class);
