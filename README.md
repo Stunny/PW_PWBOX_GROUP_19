@@ -1,7 +1,11 @@
 # PW Box - Group 19
-Developed by @Stunny, @RafaRebollo and @Sartox.
+Developed by @Stunny (Alex Vogel), @RafaRebollo and @afarre (Angel Farre).
 
+### Development time 
 
+- @Stunny: `100h`
+- @RafaRebollo: `50h`
+- @afarre: `100h`
 
 ## Back-End Dependencies
 ```
@@ -27,3 +31,5 @@ Developed by @Stunny, @RafaRebollo and @Sartox.
 
 To start testing this app, clone it from `https://github.com/Stunny/PW_PWBOX_GROUP_19` and then be sure to run the command `$composer install` on the cloned folder.
 After that, access the `public` folder and run `$npm i`.
+
+Lastly, you will have to initialize the database. A scripts file is provided with every creation query needed to run this app. You will find it in the `resources` folder as a `.sql` file.
