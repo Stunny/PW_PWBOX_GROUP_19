@@ -1,7 +1,7 @@
 # PW Box - Group 19
-Developed by @Stunny (Alex Vogel), @RafaRebollo and @afarre (Angel Farre).
+Developed by @Stunny (Alex Vogel), @RafaRebollo (Rafael Rebollo) and @afarre (Angel Farre).
 
-### Development time 
+### Aproximate Development time 
 
 - @Stunny: `100h`
 - @RafaRebollo: `50h`
@@ -27,7 +27,7 @@ Developed by @Stunny (Alex Vogel), @RafaRebollo and @afarre (Angel Farre).
 - Dropzone JS
 - Animate CSS
 
-##Usage 
+## Usage 
 
 To start testing this app, clone it from `https://github.com/Stunny/PW_PWBOX_GROUP_19` and then be sure to run the command `$composer install` on the cloned folder.
 After that, access the `public` folder and run `$npm i`.
