@@ -205,13 +205,13 @@ class DoctrineFolderRepository implements FolderRepository
         //var_dump($userID);
         if ($userID != null){
             //comprueba si el usuario que quiere compartir existe
-            $sql = "SELECT username FROM `user` WHERE `id` = :id_usuari;";
+            $sql = "SELECT email FROM `user` WHERE `id` = :id_usuari;";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("id_usuari", $userID, 'integer');
             $stmt->execute();
             $sharingUser = $stmt->fetch();
             //var_dump($sharingUser);
-            if ($sharingUser != null){
+            if ($sharingUser != null && $sharingUser['email'] != $email){
                 //comprueba si la carpeta a compartir existe
                 $sql = "SELECT nom FROM `folder` WHERE `creador` = :id_usuari AND `id` = :id_carpeta;";
                 $stmt = $this->connection->prepare($sql);
