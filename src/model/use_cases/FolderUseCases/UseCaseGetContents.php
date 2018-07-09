@@ -41,10 +41,6 @@ class UseCaseGetContents
             foreach ($fileIds as $clave){
                 $fileData = $this->fileRepo->getData(new File($clave['id'], null, $userId, $folderId, null, null, null));
                 $aux = array();
-                /*array_push($aux, $fileData->getId());
-                array_push($aux, 'file');
-                array_push($aux, $fileData->getName());
-                */
                 $aux['id'] = $fileData->getId();
                 $aux['type'] = 'file';
                 $aux['filename'] = $fileData->getName();

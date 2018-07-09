@@ -24,10 +24,11 @@ class DoctrineFileRepository implements FileRepository
     private const USER_FOLDERS_DIR = "/home/vagrant/pwbox/appdata/user_folders/";
 
     private const POST_QUERY = 'INSERT INTO `file`(`name`, `creator`, `folder`) VALUES (:filename, :creator, :folder);';
-    private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id) AND `creator` = :id_usuari AND `folder` = :id_folder;';
+    //private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id) AND `creator` = :id_usuari AND `folder` = :id_folder;';
+    private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id)  AND `folder` = :id_folder;';
     private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id AND `folder` = (SELECT `id` FROM `folder` WHERE `id` = :id_folder AND `creador` = :id_user);';
     private const UPDATE_DATA = 'UPDATE `file` SET `name` = :filename, `folder` = :folder WHERE (`creator` = :userID AND `id` = :fileID);';
-    private const GET_FILE_ID = 'SELECT `id` FROM `file` WHERE `folder` = :id_folder AND `creator` = :id_creador;';
+    private const GET_FILE_ID = 'SELECT `id` FROM `file` WHERE `folder` = :id_folder AND `creator` = :id_creador ;';
 
 
     public function __construct(Connection $connection)
@@ -94,21 +95,15 @@ class DoctrineFileRepository implements FileRepository
         return true;
     }
 
-    public function delete(File $file)
+    public function delete($fileId, $folderID)
     {
-        $databaseFile = $this->getData($file);
-        $databaseFileId = $databaseFile->getId();
-        if (isset($databaseFileId) && $databaseFile->getFolder() == $file->getFolder() && $databaseFile->getCreador() == $file->getCreador()){
             $sql = self::DELETE_QUERY;
             $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue("id", $file->getId(), 'integer');
-            $stmt->bindValue("id_usuari", $file->getCreador(), 'integer');
-            $stmt->bindValue("id_folder", $file->getFolder(), 'integer');
+            $stmt->bindValue("id", $fileId, 'integer');
+            //$stmt->bindValue("id_usuari", $file->getCreador(), 'integer');
+            $stmt->bindValue("id_folder", $folderID, 'integer');
             $stmt->execute();
             return true;
-        }else{
-            return false;
-        }
     }
 
     public function getData(File $file): File
@@ -139,8 +134,35 @@ class DoctrineFileRepository implements FileRepository
         $this->getData(new File($file->getId(), null, $userID, $file->getFolder(), null, null, null));
     }
 
-    public function getFileId($userId, $folderId)
+    public function getFileId(&$userId, $folderId)
     {
+
+        $sql_access = 'select usuari from role where folder=:folderID';
+        $stmt = $this->connection->prepare($sql_access);
+        $stmt->bindValue('folderID', $folderId, 'integer');
+        $stmt->execute();
+
+        $ids = $stmt->fetchAll();
+        $hasAccess = false;
+        //var_dump($userId);
+        foreach ($ids as $i){
+            //var_dump($i);
+            if($i['usuari'] == $userId) {
+                $hasAccess = true;
+                break;
+            }
+        }
+        //var_dump($hasAccess);
+        if($hasAccess){
+            $stmt = $this->connection->prepare("select creador from folder where id=:folderID");
+            $stmt->bindValue("folderID", $folderId, 'integer');
+            $stmt->execute();
+            //echo "tiene permisos";
+            if($ownerID = $stmt->fetch()){
+                $userId = $ownerID['creador'];
+            }
+        }
+
         $sql = self::GET_FILE_ID;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id_folder", $folderId, 'integer');

@@ -17,12 +17,12 @@ interface FileRepository
 
     public function download(File $file, Folder $folder);
 
-    public function delete(File $file);
+    public function delete($fileId, $folderID);
 
     public function getData(File $file): File;
 
     public function updateData(File $file, $userID, $newName);
 
-    public function getFileId($userId, $folderId);
+    public function getFileId(&$userId, $folderId);
 
 }
