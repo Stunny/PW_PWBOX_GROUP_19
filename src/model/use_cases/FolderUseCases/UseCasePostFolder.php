@@ -44,7 +44,7 @@ class UseCasePostFolder
                 null,
                 $userID,
                 $rawData['folderName'],
-                $rawData['path'],
+                $rawData['parent'],
                 $now,
                 $now
             );

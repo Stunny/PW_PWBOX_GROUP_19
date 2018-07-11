@@ -46,6 +46,61 @@ class DoctrineFolderRepository implements FolderRepository
 
     public function create(int $creatorId, Folder $folder)
     {
+        $parentFolder = intval($folder->getPath());
+
+        $sql = "select role from role where usuari=:iduser and folder=:idfolder";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("idfolder", $parentFolder, 'integer');
+        $stmt->bindValue("iduser", $creatorId, 'integer');
+        $stmt->execute();
+
+        $role = $stmt->fetch()['role'];
+
+        if($role != "admin"){
+            return 401;
+        }
+
+
+        $sql = "select path from folder where id=:idFolder";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("idFolder", $parentFolder, 'integer');
+        $stmt->execute();
+        $parentFolderPath = $stmt->fetch()['path'];
+
+        if(file_exists(self::USER_FOLDERS_DIR . $parentFolderPath ."/".$folder->getNom())){
+            return 409;
+        }
+
+        $sql = self::INSERT_FOLDER_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("creador", $creatorId, 'integer');
+        $stmt->bindValue("nom", $folder->getNom(), 'string');
+        $stmt->bindValue("path", $parentFolderPath ."/".$folder->getNom(), 'string');
+        $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
+        $stmt->bindValue("updated_at", $folder->getUpdatedAt()->format(self::DATE_FORMAT));
+        $stmt->execute();
+
+        $sql = self::NEW_FOLDER_ID;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id_creador", $creatorId, 'integer');
+        $stmt->execute();
+        $folderID = $stmt->fetch();
+
+        $sql = self::INSERT_ROLES_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id_creador", $creatorId, 'integer');
+        $stmt->bindValue("id_folder", intval($folderID['id']), 'integer');
+        $stmt->bindValue("role", "admin", 'string');
+        $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
+        $stmt->bindValue("updated_at", $folder->getUpdatedAt()->format(self::DATE_FORMAT));
+        $stmt->execute();
+
+        mkdir(self::USER_FOLDERS_DIR.$folder->getPath(), 0777, true);
+        return 200;
+    }
+
+    public function init(int $creatorId, Folder $folder)
+    {
         if(file_exists(self::USER_FOLDERS_DIR . $folder->getPath())){
             return 409;
         }

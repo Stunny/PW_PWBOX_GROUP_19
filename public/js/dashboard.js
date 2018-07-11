@@ -103,11 +103,25 @@ function createNewFolder(name){
      method: 'post',
      data:{
        folderName: name,
-       path: pathTitle.toString()+'/'+name
+       parent: currentFolderId
      },
      statusCode:{
        200: function () {
            loadDashboardContent();
+       },
+       409: function () {
+           swal(
+               'Error 409: Already exists',
+               'There is already a folder with this name on the current path',
+               'error'
+           );
+       },
+       401: function(){
+           swal(
+               'Error 401: Unauthorised',
+               'You don\' have permission to create new folders here',
+               'error'
+           );
        }
      }
   });

@@ -29,12 +29,26 @@ class UseCaseGetSpace
     public function __invoke($userId)
     {
         $username = $this->repository->get($userId)['username'];
-
+        /*
         $f = self::USER_FOLDERS_DIR.$username;
         $io = popen ( '/usr/bin/du -sk ' . $f, 'r' );
         $size = fgets ( $io, 4096);
-        $currentFolderSize = intval(substr ( $size, 0, strpos ( $size, "\t" )));
+        $currentFolderSize = intval(substr ( $size, 0, strpos ( $size, "\t" )));*/
 
-        return ["space" => $currentFolderSize];
+        return ["space" => $this->GetDirectorySize(self::USER_FOLDERS_DIR.$username)/1024];
+    }
+
+    private function GetDirectorySize($path){
+        $bytestotal = 0;
+        $path = realpath($path);
+        if($path!==false && $path!='' && file_exists($path)){
+            foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)) as $object){
+                try{$bytestotal += $object->getSize();}
+                catch(\Exception $e){
+                    echo $e->getMessage();
+                }
+            }
+        }
+        return $bytestotal;
     }
 }

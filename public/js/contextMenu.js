@@ -213,7 +213,11 @@ function menuItemListener( link ) {
         case "rename":
 
             if(itemId.match(/file-[0-9]+/)){
-                renameFileItem(itemId);
+                swal(
+                    'Error',
+                    'You can not rename files.',
+                    'error'
+                );
             }else{
                 renameFolder(itemId)
             }
@@ -228,6 +232,12 @@ function menuItemListener( link ) {
         case "downlaod":
             if(itemId.match(/file-[0-9]+/)){
                 downloadFile(itemId);
+            }else{
+                swal(
+                    'Error',
+                    'You can not download an entire folder.',
+                    'error'
+                );
             }
             break;
         default:

@@ -68,7 +68,6 @@ function loadDataProfile(){
         statusCode: {
             200: function(){
                 console.log("Data found");
-                console.log(get.responseJSON.res);
                 console.log(get.responseJSON.res.username);
                 console.log(get.responseJSON.res.email);
                 console.log(get.responseJSON.res.birthdate)
@@ -104,10 +103,10 @@ function loadDataSpace(){
         statusCode: {
             200: function(){
                 console.log("Data found");
-                console.log(get.responseJSON.res.space);
-                var total = (get.responseJSON.res.space /1048576)*100;
+                //console.log(get.responseJSON.res.space);
+                var total = (get.responseJSON.res.space /(1024*1024))*100;
                 var result = total.toFixed();
-
+                console.log(total);
                 $('#progBar').progress({
                     percent: result
                 })

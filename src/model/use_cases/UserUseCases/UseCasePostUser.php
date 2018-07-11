@@ -59,7 +59,7 @@ class UseCasePostUser
         $verificationHash = $this->repository->save($user);
         $userId = $this->repository->login($user->getEmail(), $user->getPassword());
         $rootFolder = $this->folderRepository
-            ->create($userId, new Folder(null, $userId, $user->getUserName(), $user->getUserName(), $now, $now));
+            ->init($userId, new Folder(null, $userId, $user->getUserName(), $user->getUserName(), $now, $now));
 
 
         $generateVerificationService($verificationHash, $user->getEmail());
