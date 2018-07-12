@@ -95,15 +95,26 @@ class DoctrineFileRepository implements FileRepository
         return true;
     }
 
-    public function delete($fileId, $folderID)
+    public function delete($fileId, $folderID, $userId)
     {
+        $sql = '(SELECT `role` FROM `role` WHERE `usuari` = :id_user AND `folder` = :id_folder)';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id_user", $userId, 'integer');
+        $stmt->bindValue("id_folder", $folderID, 'integer');
+        $stmt->execute();
+        $role = $stmt->fetch();
+
+        if ($role['role'] == 'admin'){
             $sql = self::DELETE_QUERY;
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("id", $fileId, 'integer');
-            //$stmt->bindValue("id_usuari", $file->getCreador(), 'integer');
             $stmt->bindValue("id_folder", $folderID, 'integer');
             $stmt->execute();
             return true;
+        }else{
+            return false;
+        }
+
     }
 
     public function getData(File $file): File

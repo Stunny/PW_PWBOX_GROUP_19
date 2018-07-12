@@ -38,7 +38,7 @@ class DeleteFileController
                 $response = $response
                     ->withStatus(404)
                     ->withHeader('Content-type', 'application/json')
-                    ->write(json_encode(["msg"=>"File not found", "res"=>[]]));
+                    ->write(json_encode(["msg"=>"File or permissions not found", "res"=>[]]));
             }
 
 

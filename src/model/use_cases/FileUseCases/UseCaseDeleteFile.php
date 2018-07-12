@@ -26,6 +26,6 @@ class UseCaseDeleteFile
 
     public function __invoke($fileId, $userID, $folderID)
     {
-            return $this->repository->delete($fileId, $folderID);
+            return $this->repository->delete($fileId, $folderID, $userID);
     }
 }
