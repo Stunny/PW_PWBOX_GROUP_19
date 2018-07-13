@@ -97,13 +97,15 @@ function createNewFolder(name){
       return;
   }
 
+  console.log("Crear nueva carpeta dentro de la carpeta con id: "+currentFolderId.replace(/folder-/, ""));
+
   $.ajax({
      url: '/api/user/'+userId+'/folder/',
      async: true,
      method: 'post',
      data:{
        folderName: name,
-       parent: currentFolderId
+       parent: currentFolderId.replace(/folder-/, "")
      },
      statusCode:{
        200: function () {
