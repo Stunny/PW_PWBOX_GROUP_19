@@ -45,9 +45,15 @@ class DoctrineFileRepository implements FileRepository
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("file_name", $file->getClientFileName(), 'string');
         $stmt->execute();
-        $response = $stmt->fetchAll();
 
-        if ($folderInfo->getNom() != null){
+        $sql = 'SELECT `role` FROM `role` WHERE `folder` = :id_folder AND `usuari` = :id_usuari;';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("id_folder", $folderID, 'integer');
+        $stmt->bindValue("id_usuari", $userID, 'integer');
+        $stmt->execute();
+        $role = $stmt->fetch();
+
+        if ($folderInfo->getNom() != null && $role['role'] == 'admin'){
             $sql = self::POST_QUERY;
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("filename", $file->getClientFileName(), 'string');
