@@ -188,4 +188,13 @@ class DoctrineFileRepository implements FileRepository
 
         return $stmt->fetchAll();
     }
+
+    public function getFileByName($filename, $folderId){
+        $stmt = $this->connection->prepare("select * from file where folder=:folder and name=:filename");
+        $stmt->bindValue("folder", $folderId, 'integer');
+        $stmt->bindValue("filename", $filename, 'string');
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 }

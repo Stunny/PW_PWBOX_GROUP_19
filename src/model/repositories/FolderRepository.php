@@ -21,6 +21,8 @@ interface FolderRepository
 
     public function getByName($folderName, int $userID);
 
+    public function getByPath($folderPath);
+
     public function delete(int $folderID, int $userID);
 
     public function shareFolder(int $folderID, int $userID, $email, $role);

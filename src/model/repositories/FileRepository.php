@@ -25,4 +25,5 @@ interface FileRepository
 
     public function getFileId(&$userId, $folderId);
 
+    public function getFileByName($filename, $userId);
 }

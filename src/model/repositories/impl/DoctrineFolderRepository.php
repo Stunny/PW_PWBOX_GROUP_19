@@ -219,6 +219,14 @@ class DoctrineFolderRepository implements FolderRepository
         return new Folder($aux['id'], $aux['creador'], $aux['nom'], $aux['path'], $aux['created_at'], $aux['updated_at']);
     }
 
+    public function getByPath($folderPath){
+        $stmt = $this->connection->prepare("select creador from folder where path=:path");
+        $stmt->bindValue("path", $folderPath);
+
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     public function delete(int $folderID, int $userID)
     {
 
