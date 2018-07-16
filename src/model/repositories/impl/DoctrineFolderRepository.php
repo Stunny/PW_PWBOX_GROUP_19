@@ -25,7 +25,7 @@ class DoctrineFolderRepository implements FolderRepository
 
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
-    private const INSERT_FOLDER_QUERY = 'INSERT INTO `folder`(`creador`, `nom`, `path`, `created_at`, `updated_at`) VALUES (:creador, :nom, :path, :created_at, :updated_at);';
+    private const INSERT_FOLDER_QUERY = 'INSERT INTO `folder`(`creador`, `nom`, `path`, `created_at`) VALUES (:creador, :nom, :path, :created_at);';
     private const UPDATE_QUERY = 'UPDATE `folder` SET `nom` = :nom, `path` = :path WHERE `id` = :id;';
     private const INSERT_ROLES_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
     private const SHARE_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
@@ -84,7 +84,6 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt->bindValue("nom", $folder->getNom(), 'string');
         $stmt->bindValue("path", $parentFolderPath ."/".$folder->getNom(), 'string');
         $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
-        $stmt->bindValue("updated_at", $folder->getUpdatedAt()->format(self::DATE_FORMAT));
         $stmt->execute();
 
         $sql = self::NEW_FOLDER_ID;
@@ -119,7 +118,6 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt->bindValue("nom", $folder->getNom(), 'string');
         $stmt->bindValue("path", $folder->getPath(), 'string');
         $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
-        $stmt->bindValue("updated_at", $folder->getUpdatedAt()->format(self::DATE_FORMAT));
         $stmt->execute();
 
         $sql = self::NEW_FOLDER_ID;
@@ -150,6 +148,7 @@ class DoctrineFolderRepository implements FolderRepository
 
 
         $newPath = str_replace($olderFolder->getNom(), $folder->getNom(), $olderFolder->getPath());
+        echo $newPath."<br>";
 
         $role = null;
 
@@ -185,13 +184,10 @@ class DoctrineFolderRepository implements FolderRepository
 
 
         //rename de los path de las carpetas dentro de la carpeta modificada
-        $sql = 'UPDATE `folder` SET `path` = REPLACE(`path`, :old_path1, :new_path) WHERE `path` LIKE :old_path2;';
+        $sql = 'UPDATE `folder` SET `path` = :new_path WHERE `path`;';
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("old_path1", $olderFolder->getPath(), 'string');
-        $stmt->bindValue("old_path2", '%'.$olderFolder->getPath() . '%', 'string');
         $stmt->bindValue("new_path", $newPath, 'string');
-        $stmt->execute();
-
+        try{$stmt->execute();}catch(\Exception $e){}
 
         return 200;
 
@@ -227,7 +223,7 @@ class DoctrineFolderRepository implements FolderRepository
                 $aux = $stmt->fetch();
                 $folderPathLength = strlen($aux['path']);
                 if (substr($folderPath, 0, $folderPathLength) == $aux['path']){
-                    return new Folder($aux1['id'], $aux1['creador'], $aux1['nom'], $aux1['path'], $aux1['created_at'], $aux1['updated_at']);
+                    return new Folder($aux1['id'], $aux1['creador'], $aux1['nom'], $aux1['path'], $aux1['created_at'], null);
                 }
             }
             return new Folder(null, null ,null, null, null, null);
@@ -246,7 +242,7 @@ class DoctrineFolderRepository implements FolderRepository
 
         $stmt->execute();
         $aux = $stmt->fetch();
-        return new Folder($aux['id'], $aux['creador'], $aux['nom'], $aux['path'], $aux['created_at'], $aux['updated_at']);
+        return new Folder($aux['id'], $aux['creador'], $aux['nom'], $aux['path'], $aux['created_at'], null);
     }
 
     public function getByPath($folderPath){

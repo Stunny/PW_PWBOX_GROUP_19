@@ -195,7 +195,7 @@ class FolderController
             $response = $response
                 ->withStatus(500)
                 ->withHeader('Content-type', 'application/json')
-                ->write(json_encode(["msg"=>'Something went wrong: '.$e->getMessage(), "res"=>[]]));
+                ->write("<br>".$e->getMessage()."<br>". $e->getTraceAsString());
         } catch (NotFoundExceptionInterface $e) {
         } catch (ContainerExceptionInterface $e) {
         }
