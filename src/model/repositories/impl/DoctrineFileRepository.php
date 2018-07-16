@@ -111,6 +111,21 @@ class DoctrineFileRepository implements FileRepository
         $role = $stmt->fetch();
 
         if ($role['role'] == 'admin'){
+            $sql = 'SELECT `path` FROM `folder` WHERE `id` = :folderId;';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("folderId", $folderID, 'integer');
+            $stmt->execute();
+            $folderPath = $stmt->fetch();
+
+            $fileId = (int) $fileId;
+            $sql = 'SELECT `name` FROM `file` WHERE `id` = :fileId;';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("fileId", $fileId, 'integer');
+            $stmt->execute();
+            $fileName = $stmt->fetch();
+
+            unlink("/home/vagrant/pwbox/appdata/user_folders/" . $folderPath['path'] . '/' . $fileName['name']);
+
             $sql = self::DELETE_QUERY;
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue("id", $fileId, 'integer');
