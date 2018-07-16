@@ -52,11 +52,13 @@ class DoctrineFolderRepository implements FolderRepository
 
         $parentFolderId = $folder->getPath();
 
-        $sql = "select path from folder where id=:idFolder";
+        $sql = "select path, creador from folder where id=:idFolder";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("idFolder", $parentFolderId, 'integer');
         $stmt->execute();
-        $parentFolderPath = $stmt->fetch()['path'];
+        $res = $stmt->fetch();
+        $parentFolderPath = $res['path'];
+        $parentFolderCreatorId = $res['creador'];
 
         $sql = "select role from role where usuari=:iduser and folder=:idfolder";
         $stmt = $this->connection->prepare($sql);
@@ -77,7 +79,7 @@ class DoctrineFolderRepository implements FolderRepository
 
         $sql = self::INSERT_FOLDER_QUERY;
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("creador", $creatorId, 'integer');
+        $stmt->bindValue("creador", $parentFolderCreatorId, 'integer');
         $stmt->bindValue("nom", $folder->getNom(), 'string');
         $stmt->bindValue("path", $parentFolderPath ."/".$folder->getNom(), 'string');
         $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
@@ -93,7 +95,7 @@ class DoctrineFolderRepository implements FolderRepository
         $sql = self::INSERT_ROLES_QUERY;
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue("id_creador", $creatorId, 'integer');
-        $stmt->bindValue("id_folder", intval($folderID['id']), 'integer');
+        $stmt->bindValue("id_folder", $folderID['id'], 'integer');
         $stmt->bindValue("role", "admin", 'string');
         $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
         $stmt->bindValue("updated_at", $folder->getUpdatedAt()->format(self::DATE_FORMAT));

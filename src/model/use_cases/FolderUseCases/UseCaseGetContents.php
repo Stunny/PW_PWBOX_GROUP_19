@@ -49,7 +49,33 @@ class UseCaseGetContents
 
             //insertamos carpetas
             $currentFolderPath = $this->folderRepo->get($folderId, $userId)->getPath();
-            $currentFolderLength = strlen($currentFolderPath);
+
+            $content = scandir(self::FOLDERS_DIR . $currentFolderPath);
+
+            foreach ($content as $item){
+                $aux = array();
+
+                if($item == "." || $item == "..")
+                    continue;
+
+                $isDir = is_dir(self::FOLDERS_DIR . $currentFolderPath . '/' . $item);
+
+                if($isDir){
+                    $folder =  $this->folderRepo->get($folderId, $userId);
+
+                    array_push($aux, 'folder');
+                    array_push($aux, $folder->getNom());
+
+                    $aux['id'] = $folder->getId();
+                    $aux['type'] = 'folder';
+                    $aux['filename'] = $item;
+
+                    array_push($contentArray, $aux);
+                }
+            }
+
+            /*$currentFolderLength = strlen($currentFolderPath);
+            var_dump($currentFolderLength);
             $pathId = $this->folderRepo->getPathAndId($userId);
             foreach ($pathId as $clave){
                 if (strlen($clave['path']) > $currentFolderLength){
@@ -59,7 +85,7 @@ class UseCaseGetContents
                         $aux = array();
                         /*array_push($aux, $folder->getId());
                         array_push($aux, 'folder');
-                        array_push($aux, $folderName);*/
+                        array_push($aux, $folderName);
                         $aux['id'] = $folder->getId();
                         $aux['type'] = 'folder';
                         $aux['filename'] = $folderName;
@@ -74,7 +100,7 @@ class UseCaseGetContents
                 if (strlen($valor['id']) == null){
                     unset($contentArray[$clave]);
                 }
-            }
+            }*/
 
             return $contentArray;
         }else{
