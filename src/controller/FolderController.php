@@ -213,17 +213,17 @@ class FolderController
             if($result == 200){
                 $response = $response
                     ->withStatus(200)
-                    ->withHeader('Content-type', 'application/json')
+                    ->withHeader('Content-type', 'text/html')
                     ->write(json_encode(["msg"=>'Deleted successfully', "res"=>[]]));
             }else if($result == 400){
                 $response = $response
                     ->withStatus(400)
-                    ->withHeader('Content-type', 'application/json')
+                    ->withHeader('Content-type', 'text/html')
                     ->write(json_encode(["msg"=>"Folder not empty", "res"=>[]]));
             }else if($result == 401){
                 $response = $response
                     ->withStatus(401)
-                    ->withHeader('Content-type', 'application/json')
+                    ->withHeader('Content-type', 'text/html')
                     ->write(json_encode(["msg"=>"Unauthorised", "res"=>[]]));
             }else{
                 $response = $response

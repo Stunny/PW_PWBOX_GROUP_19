@@ -33,7 +33,8 @@ class DoctrineFolderRepository implements FolderRepository
     private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id) AND `id` = (SELECT `folder` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari);';
     private const SELECT_QUERY_2 = 'SELECT * FROM `folder` WHERE (`id` = :id);';
     private const SELECT_BY_NAME_QUERY = 'select * from `folder` where(`creador`=:userID and `nom`=:folderName)';
-    private const FOLDER_DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id) AND `creador` = :id_usuari;';
+    private const FOLDER_DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id);';// AND `creador` = :id_usuari;';
+    private const ROLE_DELETE_QUERY = 'DELETE FROM `role` WHERE (`folder` = :folderId);';
     private const ACCESSIBLE_FOLDERS = 'SELECT `folder` FROM `role` WHERE `usuari` = :id_usuari;';
     private const GET_FOLDER_PATH_ID = 'SELECT `id`, `path` FROM `folder` WHERE `creador` = :id_creador;';
     private const GET_MY_SHARED_FOLDER_DATA = 'SELECT `id`, `nom`, `path` FROM `folder` WHERE id = :id_folder;';
@@ -220,7 +221,7 @@ class DoctrineFolderRepository implements FolderRepository
     }
 
     public function getByPath($folderPath){
-        $stmt = $this->connection->prepare("select creador from folder where path=:path");
+        $stmt = $this->connection->prepare("select * from folder where path=:path");
         $stmt->bindValue("path", $folderPath);
 
         $stmt->execute();
@@ -244,9 +245,33 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt->bindValue("id_usuari", $userID, 'integer');
         $stmt->bindValue("id", $folderID, 'integer');
         $stmt->execute();
-        $userID = $stmt->fetch();
+        $user = $stmt->fetch();
 
-        if (isset($userID)){
+        if (!$user){
+            //unset($userID);
+            $folderPathPrima = $folderPath;
+            while (count(explode('/', $folderPathPrima)) != 1){
+                $folderPathPrima = str_replace('/' . explode('/', $folderPathPrima)[count(explode('/', $folderPathPrima)) - 1], '' , $folderPathPrima);
+                $folderID = (int)$this->getByPath($folderPathPrima)['id'];
+                var_dump($folderID);
+                var_dump($userID);
+
+                $sql = "SELECT `role` FROM `role` WHERE `folder` = :folderId AND `usuari` =:userId;";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue("folderId", $folderID, 'integer');
+                $stmt->bindValue("userId", $userID, 'integer');
+                $stmt->execute();
+                $role = $stmt->fetch();
+                var_dump($role);
+                if (!$role){
+                    unset($role);
+                }else{
+                    break;
+                }
+            }
+        }
+
+        if (isset($role) && $role['role'] == 'admin'){
             //el usuario tiene permisos para borrar la carpeta
             $sql = "SELECT `id` FROM `folder` WHERE `path` LIKE :path;";
             $stmt = $this->connection->prepare($sql);
@@ -255,10 +280,17 @@ class DoctrineFolderRepository implements FolderRepository
             $foldersToDelete = $stmt->fetchAll();
 
             foreach ($foldersToDelete as $value){
+                var_dump($value['id']);
                 $sql = self::FOLDER_DELETE_QUERY;
                 $stmt = $this->connection->prepare($sql);
                 $stmt->bindValue("id", $value['id'], 'integer');
-                $stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
+                //$stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
+                $stmt->execute();
+
+                $sql = self::ROLE_DELETE_QUERY;
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue("folderId", $value['id'], 'integer');
+                //$stmt->bindValue("id_usuari", $userID['usuari'], 'integer');
                 $stmt->execute();
             }
 
