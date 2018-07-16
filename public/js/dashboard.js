@@ -512,6 +512,11 @@ $(document).on('click','a[id^="folder-"]',(event)=>{
 });
 
 $(document).on('dblclick', '.file.dashItem.three.wide.column', (event)=>{
+    if ($(event.target).parent().attr('id').match(/file-/)){
+        return;
+    }
+
+
     currentFolderId = $(event.target).parent().attr('id');
     pathTitle.setPath(getFolderBreadcrumb(currentFolderId));
 });

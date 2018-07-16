@@ -25,13 +25,16 @@ class UseCaseUpdateFolder
     {
         $oldPath = $this->repository->get($folderID, $userID)->getPath();
         $response = $this->repository->update(new Folder($folderID, null, $rawData['foldername'], null, null, null), $userID);
-        if ($response){
+        if ($response == 200){
+            echo "renombrando archivo fisico";
             //rename folder y todos aquellos path que contengan ese folder
             $newPath = $this->repository->get($folderID, $userID)->getPath();
             rename("/home/vagrant/pwbox/appdata/user_folders/" . $oldPath, "/home/vagrant/pwbox/appdata/user_folders/" . $newPath);
-            return true;
+            return 200;
+        }else if($response == 401){
+            return 401;
         }else{
-            return false;
+            return 404;
         }
     }
 }

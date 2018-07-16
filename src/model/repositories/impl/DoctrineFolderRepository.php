@@ -144,28 +144,57 @@ class DoctrineFolderRepository implements FolderRepository
     public function update(Folder $folder, int $userID)
     {
         $olderFolder = $this->get($folder->getId(), $userID);
+        if($olderFolder == null){
+            return 404;
+        }
+
+
         $newPath = str_replace($olderFolder->getNom(), $folder->getNom(), $olderFolder->getPath());
 
-        if ($this->get($folder->getId(), $userID)->getCreador() == $userID){
-            //rename del nombre y path
-            $sql = self::UPDATE_QUERY;
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue("nom", $folder->getNom(), 'string');
-            $stmt->bindValue("path", $newPath, 'string');
-            $stmt->bindValue("id", $folder->getId(), 'integer');
-            $stmt->execute();
+        $role = null;
 
-            //rename de los path de las carpetas dentro de la carpeta modificada
-            $sql = 'UPDATE `folder` SET `path` = REPLACE(`path`, :old_path1, :new_path) WHERE `path` LIKE :old_path2;';
+        $folderPathPrima = $olderFolder->getPath();
+
+        while (count(explode('/', $folderPathPrima)) != 1){
+            $folderPathPrima = str_replace('/' . explode('/', $folderPathPrima)[count(explode('/', $folderPathPrima)) - 1], '' , $folderPathPrima);
+            $folderID = (int)$this->getByPath($folderPathPrima)['id'];
+
+            $sql = "SELECT `role` FROM `role` WHERE `folder` = :folderId AND `usuari` =:userId;";
             $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue("old_path1", $olderFolder->getPath(), 'string');
-            $stmt->bindValue("old_path2", '%'.$olderFolder->getPath() . '%', 'string');
-            $stmt->bindValue("new_path", $newPath, 'string');
+            $stmt->bindValue("folderId", $folderID, 'integer');
+            $stmt->bindValue("userId", $userID, 'integer');
             $stmt->execute();
-            return true;
-        }else{
-            return false;
+            $role = $stmt->fetch();
+            if (!$role){
+                unset($role);
+            }else{
+                break;
+            }
         }
+
+        if(!isset($role) || $role['role'] != "admin"){
+            return 401;
+        }
+
+        $sql = self::UPDATE_QUERY;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("nom", $folder->getNom(), 'string');
+        $stmt->bindValue("path", $newPath, 'string');
+        $stmt->bindValue("id", $folder->getId(), 'integer');
+        $stmt->execute();
+
+
+        //rename de los path de las carpetas dentro de la carpeta modificada
+        $sql = 'UPDATE `folder` SET `path` = REPLACE(`path`, :old_path1, :new_path) WHERE `path` LIKE :old_path2;';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("old_path1", $olderFolder->getPath(), 'string');
+        $stmt->bindValue("old_path2", '%'.$olderFolder->getPath() . '%', 'string');
+        $stmt->bindValue("new_path", $newPath, 'string');
+        $stmt->execute();
+
+
+        return 200;
+
     }
 
     public function get(int $folderID, int $userID): Folder

@@ -29,11 +29,16 @@ class DeleteFileController
             $service = $this->container->get('delete-file-service');
 
             $result = $service($args['fileID'], $args['userID'], $args['folderID']);
-            if($result){
+            if($result == 200){
                 $response = $response
                     ->withStatus(200)
                     ->withHeader('Content-type', 'application/json')
                     ->write(json_encode(["msg"=>'Deleted successfully', "res"=>[]]));
+            }else if($result == 401){
+                $response = $response
+                    ->withStatus(401)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"File or permissions not found", "res"=>[]]));
             }else{
                 $response = $response
                     ->withStatus(404)

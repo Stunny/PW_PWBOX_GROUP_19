@@ -174,11 +174,16 @@ class FolderController
             $rawData = $request->getParsedBody();
             $result = $service($rawData, $args['folderID'], $args['userID']);
 
-            if($result){
+            if($result == 200){
                 $response = $response
                     ->withStatus(200)
                     ->withHeader('Content-type', 'application/json')
                     ->write(json_encode(["msg"=>'Updated successfully', "res"=>[]]));
+            }else if($result == 401){
+                $response = $response
+                    ->withStatus(401)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"Unauthorised", "res"=>[]]));
             }else{
                 $response = $response
                     ->withStatus(404)

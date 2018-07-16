@@ -116,9 +116,9 @@ class DoctrineFileRepository implements FileRepository
             $stmt->bindValue("id", $fileId, 'integer');
             $stmt->bindValue("id_folder", $folderID, 'integer');
             $stmt->execute();
-            return true;
+            return 200;
         }else{
-            return false;
+            return 401;
         }
 
     }

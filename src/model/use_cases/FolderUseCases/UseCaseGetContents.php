@@ -36,17 +36,6 @@ class UseCaseGetContents
         //miramos si la carpeta existe
         if ($this->folderRepo->get(intval($folderId), intval($userId))->getNom() != null){
 
-            /*/insertamos ficheros
-            $fileIds = $this->fileRepo->getFileId($userId, $folderId);
-            foreach ($fileIds as $clave){
-                $fileData = $this->fileRepo->getData(new File($clave['id'], null, $userId, $folderId, null, null, null));
-                $aux = array();
-                $aux['id'] = $fileData->getId();
-                $aux['type'] = 'file';
-                $aux['filename'] = $fileData->getName();
-                array_push($contentArray, $aux);
-            }*/
-
 
             $currentFolderPath = $this->folderRepo->get($folderId, $userId)->getPath();
 
@@ -78,34 +67,6 @@ class UseCaseGetContents
 
                 array_push($contentArray, $aux);
             }
-
-            /*$currentFolderLength = strlen($currentFolderPath);
-            var_dump($currentFolderLength);
-            $pathId = $this->folderRepo->getPathAndId($userId);
-            foreach ($pathId as $clave){
-                if (strlen($clave['path']) > $currentFolderLength){
-                    if (substr($clave['path'], $currentFolderLength, strlen($clave['path'])) != null){
-                        $folderName = substr($clave['path'], $currentFolderLength + 1, strlen($clave['path']));
-                        $folder = $this->folderRepo->getByName($folderName, $userId);
-                        $aux = array();
-                        /*array_push($aux, $folder->getId());
-                        array_push($aux, 'folder');
-                        array_push($aux, $folderName);
-                        $aux['id'] = $folder->getId();
-                        $aux['type'] = 'folder';
-                        $aux['filename'] = $folderName;
-
-                        array_push($contentArray, $aux);
-                    }
-                }
-            }
-
-            //borramos todas aquellas carpetas que no son las que estan directamente debajo de la seleccionada (campo id = null)
-            foreach ($contentArray as $clave => $valor){
-                if (strlen($valor['id']) == null){
-                    unset($contentArray[$clave]);
-                }
-            }*/
 
             return $contentArray;
         }else{
