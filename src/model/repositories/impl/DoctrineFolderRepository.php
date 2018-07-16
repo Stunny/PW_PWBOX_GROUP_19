@@ -46,8 +46,17 @@ class DoctrineFolderRepository implements FolderRepository
 
     public function create(int $creatorId, Folder $folder)
     {
-        $parentFolderId = explode('-', $folder->getPath());
-        $parentFolderId = (int)$parentFolderId[1];
+
+        $parentFolderId = "";
+        $parentFolderPath = "";
+
+        $parentFolderId = $folder->getPath();
+
+        $sql = "select path from folder where id=:idFolder";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("idFolder", $parentFolderId, 'integer');
+        $stmt->execute();
+        $parentFolderPath = $stmt->fetch()['path'];
 
         $sql = "select role from role where usuari=:iduser and folder=:idfolder";
         $stmt = $this->connection->prepare($sql);
@@ -61,12 +70,6 @@ class DoctrineFolderRepository implements FolderRepository
             return 401;
         }
 
-        $sql = "select path from folder where id=:idFolder";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("idFolder", $parentFolderId, 'integer');
-        $stmt->execute();
-        $parentFolderPath = $stmt->fetch()['path'];
-        var_dump($parentFolderPath);
 
         if(file_exists(self::USER_FOLDERS_DIR . $parentFolderPath ."/".$folder->getNom())){
             return 409;
@@ -95,7 +98,7 @@ class DoctrineFolderRepository implements FolderRepository
         $stmt->bindValue("created_at", $folder->getCreatedAt()->format(self::DATE_FORMAT));
         $stmt->bindValue("updated_at", $folder->getUpdatedAt()->format(self::DATE_FORMAT));
         $stmt->execute();
-        var_dump(self::USER_FOLDERS_DIR . $parentFolderPath ."/".$folder->getNom());
+        //var_dump(self::USER_FOLDERS_DIR . $parentFolderPath ."/".$folder->getNom());
 
         mkdir(self::USER_FOLDERS_DIR . $parentFolderPath ."/".$folder->getNom(), 0777, true);
         return 200;
