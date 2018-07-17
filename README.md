@@ -3,9 +3,9 @@ Developed by @Stunny (Alex Vogel), @RafaRebollo (Rafael Rebollo) and @afarre (An
 
 ### Aproximate Development time 
 
-- @Stunny: `100h`
-- @RafaRebollo: `50h`
-- @afarre: `100h`
+- @Stunny: `120h`
+- (@RafaRebollo: `30h`)
+- @afarre: `120h`
 
 ## Back-End Dependencies
 ```
