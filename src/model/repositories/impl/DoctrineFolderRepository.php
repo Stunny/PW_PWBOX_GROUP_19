@@ -30,7 +30,7 @@ class DoctrineFolderRepository implements FolderRepository
     private const INSERT_ROLES_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
     private const SHARE_QUERY = 'INSERT INTO `role`(`usuari`, `folder`, `role`, `created_at`, `updated_at`) VALUES (:id_creador, :id_folder, :role, :created_at, :updated_at);';
     private const NEW_FOLDER_ID = 'SELECT `id` FROM `folder` WHERE `creador` = :id_creador ORDER BY `id` DESC LIMIT 1;';
-    private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id) AND `id` = (SELECT `folder` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari);';
+    private const SELECT_QUERY = 'SELECT * FROM `folder` WHERE (`id` = :id) AND `id` in (SELECT `folder` FROM `role` WHERE `folder` = :id AND `usuari` = :id_usuari);';
     private const SELECT_QUERY_2 = 'SELECT * FROM `folder` WHERE (`id` = :id);';
     private const SELECT_BY_NAME_QUERY = 'select * from `folder` where(`creador`=:userID and `nom`=:folderName)';
     private const FOLDER_DELETE_QUERY = 'DELETE FROM `folder` WHERE (`id` = :id);';// AND `creador` = :id_usuari;';
@@ -148,13 +148,13 @@ class DoctrineFolderRepository implements FolderRepository
 
 
         $newPath = str_replace($olderFolder->getNom(), $folder->getNom(), $olderFolder->getPath());
-        echo $newPath."<br>";
 
         $role = null;
 
         $folderPathPrima = $olderFolder->getPath();
+        $oldPath = $olderFolder->getPath();
 
-        while (count(explode('/', $folderPathPrima)) != 1){
+        while (count(explode('/', $folderPathPrima)) != 0){
             $folderPathPrima = str_replace('/' . explode('/', $folderPathPrima)[count(explode('/', $folderPathPrima)) - 1], '' , $folderPathPrima);
             $folderID = (int)$this->getByPath($folderPathPrima)['id'];
 
@@ -184,9 +184,12 @@ class DoctrineFolderRepository implements FolderRepository
 
 
         //rename de los path de las carpetas dentro de la carpeta modificada
-        $sql = 'UPDATE `folder` SET `path` = :new_path WHERE `path`;';
+        $sql = 'UPDATE `folder` SET `path` = REPLACE(`path`, :old_path1, :new_path) WHERE `path` LIKE :old_path2 and id<>:folderId;';
         $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("old_path1", $oldPath, 'string');
+        $stmt->bindValue("old_path2", '%'.$oldPath . '%', 'string');
         $stmt->bindValue("new_path", $newPath, 'string');
+        $stmt->bindValue("folderId", $folder->getId(), 'integer');
         try{$stmt->execute();}catch(\Exception $e){}
 
         return 200;
