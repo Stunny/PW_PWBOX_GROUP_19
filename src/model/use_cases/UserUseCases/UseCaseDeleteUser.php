@@ -31,7 +31,13 @@ class UseCaseDeleteUser
 
         if($user != null){
             $this->repository->delete($user);
-            unlink("/home/vagrant/pwbox/public/profile_imgs/" . $user['username'] . ".jpg");
+
+            $files = glob('/home/vagrant/pwbox/public/profile_imgs/*', GLOB_BRACE);
+            foreach($files as $file) {
+                if (pathinfo($file)['filename'] == $user['username']){
+                    unlink("/home/vagrant/pwbox/public/profile_imgs/" . pathinfo($file)['basename']);
+                }
+            }
             $dir = "/home/vagrant/pwbox/appdata/user_folders/" . $user['username'];
 
             $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
