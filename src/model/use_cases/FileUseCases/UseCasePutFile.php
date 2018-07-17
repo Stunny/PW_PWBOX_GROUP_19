@@ -37,19 +37,20 @@ class UseCasePutFile
 
             $file = $this->fileRepo->getData(new File($args['fileID'], null, $folder->getCreador(), $args['folderID'], null, null, null));
             $return = $this->fileRepo->getData(new File($args['fileID'], null, $folder->getCreador(), $args['folderID'], null, null, null));
-            if ($this->fileRepo->canEdit($folder->getId(), $folder->getPath(), $args['userID'], $folderID = (int)$this->folderRepo->getByPath($folder->getPath())['id'])){
+
+            if (200 == $this->fileRepo->canEdit($folder->getId(), $folder->getPath(), $args['userID'], $folderID = (int)$this->folderRepo->getByPath($folder->getPath())['id'])){
                 //rename file
                 echo "rename file";
                 $this->fileRepo->updateData($folder, $args['userID'], $rawData['filename'], $args['fileID']);
                 $path = $this->folderRepo->get($folder->getId(), $args['userID'])->getPath();
                 $ext = pathinfo($file->getName());
                 rename("/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $file->getName(), "/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $rawData['filename'] . '.' . $ext['extension']);
-                return true;
+                return 200;
             }else{
-                return false;
+                return 401;
             }
         }else{
-            return false;
+            return 404;
         }
     }
 

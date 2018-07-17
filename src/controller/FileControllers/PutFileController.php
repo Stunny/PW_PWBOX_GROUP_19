@@ -30,11 +30,16 @@ class PutFileController
             $service = $this->container->get('put-file-service');
             $result = $service($rawData, $args);
 
-            if($result){
+            if($result == 200){
                 $response = $response
                     ->withStatus(200)
                     ->withHeader('Content-type', 'application/json')
                     ->write(json_encode(["msg"=>'Updated successfully', "res"=>[]]));
+            }else if($result == 401){
+                $response = $response
+                    ->withStatus(401)
+                    ->withHeader('Content-type', 'application/json')
+                    ->write(json_encode(["msg"=>"You can not rename this file", "res"=>[]]));
             }else{
                 $response = $response
                     ->withStatus(404)

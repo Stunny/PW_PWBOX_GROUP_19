@@ -235,10 +235,10 @@ class DoctrineFileRepository implements FileRepository
                 break;
             }
         }
-        if ($role['role'] == 'admin'){
-            return true;
+        if (isset($role['role']) && $role['role'] == 'admin'){
+            return 200;
         }else{
-            return false;
+            return 401;
         }
     }
 }
