@@ -220,7 +220,9 @@ class DoctrineFileRepository implements FileRepository
 
     public function canEdit($fileId, $folderPath, $userId, $folderId)
     {
-        while (count(explode('/', $folderPath)) != 1){
+        var_dump($folderPath);
+        while (count(explode('/', $folderPath)) != 0){
+            var_dump("entro al while");
             $folderPath = str_replace('/' . explode('/', $folderPath)[count(explode('/', $folderPath)) - 1], '' , $folderPath);
 
             $sql = "SELECT `role` FROM `role` WHERE `folder` = :folderId AND `usuari` =:userId;";

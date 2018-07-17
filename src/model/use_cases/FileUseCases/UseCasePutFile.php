@@ -40,7 +40,6 @@ class UseCasePutFile
 
             if (200 == $this->fileRepo->canEdit($folder->getId(), $folder->getPath(), $args['userID'], $folderID = (int)$this->folderRepo->getByPath($folder->getPath())['id'])){
                 //rename file
-                echo "rename file";
                 $this->fileRepo->updateData($folder, $args['userID'], $rawData['filename'], $args['fileID']);
                 $path = $this->folderRepo->get($folder->getId(), $args['userID'])->getPath();
                 $ext = pathinfo($file->getName());
