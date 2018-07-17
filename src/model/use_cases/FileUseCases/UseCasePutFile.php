@@ -32,14 +32,18 @@ class UseCasePutFile
 
     public function __invoke(array $rawData, array $args): bool
     {
-        $file = $this->fileRepo->getData(new File($args['fileID'], null, $args['userID'], $args['folderID'], null, null, null));
-        if($file->getId() != null){
-            $this->fileRepo->updateData($file, $args['userID'], $rawData['filename']);
-            $return = $this->fileRepo->getData(new File($args['fileID'], null, $args['userID'], $args['folderID'], null, null, null));
-            if ($return->getId() != null){
+        $folder = $this->folderRepo->get($args['folderID'], $args['userID']);
+        if($folder->getId() != null){
+
+            $file = $this->fileRepo->getData(new File($args['fileID'], null, $folder->getCreador(), $args['folderID'], null, null, null));
+            $return = $this->fileRepo->getData(new File($args['fileID'], null, $folder->getCreador(), $args['folderID'], null, null, null));
+            if ($this->fileRepo->canEdit($folder->getId(), $folder->getPath(), $args['userID'], $folderID = (int)$this->folderRepo->getByPath($folder->getPath())['id'])){
                 //rename file
-                $path = $this->folderRepo->get($file->getFolder(), $args['userID'])->getPath();
-                rename("/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $file->getName(), "/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $return->getName());
+                echo "rename file";
+                $this->fileRepo->updateData($folder, $args['userID'], $rawData['filename'], $args['fileID']);
+                $path = $this->folderRepo->get($folder->getId(), $args['userID'])->getPath();
+                $ext = pathinfo($file->getName());
+                rename("/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $file->getName(), "/home/vagrant/pwbox/appdata/user_folders/" . $path . DIRECTORY_SEPARATOR . $rawData['filename'] . '.' . $ext['extension']);
                 return true;
             }else{
                 return false;

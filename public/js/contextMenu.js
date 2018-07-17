@@ -213,11 +213,7 @@ function menuItemListener( link ) {
         case "rename":
 
             if(itemId.match(/file-[0-9]+/)){
-                swal(
-                    'Error',
-                    'You can not rename files.',
-                    'error'
-                );
+                renameFileItem(itemId);
             }else{
                 renameFolder(itemId)
             }

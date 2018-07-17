@@ -27,7 +27,7 @@ class DoctrineFileRepository implements FileRepository
     //private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id) AND `creator` = :id_usuari AND `folder` = :id_folder;';
     private const DELETE_QUERY = 'DELETE FROM `file` WHERE (`id` = :id)  AND `folder` = :id_folder;';
     private const GET_DATA_QUERY = 'SELECT * FROM `file` WHERE `id` = :id AND `folder` = (SELECT `id` FROM `folder` WHERE `id` = :id_folder AND `creador` = :id_user);';
-    private const UPDATE_DATA = 'UPDATE `file` SET `name` = :filename, `folder` = :folder WHERE (`creator` = :userID AND `id` = :fileID);';
+    private const UPDATE_DATA = 'UPDATE `file` SET `name` = :filename WHERE (`folder` = :folder AND `id` = :fileID);';
     private const GET_FILE_ID = 'SELECT `id` FROM `file` WHERE `folder` = :id_folder AND `creator` = :id_creador ;';
 
 
@@ -151,19 +151,24 @@ class DoctrineFileRepository implements FileRepository
         return new File($query_result['id'], $query_result['name'], $query_result['creator'], $query_result['folder'], $query_result['created_at'], $query_result['updated_at'], null);
     }
 
-    public function updateData(File $file, $userID, $newName)
+    public function updateData(Folder $folder, $userID, $newName, $fileId)
     {
-        $ext = pathinfo($file->getName(), PATHINFO_EXTENSION);
+        $sql = 'SELECT `name` FROM `file` WHERE `id` = :fileId;';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue("fileId", (int)$fileId, 'integer');
+        $stmt->execute();
+
+        $ext = pathinfo($stmt->fetch()['name']);
+        $newName = $newName . "." . $ext['extension'];
 
         $sql = self::UPDATE_DATA;
         $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue("filename", $newName . "." . $ext, 'string');
-        $stmt->bindValue("folder", $file->getFolder(), 'integer');
-        $stmt->bindValue("userID", $userID, 'integer');
-        $stmt->bindValue("fileID", $file->getId(), 'integer');
+        $stmt->bindValue("filename", $newName, 'string');
+        $stmt->bindValue("folder", (int)$folder->getId(), 'integer');
+        $stmt->bindValue("fileID", (int)$fileId, 'integer');
         $stmt->execute();
 
-        $this->getData(new File($file->getId(), null, $userID, $file->getFolder(), null, null, null));
+        $this->getData(new File($fileId, null, $userID, $folder->getId(), null, null, null));
     }
 
     public function getFileId(&$userId, $folderId)
@@ -211,5 +216,29 @@ class DoctrineFileRepository implements FileRepository
         $stmt->execute();
 
         return $stmt->fetch();
+    }
+
+    public function canEdit($fileId, $folderPath, $userId, $folderId)
+    {
+        while (count(explode('/', $folderPath)) != 1){
+            $folderPath = str_replace('/' . explode('/', $folderPath)[count(explode('/', $folderPath)) - 1], '' , $folderPath);
+
+            $sql = "SELECT `role` FROM `role` WHERE `folder` = :folderId AND `usuari` =:userId;";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue("folderId", $folderId, 'integer');
+            $stmt->bindValue("userId", $userId, 'integer');
+            $stmt->execute();
+            $role = $stmt->fetch();
+            if (!$role){
+                return false;
+            }else{
+                break;
+            }
+        }
+        if ($role['role'] == 'admin'){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
